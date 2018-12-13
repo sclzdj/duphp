@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin\System;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\BaseController;
 
-class IndexController extends Controller
+class IndexController extends BaseController
 {
     public function index()
     {
-        return view('/admin/system/user/index');
+        return view('/admin/system/index/index');
     }
 }

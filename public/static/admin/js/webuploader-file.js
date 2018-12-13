@@ -156,7 +156,9 @@ $(function () {
         //移除队列中的对应文件
         var index = $(this).attr('uploader-index');
         var fileId = $(this).attr('file-id');
-        uploader_file[index].removeFile(uploader_file[index].files[fileId], true);
+        if (fileId !== undefined) {
+            uploader_file[index].removeFile(uploader_file[index].files[fileId], true);
+        }
     });
 
     //重试上传
@@ -166,10 +168,4 @@ $(function () {
         uploader_file[index].retry(uploader_file[index].files[fileId]);
     });
 
-
-    //多图上传拖拽排序
-    $('.ui-sortable').sortable({
-        handle: ".move-file"
-    });
-    $(".ui-sortable").disableSelection();
 });

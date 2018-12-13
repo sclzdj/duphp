@@ -604,8 +604,32 @@ div.tagsinput {
     width: 130px;
 }
 
+.search-bar-150 {
+    width: 150px;
+}
+
+.search-bar-180 {
+    width: 180px;
+}
+
 .search-bar-200 {
     width: 200px;
+}
+
+.search-bar-230 {
+    width: 230px;
+}
+
+.search-bar-250 {
+    width: 250px;
+}
+
+.search-bar-280 {
+    width: 280px;
+}
+
+.search-bar-300 {
+    width: 300px;
 }
 
 .search-bar-340 {
@@ -623,7 +647,7 @@ div.tagsinput {
         float: none !important;
     }
 
-    .search-bar-130, .search-bar-200, .search-bar-340, .search-bar-380,.search-bar-submit {
+    .search-bar-130, .search-bar-150, .search-bar-180, .search-bar-200, .search-bar-230, .search-bar-250, .search-bar-280, .search-bar-300, .search-bar-340, .search-bar-380, .search-bar-submit {
         width: 100%;
     }
 }

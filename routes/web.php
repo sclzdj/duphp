@@ -23,15 +23,25 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::get('system/index/index', 'System\IndexController@index');
         Route::resource('system/user', 'System\UserController');
         Route::patch('system/user/enable/{id}', 'System\UserController@enable');
-        Route::patch('system/user/disable/{id}', 'System\UserController@disable');
+        Route::patch('system/user/disable/{id}',
+                     'System\UserController@disable');
+        Route::resource('system/role', 'System\RoleController');
+        Route::patch('system/role/enable/{id}', 'System\RoleController@enable');
+        Route::patch('system/role/disable/{id}',
+                     'System\RoleController@disable');
+        Route::resource('system/node', 'System\NodeController');
+        Route::patch('system/node/enable/{id}', 'System\NodeController@enable');
+        Route::patch('system/node/disable/{id}',
+                     'System\NodeController@disable');
+        Route::patch('system/node/sort', 'System\NodeController@sort');
+
         //其他模块
-        
+
     });
     //这下面写不需要登录的路由
-//    Route::get('login', 'Auth\LoginController@showLoginForm');
-//    Route::post('login', 'Auth\LoginController@login');
-//    Route::get('logout', 'Auth\LoginController@logout');
-    Auth::routes();
+    Route::get('login', 'Auth\LoginController@showLoginForm');
+    Route::post('login', 'Auth\LoginController@login');
+    Route::post('logout', 'Auth\LoginController@logout');
 });
 
 Auth::routes();

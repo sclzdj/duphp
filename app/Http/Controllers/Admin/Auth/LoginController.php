@@ -60,8 +60,8 @@ class LoginController extends Controller
         
         return $this->loggedOut($request) ?:
             ($request->ajax() ? response()->json([
-                                                     'code' => 200,
-                                                     'msg' => '退出成功',
+                                                     'status_code' => 200,
+                                                     'message' => '退出成功',
                                                      //ajax请求返回数据
                                                      'data' => ['url' => '/admin/login'],
                                                  ]) :
@@ -87,8 +87,8 @@ class LoginController extends Controller
         $this->clearLoginAttempts($request);
         return $this->authenticated($request, $this->guard()->user()) ?:
             ($request->ajax() ? response()->json([
-                                                     'code' => 200,
-                                                     'msg' => '登录成功',
+                                                     'status_code' => 200,
+                                                     'message' => '登录成功',
                                                      'data' => ['url' => $this->redirectPath()]
                                                  ]) :
                 redirect()->intended($this->redirectPath()));

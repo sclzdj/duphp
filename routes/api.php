@@ -16,3 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+//后台
+Route::any('admin/system/file/upload', 'Admin\System\FileController@upload');

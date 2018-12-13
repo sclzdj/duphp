@@ -19,6 +19,7 @@ class CreateSystemUsersTable extends Migration
             $table->string('username')->unique()->default('')->comment('账号');
             $table->string('password')->default('')->comment('密码');
             $table->string('nickname')->default('')->comment('昵称');
+            $table->string('avatar',1000)->default('')->comment('头像');
             $table->unsignedTinyInteger('type')->default(0)
                 ->comment('类型:0=>超级管理员 1=>角色权限 2=>直赋权限');
             $table->unsignedTinyInteger('status')->default(1)
@@ -26,8 +27,9 @@ class CreateSystemUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+        DB::statement("ALTER TABLE `system_users` COMMENT '后台:系统账号'"); // 表注释
     }
-    
+
     /**
      * Reverse the migrations.
      *

@@ -20,7 +20,21 @@
             <div class="side-content" id="sidebar-menu">
                 <ul class="nav-main" id="nav-236">
                     <li class="open">
-                        <a class="active" href="一级菜单链接" target="_self"><i class="fa fa-fw fa-home"></i><span class="sidebar-mini-hide">一级菜单</span></a>
+                        <a class="active" href="/admin/system/index/index" target="_self"><i class="fa fa-fw fa-home"></i><span class="sidebar-mini-hide">后台首页</span></a>
+                    </li>
+                    <li>
+                        <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0);"><i class="fa fa-fw fa-user"></i><span class="sidebar-mini-hide">权限管理</span></a>
+                        <ul>
+                            <li>
+                                <a href="/admin/system/user" target="_self"><i class="fa fa-fw fa-list"></i>账号管理</a>
+                            </li>
+                            <li>
+                                <a href="/admin/system/role" target="_self"><i class="fa fa-fw fa-list"></i>角色管理</a>
+                            </li>
+                            <li>
+                                <a href="/admin/system/node" target="_self"><i class="fa fa-fw fa-list"></i>节点管理</a>
+                            </li>
+                        </ul>
                     </li>
                     <li>
                         <a class="nav-submenu" data-toggle="nav-submenu" href="javascript:void(0);"><i class="fa fa-fw fa-user"></i><span class="sidebar-mini-hide">一级菜单</span></a>

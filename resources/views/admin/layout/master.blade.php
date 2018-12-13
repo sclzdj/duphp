@@ -35,15 +35,10 @@
     <!-- Stylesheets -->
     <!--本页面专属顶部css-->
 @yield('pre_css')
-<!-- Page JS Plugins CSS -->
-    <link rel="stylesheet" href="/static/libs/jquery-nestable/jquery.nestable.css?v=20180327"/>
-    <!-- Bootstrap与ONEUI CSS框架 -->
-    <link rel="stylesheet" href="/static/libs/sweetalert/sweetalert.min.css?v=20180327">
-    <link rel="stylesheet" href="/static/libs/magnific-popup/magnific-popup.min.css?v=20180327">
+<!-- Bootstrap与ONEUI CSS框架 -->
     <link rel="stylesheet" href="/static/admin/css/bootstrap.min.css?v=20180327">
     <link rel="stylesheet" href="/static/admin/css/oneui.css?v=20180327">
     <link rel="stylesheet" href="/static/admin/css/dolphin.css?v=20180327" id="css-main">
-    <link rel="stylesheet" href="/static/libs/viewer/viewer.min.css?v=20180327">
     <!--自定义css-->
     <link rel="stylesheet" href="/static/admin/css/custom.css?v=20180327" type="text/css"/>
     <!--本页面专属底部css-->
@@ -65,15 +60,8 @@
     <!-- Main Container -->
     <main id="main-container">
         <!-- Page Header -->
-        <div class="bg-gray-lighter">
-            <ol class="breadcrumb">
-                <li><i class="fa fa-map-marker"></i></li>
-                <li><a class="link-effect" href="/admin.php/manage/index/index.html">一级菜单</a></li>
-                <li><a class="link-effect" href="/admin.php/manage/index/index.html">二级菜单</a></li>
-                <li><a class="link-effect" href="javascript:void(0);">操作菜单</a></li>
-            </ol>
-        </div>
-        <!-- END Page Header -->
+    @include('admin.layout.location-navbar')
+    <!-- END Page Header -->
         <!-- Page Content -->
         <div class="content" id="app">
             @yield('content','')
@@ -90,22 +78,17 @@
 <!-- Opens from the button in the header -->
 @include('admin.layout.apps-modal')
 <!-- END Apps Modal -->
-<!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
+<!-- Page JS Plugins -->
 <script src="/static/admin/js/core/jquery.min.js?v=20180327"></script>
 <script src="/static/admin/js/core/bootstrap.min.js?v=20180327"></script>
 <script src="/static/admin/js/core/jquery.slimscroll.min.js?v=20180327"></script>
 <script src="/static/admin/js/core/jquery.scrollLock.min.js?v=20180327"></script>
-<script src="/static/admin/js/core/jquery.appear.min.js?v=20180327"></script>
-<script src="/static/admin/js/core/jquery.countTo.min.js?v=20180327"></script>
 <script src="/static/admin/js/core/jquery.placeholder.min.js?v=20180327"></script>
-<script src="/static/admin/js/core/js.cookie.min.js?v=20180327"></script>
-<script src="/static/libs/magnific-popup/magnific-popup.min.js?v=20180327"></script>
 <script src="/static/admin/js/app.js?v=20180327"></script>
 <script src="/static/admin/js/dolphin.js?v=20180327"></script>
 <script src="/static/libs/bootstrap-notify/bootstrap-notify.min.js?v=20180327"></script>
-<script src="/static/libs/sweetalert/sweetalert.min.js?v=20180327"></script>
 <script src="/static/libs/js-xss/xss.min.js?v=20180327"></script>
-<script src="/static/libs/viewer/viewer.min.js?v=20180327"></script>
+<script src="/static/libs/layer/layer.js?v=20180327"></script>
 <!-- 程序启动 -->
 <script>
     jQuery(function () {
@@ -115,14 +98,11 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-    })
+    });
+    //上传全局配置
+    var server_upload_image_url = "{{action('Admin\System\FileController@upload')}}";//上传地址
+    var server_image_host = "";//图片显示前缀域名，上传成功后返回的是完整图片地址就留空
 </script>
-<!-- Page JS Plugins -->
-<script src="/static/libs/layer/layer.js?v=20180327"></script>
-<script src="/static/libs/jstree/jstree.min.js?v=20180327"></script>
-<script src="/static/libs/jquery-nestable/jquery.nestable.js?v=20180327"></script>
-<script src="/static/libs/jquery-ui/jquery-ui.min.js?v=20180327"></script>
-<script src="/static/admin/js/food.js?v=20180327"></script>
 <!--vuejs引入和相关代码-->
 @yield('vuejs','')
 <!--自定义js-->
@@ -137,13 +117,13 @@
                 dataType: 'JSON',
                 success: function (response) {
                     Dolphin.loading('hide');
-                    if (response.code == 200) {
-                        Dolphin.notify(response.msg, 'success');
+                    if (response.status_code >= 200 && response.status_code < 300) {
+                        Dolphin.notify(response.message, 'success');
                         setTimeout(function () {
                             location.href = response.data.url;
                         }, 1500);
                     } else {
-                        Dolphin.notify(response.msg, 'danger');
+                        Dolphin.notify(response.message, 'danger');
                     }
                 },
                 error: function (xhr, status, error) {

@@ -14,7 +14,13 @@ class SystemUser extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'password', 'nickname', 'type', 'status',
+        'username',
+        'password',
+        'nickname',
+        'avatar',
+        'type',
+        'status',
+        'remember_token'
     ];
     
     /**

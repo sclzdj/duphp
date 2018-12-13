@@ -31,8 +31,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/static/admin/img/favicons/apple-touch-icon-180x180.png">
     <!-- END Icons -->
     <!-- Stylesheets -->
-    <!-- Page JS Plugins CSS -->
-    <!-- Bootstrap与ONEUI CSS框架 -->
+    <!-- Bootstrap与ONEUI CSS框架  Page JS Plugins CSS  -->
     <link rel="stylesheet" href="/static/admin/css/bootstrap.min.css?v=20180327">
     <link rel="stylesheet" href="/static/admin/css/oneui.css?v=20180327">
     <link rel="stylesheet" href="/static/admin/css/dolphin.css?v=20180327" id="css-main">
@@ -57,16 +56,16 @@
                     </div>
                     <!-- END Login Title -->
                     <!-- Login Form -->
-                    <form class="form-horizontal push-30-t signin-form" id="admin-login-form">
-                        <div class="form-group">
+                    <form class="form-horizontal push-30-t signin-form" id="login-form">
+                        <div class="form-group" id="login-username">
                             <label class="col-xs-12">账号</label>
-                            <div class="col-xs-12" id="admin-login-username">
+                            <div class="col-xs-12">
                                 <input class="form-control" type="text" name="username" placeholder="请输入您的用户名">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="login-password">
                             <label class="col-xs-12">密码</label>
-                            <div class="col-xs-12" id="admin-login-password">
+                            <div class="col-xs-12">
                                 <input class="form-control" type="password" name="password" placeholder="请输入您的密码">
                             </div>
                         </div>
@@ -84,7 +83,7 @@
                         </div>
                         <div class="form-group push-30-t">
                             <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
-                                <button class="btn btn-block btn-primary" id="admin-login-submit" type="button">登 录</button>
+                                <button class="btn btn-block btn-primary" id="login-submit" type="button">登 录</button>
                             </div>
                         </div>
                     </form>
@@ -101,13 +100,14 @@
 </div>
 <!-- END Login Footer -->
 <!-- END Apps Modal -->
-<!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->
+<!-- Page JS Plugins -->
 <script src="/static/admin/js/core/jquery.min.js?v=20180327"></script>
 <script src="/static/admin/js/core/bootstrap.min.js?v=20180327"></script>
 <script src="/static/admin/js/core/jquery.scrollLock.min.js?v=20180327"></script>
 <script src="/static/admin/js/core/jquery.placeholder.min.js?v=20180327"></script>
 <script src="/static/admin/js/dolphin.js?v=20180327"></script>
 <script src="/static/libs/bootstrap-notify/bootstrap-notify.min.js?v=20180327"></script>
+<script src="/static/libs/js-xss/xss.min.js?v=20180327"></script>
 <!-- 程序启动 -->
 <script>
     jQuery(function () {
@@ -116,9 +116,8 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-    })
+    });
 </script>
-<!-- Page JS Plugins -->
 <!--vuejs引入和相关代码-->
 <!--自定义js-->
 <script src="/static/admin/js/custom.js?v=20180327"></script>
@@ -127,9 +126,9 @@
 <!--页面js脚本-->
 <script>
     $(function () {
-        $(document).on('click', '#admin-login-submit', function () {
-            $('#admin-login-form').find('.form-validate-msg').remove();//清空该表单的验证错误信息
-            var data = $('#admin-login-form').serialize();//表单数据
+        $(document).on('click', '#login-submit', function () {
+            $('#login-form').find('.form-validate-msg').remove();//清空该表单的验证错误信息
+            var data = $('#login-form').serialize();//表单数据
             Dolphin.loading('登录中...');
             $.ajax({
                 type: 'POST',
@@ -138,13 +137,13 @@
                 data: data,
                 success: function (response) {
                     Dolphin.loading('hide');
-                    if (response.code == 200) {
-                        Dolphin.notify(response.msg, 'success');
+                    if (response.status_code >= 200 && response.status_code < 300) {
+                        Dolphin.notify(response.message, 'success');
                         setTimeout(function () {
                             location.href = response.data.url;
                         }, 1500);
                     } else {
-                        Dolphin.notify(response.msg, 'danger');
+                        Dolphin.notify(response.message, 'danger');
                     }
                 },
                 error: function (xhr, status, error) {
@@ -158,7 +157,7 @@
                                 validate_tips += '<div class="col-md-12 form-validate-msg"><i class="fa fa-fw fa-warning text-warning"></i>' + v[i] + '</div>';
                                 validate_notify += '<li>' + v[i] + '</li>';
                             }
-                            $('#admin-login-' + k).after(validate_tips); // 页面表单项下方提示，错误验证信息
+                            $('#login-' + k).append(validate_tips); // 页面表单项下方提示，错误验证信息
                         });
                         Dolphin.notify(validate_notify, 'danger'); //页面顶部浮窗提示，错误验证信息
                     } else if (xhr.status == 419) { // csrf错误，错误码固定为419
@@ -169,7 +168,7 @@
                 }
             });
         });
-    })
+    });
 </script>
 </body>
 </html>

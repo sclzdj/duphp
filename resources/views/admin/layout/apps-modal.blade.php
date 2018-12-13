@@ -14,7 +14,7 @@
                 <div class="block-content">
                     <div class="row text-center">
                         <div class="col-xs-6 col-sm-3">
-                            <a class="block block-rounded top-menu" href="javascript:void(0);" target="_self">
+                            <a class="block block-rounded" href="javascript:void(0);" target="_self">
                                 <div class="block-content text-white bg-primary">
                                     <i class="fa fa-fw fa-cab fa-2x"></i>
                                     <div class="font-w600 push-15-t push-15">模块一</div>
@@ -22,8 +22,8 @@
                             </a>
                         </div>
                         <div class="col-xs-6 col-sm-3">
-                            <a class="block block-rounded top-menu" href="javascript:void(0);" target="_self">
-                                <div class="block-content">
+                            <a class="block block-rounded" href="javascript:void(0);" target="_self">
+                                <div class="block-content text-white bg-primary-dark">
                                     <i class="fa fa-fw fa-cab fa-2x"></i>
                                     <div class="font-w600 push-15-t push-15">模块二</div>
                                 </div>

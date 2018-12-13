@@ -2,21 +2,115 @@
 
 namespace App\Http\Controllers\Admin\System;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\BaseController;
+use App\Http\Requests\Admin\SystemUserRequest;
+use App\Model\Admin\SystemUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('/admin/system/user/index');
+        $pageInfo = [
+            'pageSize' => $request['pageSize'] !== null ?
+                $request['pageSize'] :
+                10,
+            'page' => $request['page'] !== null ?
+                $request['page'] :
+                1
+        ];
+
+        $filter = [
+            'id' => $request['id'] !== null ?
+                $request['id'] :
+                '',
+            'username' => $request['username'] !== null ?
+                $request['username'] :
+                '',
+            'nickname' => $request['nickname'] !== null ?
+                $request['nickname'] :
+                '',
+            'type' => $request['type'] !== null ?
+                $request['type'] :
+                '',
+            'status' => $request['status'] !== null ?
+                $request['status'] :
+                '',
+            'created_at_start' => $request['created_at_start'] !== null ?
+                $request['created_at_start'] :
+                '',
+            'created_at_end' => $request['created_at_end'] !== null ?
+                $request['created_at_end'] :
+                '',
+        ];
+        $orderBy = [
+            'order_field' => $request['order_field'] !== null ?
+                $request['order_field'] :
+                'id',
+            'order_type' => $request['order_type'] !== null ?
+                $request['order_type'] :
+                'asc',
+        ];
+        $where = [];
+        if ($filter['id'] !== '') {
+            $where[] = ['id', 'like', '%' . $filter['id'] . '%'];
+        }
+        if ($filter['username'] !== '') {
+            $where[] = ['username', 'like', '%' . $filter['username'] . '%'];
+        }
+        if ($filter['nickname'] !== '') {
+            $where[] = ['nickname', 'like', '%' . $filter['nickname'] . '%'];
+        }
+        if ($filter['type'] !== '') {
+            $where[] = ['type', '=', $filter['type']];
+        }
+        if ($filter['status'] !== '') {
+            $where[] = ['status', '=', $filter['status']];
+        }
+        if ($filter['created_at_start'] !== '' &&
+            $filter['created_at_end'] !== ''
+        ) {
+            $where[] = [
+                'created_at',
+                '>=',
+                $filter['created_at_start'] . " 00:00:00"
+            ];
+            $where[] = [
+                'created_at',
+                '<=',
+                $filter['created_at_end'] . " 23:59:59"
+            ];
+        } elseif ($filter['created_at_start'] === '' &&
+            $filter['created_at_end'] !== ''
+        ) {
+            $where[] = [
+                'created_at',
+                '<=',
+                $filter['created_at_end'] . " 23:59:59"
+            ];
+        } elseif ($filter['created_at_start'] !== '' &&
+            $filter['created_at_end'] === ''
+        ) {
+            $where[] = [
+                'created_at',
+                '>=',
+                $filter['created_at_start'] . " 00:00:00"
+            ];
+        }
+        $systemUsers = SystemUser::where($where)
+            ->orderBy($orderBy['order_field'], $orderBy['order_type'])
+            ->paginate($pageInfo['pageSize']);
+
+        return view('/admin/system/user/index',
+                    compact('systemUsers', 'pageInfo', 'orderBy', 'filter'));
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -24,9 +118,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('/admin/system/user/create');
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -34,11 +128,37 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SystemUserRequest $systemUserRequest)
     {
-        //
+        DB::beginTransaction();//开启事务
+        try {
+            $data = $systemUserRequest->all();
+            $data = array_map(function ($value) {
+                if ($value === null) {
+                    return '';
+                } else {
+                    return $value;
+                }
+            }, $data);
+            $data['password'] = bcrypt($data['password']);
+            $data['remember_token'] = str_random(64);
+            $data['status'] = $data['status'] ?? 0;
+            $systemUser = SystemUser::create($data);
+            $response = [
+                'url' => action('Admin\System\UserController@index'),
+                'id' => $systemUser->id
+            ];
+            DB::commit();//提交事务
+
+            return $this->response('添加成功', 201, $response);
+
+        } catch (\Exception $e) {
+            DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -50,7 +170,7 @@ class UserController extends Controller
     {
         //
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -60,9 +180,14 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $systemUser = SystemUser::find($id);
+        if (!$systemUser) {
+            abort(403, '参数无效');
+        }
+
+        return view('/admin/system/user/edit', compact('systemUser'));
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -71,11 +196,44 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SystemUserRequest $systemUserRequest, $id)
     {
-        //
+        $systemUser = SystemUser::find($id);
+        if (!$systemUser) {
+            return $this->response('参数无效', 403);
+        }
+        DB::beginTransaction();//开启事务
+        try {
+            $data = $systemUserRequest->all();
+            $data = array_map(function ($value) {
+                if ($value === null) {
+                    return '';
+                } else {
+                    return $value;
+                }
+            }, $data);
+            if ($data['password'] !== '') {
+                $data['password'] = bcrypt($data['password']);
+            } else {
+                unset($data['password']);
+            }
+            $data['status'] = $data['status'] ?? 0;
+            $systemUser->update($data);
+            $response = [
+                'url' => action('Admin\System\UserController@edit',
+                                ['id' => $id])
+            ];
+            DB::commit();//提交事务
+
+            return $this->response('修改成功', 200, $response);
+
+        } catch (\Exception $e) {
+            DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *

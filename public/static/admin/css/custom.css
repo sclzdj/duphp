@@ -27,10 +27,6 @@ select.form-control {
     .help-line {
         display: block;
     }
-
-    .search-bar-130, .search-bar-200, .search-bar-380 {
-        width: 100%;
-    }
 }
 
 .form-option-line {
@@ -46,9 +42,6 @@ select.form-control {
 }
 
 .form-option-require {
-    /*font-size: 12px;*/
-    /*font-weight: normal;*/
-    /*color: #f00000;*/
     background-image: url("../img/common/require.png");
     background-repeat: no-repeat;
     background-size: 100%;

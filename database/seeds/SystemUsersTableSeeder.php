@@ -22,6 +22,7 @@ class SystemUsersTableSeeder extends Seeder
         $systemUser = $systemUsers[1];
         $systemUser->username = 'dujun';
         $systemUser->nickname = '军哥';
+        $systemUser->avatar = '';
         $systemUser->status = 1;
         $systemUser->save();
         $systemUser = $systemUsers[2];

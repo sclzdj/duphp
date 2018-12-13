@@ -48,10 +48,10 @@
             <a href="javascript:void(0)" title="打开/关闭左侧导航" data-toggle="layout" data-action="sidebar_mini_toggle"><i class="fa fa-bars"></i></a>
         </li>
         <li class="hidden-xs hidden-sm active">
-            <a href="javascript:void(0);" target="_self" class="top-menu"><i class="fa fa-fw fa-cab"></i>模块一</a>
+            <a href="javascript:void(0);" target="_self" class=""><i class="fa fa-fw fa-cab"></i>模块一</a>
         </li>
         <li class="hidden-xs hidden-sm">
-            <a href="javascript:void(0);" target="_self" class="top-menu"><i class="fa fa-fw fa-cab"></i>模块二</a>
+            <a href="javascript:void(0);" target="_self" class=""><i class="fa fa-fw fa-cab"></i>模块二</a>
         </li>
         <li>
             <!-- Opens the Apps modal found at the bottom of the page, before including JS code -->

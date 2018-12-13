@@ -1,9 +1,4 @@
 $(function () {
-    //上传全局配置
-    var server_upload_image_url = "http://dt5.dj/index/upload";//上传地址
-    var server_image_host = "http://dt5.dj/";//图片显示前缀域名，上传成功后返回的是完整图片地址就留空
-
-
     // 图片上传初始化Web Uploader
     var uploader_image = [];
     for (var index = 0; index < $('.js-upload-image').length; index++) {
@@ -109,7 +104,7 @@ $(function () {
             } else {
                 $('#' + file.id).addClass('upload-state-done');
                 //图片查看器赋值
-                $('#' + file.id).find('img').attr('data-original', server_image_host + response.data.path);
+                $('#' + file.id).find('img').attr('data-original', server_image_host + response.data.url);
                 //viewer更新加载
                 $('.gallery-list,.uploader-list').each(function () {
                     $(this).viewer('update');
@@ -118,10 +113,10 @@ $(function () {
                 });
                 if (this.upload_type == 'images') {
                     //将上传的文件地址赋值给隐藏输入框，并添加元素
-                    $('#' + file.id).append('<input type="hidden" name="' + this.inputName + '[]" value="' + server_image_host + response.data.path + '">');
+                    $('#' + file.id).append('<input type="hidden" name="' + this.inputName + '[]" value="' + server_image_host + response.data.url + '">');
                 } else {
                     //将上传的文件地址赋值给隐藏输入框
-                    $('#' + file.id).parent().parent().find('input[type="hidden"]').val(server_image_host + response.data.path);
+                    $('#' + file.id).parent().parent().find('input[type="hidden"]').val(server_image_host + response.data.url);
                 }
                 //成功提示
                 var $li = $('#' + file.id),
@@ -176,7 +171,9 @@ $(function () {
         //移除队列中的对应图片
         var index = $(this).attr('uploader-index');
         var fileId = $(this).attr('file-id');
-        uploader_image[index].removeFile(uploader_image[index].files[fileId], true);
+        if (fileId !== undefined) {
+            uploader_image[index].removeFile(uploader_image[index].files[fileId], true);
+        }
         //viewer更新加载
         $('.gallery-list,.uploader-list').each(function () {
             $(this).viewer('update');
@@ -192,11 +189,4 @@ $(function () {
         uploader_image[index].retry(uploader_image[index].files[fileId]);
     });
 
-
-    //多图上传拖拽排序
-    $('.ui-sortable').sortable({
-        placeholder: "ui-sortable-images-state-highlight",
-        handle: ".move-picture"
-    });
-    $(".ui-sortable").disableSelection();
 });
