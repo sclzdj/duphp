@@ -127,11 +127,16 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    var response = JSON.parse(xhr.responseText);
                     Dolphin.loading('hide');
                     if (xhr.status == 419) { // csrf错误，错误码固定为419
                         Dolphin.notify('请勿重复请求~', 'danger');
                     } else {
-                        Dolphin.notify('服务器错误~', 'danger');
+                        if (response.message) {
+                            Dolphin.notify(response.message, 'danger');
+                        } else {
+                            Dolphin.notify('服务器错误~', 'danger');
+                        }
                     }
                 }
             });

@@ -22,18 +22,20 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         //系统模块
         Route::get('system/index/index', 'System\IndexController@index');
         Route::resource('system/user', 'System\UserController');
-        Route::patch('system/user/enable/{id}', 'System\UserController@enable');
-        Route::patch('system/user/disable/{id}',
+        Route::patch('system/user/{id}/enable', 'System\UserController@enable');
+        Route::patch('system/user/{id}/disable',
                      'System\UserController@disable');
         Route::resource('system/role', 'System\RoleController');
-        Route::patch('system/role/enable/{id}', 'System\RoleController@enable');
-        Route::patch('system/role/disable/{id}',
+        Route::patch('system/role/{id}/enable', 'System\RoleController@enable');
+        Route::patch('system/role/{id}/disable',
                      'System\RoleController@disable');
         Route::resource('system/node', 'System\NodeController');
-        Route::patch('system/node/enable/{id}', 'System\NodeController@enable');
-        Route::patch('system/node/disable/{id}',
+        Route::patch('system/node/{id}/enable', 'System\NodeController@enable');
+        Route::patch('system/node/{id}/disable',
                      'System\NodeController@disable');
-        Route::patch('system/node/sort', 'System\NodeController@sort');
+        Route::post('system/node/all/sort', 'System\NodeController@sort');
+        Route::any('system/node/module/sort',
+                   'System\NodeController@moduleSort');
 
         //其他模块
 

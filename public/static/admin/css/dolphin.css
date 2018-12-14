@@ -667,6 +667,25 @@ div.tagsinput {
     cursor: move;
 }
 
+.dd3-level {
+    display: inline-block;
+    background: #cccccc;
+    color: #fff;
+    min-width: 20px;
+    text-align: center;
+    font-weight: normal;
+    font-size: 12px;
+    border-radius: 2px;
+    padding: 0 4px;
+    margin: 0 4px;
+    cursor: default;
+}
+
+.dd-disable .dd3-level {
+    background: #F3C9C9;
+    color: #D2847B;
+}
+
 .dd3-handle:before {
     color: #A0A0A0;
 }

@@ -25,31 +25,33 @@
                             <div class="col-sm-12">
                                 <div class="pull-left toolbar-btn-action">
                                     <a class="btn btn-primary btn-table-top" href="{{action('Admin\System\UserController@create')}}"><i class="fa fa-plus-circle"></i> 添加</a>
-                                    <a class="btn btn-success btn-table-top" href="{{action('Admin\System\UserController@create')}}"><i class="fa fa-check-circle-o"></i> 启用</a>
+                                    <a class="btn btn-success btn-table-top ids-submit" submit-type="PATCH" href="{{action('Admin\System\UserController@enable',['id'=>0])}}"><i class="fa fa-check-circle-o"></i> 启用</a>
+                                    <a class="btn btn-warning btn-table-top ids-submit" submit-type="PATCH" href="{{action('Admin\System\UserController@disable',['id'=>0])}}"><i class="fa fa-ban"></i> 禁用</a>
+                                    <a class="btn btn-danger btn-table-top ids-submit" submit-type="DELETE" href="{{action('Admin\System\UserController@destroy',['id'=>0])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>"><i class="fa fa-times-circle-o"></i> 删除</a>
                                 </div>
                                 <form action="{{action('Admin\System\UserController@index')}}" method="get">
                                     <input type="hidden" name="order_field" value="{{$orderBy['order_field']}}">
                                     <input type="hidden" name="order_type" value="{{$orderBy['order_type']}}">
-                                    <div class="pull-right">
-                                        <div class="pull-left search-bar search-bar-130">
+                                    <div class="pull-right text-right">
+                                        <div class="search-bar search-bar-130" style="display: inline-block">
                                             <div class="input-group">
                                                 <div class="input-group-addon">ID</div>
                                                 <input type="text" class="form-control" value="{{$filter['id']}}" name="id" placeholder="请输入ID">
                                             </div>
                                         </div>
-                                        <div class="pull-left search-bar search-bar-150">
+                                        <div class="search-bar search-bar-150" style="display: inline-block">
                                             <div class="input-group">
                                                 <div class="input-group-addon">账号</div>
                                                 <input type="text" class="form-control" value="{{$filter['username']}}" name="username" placeholder="请输入账号">
                                             </div>
                                         </div>
-                                        <div class="pull-left search-bar search-bar-150">
+                                        <div class="search-bar search-bar-150" style="display: inline-block">
                                             <div class="input-group">
                                                 <div class="input-group-addon">昵称</div>
                                                 <input type="text" class="form-control" value="{{$filter['nickname']}}" name="nickname" placeholder="请输入昵称">
                                             </div>
                                         </div>
-                                        <div class="pull-left search-bar search-bar-180">
+                                        <div class="search-bar search-bar-180" style="display: inline-block">
                                             <div class="input-group">
                                                 <div class="input-group-addon">类型</div>
                                                 <select class="form-control" name="type">
@@ -60,7 +62,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="pull-left search-bar search-bar-130">
+                                        <div class="search-bar search-bar-130" style="display: inline-block">
                                             <div class="input-group">
                                                 <div class="input-group-addon">状态</div>
                                                 <select class="form-control" name="status">
@@ -70,7 +72,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="pull-left search-bar search-bar-300">
+                                        <div class="search-bar search-bar-300" style="display: inline-block">
                                             <div class="input-daterange input-group" data-date-format="yyyy-mm-dd">
                                                 <span class="input-group-addon" style="border-width:1px;">创建日期</span>
                                                 <input class="form-control" type="text" value="{{$filter['created_at_start']}}" name="created_at_start" placeholder="开始日期" autocomplete="off">
@@ -78,16 +80,18 @@
                                                 <input class="form-control" type="text" value="{{$filter['created_at_end']}}" name="created_at_end" placeholder="结束日期" autocomplete="off">
                                             </div>
                                         </div>
-                                        <div class="pull-left search-bar-submit text-center">
-                                            <button type="submit" class="btn btn-default btn-table-top">搜索</button>
-                                            <a href="{{action('Admin\System\UserController@index',array_merge($orderBy,['pageSize'=>$pageInfo['pageSize']]))}}" class="btn btn-default btn-table-top">清空</a>
+                                        <div class="search-bar search-bar-submit" style="display: inline-block;width: auto;margin-right: 0;">
+                                            <div class="input-group">
+                                                <button type="submit" class="btn btn-default">搜索</button>
+                                                <a href="{{action('Admin\System\UserController@index',array_merge($orderBy,['pageSize'=>$pageInfo['pageSize']]))}}" class="btn btn-default" style="margin-left: 5px;">清空</a>
+                                            </div>
                                         </div>
                                     </div>
                                     <input type="hidden" name="pageSize" value="{{$pageInfo['pageSize']}}">
                                 </form>
                             </div>
                         </div>
-                        <div class="builder-table-wrapper" id="builder-table-wrapper" style="">
+                        <div class="builder-table-wrapper">
                             <div class="builder-table" id="builder-table">
                                 <div class="builder-table-head" id="builder-table-head">
                                     <table class="table table-builder table-hover table-bordered table-striped js-table-checkable" style="width: 1571px;">
@@ -167,7 +171,7 @@
                                         </thead>
                                     </table>
                                 </div>
-                                <div class="builder-table-body" id="builder-table-body" style="">
+                                <div class="builder-table-body">
                                     <table class="table table-builder table-hover table-bordered table-striped js-table-checkable-target" id="builder-table-main">
                                         <colgroup>
                                             <col width="50">
@@ -230,7 +234,10 @@
                                                 </td>
                                                 <td class=" ">
                                                     <div class="table-cell">
-                                                        <label class="css-input switch switch-sm switch-primary" title="开启/关闭"><input type="checkbox" @if($systemUser->status) checked @endif><span></span></label>
+                                                        <label class="css-input switch switch-sm switch-primary" title="开启/关闭">
+                                                            <input class="switch-submit" submit-type="PATCH" href-on="{{action('Admin\System\UserController@enable',['id'=>$systemUser->id])}}" href-off="{{action('Admin\System\UserController@disable',['id'=>$systemUser->id])}}" type="checkbox" @if($systemUser->status) checked @endif>
+                                                            <span></span>
+                                                        </label>
                                                     </div>
                                                 </td>
                                                 <td class=" ">
@@ -238,7 +245,7 @@
                                                         <div class="btn-group">
                                                             <a class="btn btn-xs btn-default" href="{{action('Admin\System\UserController@show',['id'=>$systemUser->id])}}">详情</a>
                                                             <a class="btn btn-xs btn-default" href="{{action('Admin\System\UserController@edit',['id'=>$systemUser->id])}}">修改</a>
-                                                            <a class="btn btn-xs btn-default" href="{{action('Admin\System\UserController@destroy',['id'=>$systemUser->id])}}">删除</a>
+                                                            <a class="btn btn-xs btn-default id-submit" submit-type="DELETE" href="{{action('Admin\System\UserController@destroy',['id'=>$systemUser->id])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>">删除</a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -289,11 +296,12 @@
     <script src="/static/libs/viewer/viewer.min.js?v=20180327"></script>
     <script src="/static/libs/bootstrap3-editable/js/bootstrap-editable.js?v=20180327"></script>
     <script src="/static/admin/js/table-init.js?v=20180327"></script>
+    <script src="/static/admin/js/table-submit.js?v=20180327"></script>
     <script src="/static/libs/bootstrap-datepicker/bootstrap-datepicker.min.js?v=20180327"></script>
     <script src="/static/libs/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js?v=20180327"></script>
     <script>
         $(function () {
             App.initHelpers(["datepicker"]);
-        })
+        });
     </script>
 @endsection

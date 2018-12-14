@@ -5,7 +5,8 @@
 @endsection
 @section('content')
     <div class="alert alert-info alert-dismissable">
-        <p><strong><i class="fa fa-fw fa-hand-o-right"></i> 说明：</strong>一级节点服务顶部导航模块，二级节点服务左侧一级菜单，三级节点服务左侧二级菜单，四级节点服务页面操作方法；<strong class="text-danger">五级节点之后无效</strong></p>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <p><strong><i class="fa fa-fw fa-hand-o-right"></i> 说明：</strong>1级节点服务顶部导航模块，2级节点服务左侧一级菜单，3级节点服务左侧二级菜单，4级节点及之后均服务于页面操作方法</p>
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -34,7 +35,7 @@
                                     <div class="col-md-6 form-option-line">
                                         <select class="js-select2 form-control select-linkage select2-hidden-accessible" name="pid" aria-hidden="true">
                                             <option value="">顶级节点（模块）</option>
-                                            @foreach($tree as $node)
+                                            @foreach($treeNodes as $node)
                                                 <option value="{{$node['id']}}" @if($node['id']==$pid) selected @endif>{!! $node['_html'] !!}&nbsp;├─&nbsp;{{$node['name']}}</option>
                                             @endforeach
                                         </select>
@@ -167,7 +168,11 @@
                         } else if (xhr.status == 419) { // csrf错误，错误码固定为419
                             Dolphin.notify('请勿重复请求~', 'danger');
                         } else {
-                            Dolphin.notify('服务器错误~', 'danger');
+                            if (response.message) {
+                                Dolphin.notify(response.message, 'danger');
+                            } else {
+                                Dolphin.notify('服务器错误~', 'danger');
+                            }
                         }
                     }
                 });

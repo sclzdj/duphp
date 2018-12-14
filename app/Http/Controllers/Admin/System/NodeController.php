@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Admin\System;
 use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\Admin\SystemNodeRequest;
 use App\Model\Admin\SystemNode;
-use Houdunwang\Arr\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class NodeController extends BaseController
@@ -21,17 +19,12 @@ class NodeController extends BaseController
         $pid = $request['pid'] !== null ?
             $request['pid'] :
             0;
-        $maxLevel = $pid == 0 ?
-            4 :
-            3;
-        $modules = SystemNode::where('pid', 0)->orderBy('sort', 'asc')->get();
-        $systemNodes = SystemNode::orderBy('sort', 'asc')->get()->toArray();
-        $HdArr = new Arr();
-        $tree = $HdArr->channelLevel($systemNodes, $pid, "&nbsp;&nbsp;", 'id',
-                                     'pid');
+        $modules = SystemNode::modules();
+        $max_level = max(0, (int)$request->max_level);
+        $grMaxHtml = SystemNode::grMaxHtml($pid, '', $max_level);
 
         return view('/admin/system/node/index',
-                    compact('tree', 'modules', 'pid', 'maxLevel'));
+                    compact('grMaxHtml', 'modules', 'pid', 'max_level'));
     }
 
     /**
@@ -44,11 +37,9 @@ class NodeController extends BaseController
         $pid = $request['pid'] !== null ?
             $request['pid'] :
             0;
-        $systemNodes = SystemNode::orderBy('sort', 'asc')->get()->toArray();
-        $HdArr = new Arr();
-        $tree = $HdArr->channelList($systemNodes, 0, "&nbsp;│&nbsp;", 'id', 'pid');
+        $treeNodes = SystemNode::treeNodes();
 
-        return view('/admin/system/node/create', compact('tree', 'pid'));
+        return view('/admin/system/node/create', compact('treeNodes', 'pid'));
     }
 
     /**
@@ -60,7 +51,7 @@ class NodeController extends BaseController
      */
     public function store(SystemNodeRequest $systemNodeRequest)
     {
-        DB::beginTransaction();//开启事务
+        \DB::beginTransaction();//开启事务
         try {
             $data = $systemNodeRequest->all();
             $data = array_map(function ($value) {
@@ -70,6 +61,12 @@ class NodeController extends BaseController
                     return $value;
                 }
             }, $data);
+            if ($data['pid'] > 0) {
+                $pSystemNode = SystemNode::find($data['pid']);
+                $data['level'] = $pSystemNode->level + 1;
+            } else {
+                $data['level'] = 1;
+            }
             $data['pid'] = (int)$data['pid'];
             $data['status'] = $data['status'] ?? 0;
             $data['sort'] = (int)$data['sort'];
@@ -78,12 +75,12 @@ class NodeController extends BaseController
                 'url' => action('Admin\System\NodeController@index'),
                 'id' => $systemNode->id
             ];
-            DB::commit();//提交事务
+            \DB::commit();//提交事务
 
             return $this->response('添加成功', 201, $response);
 
         } catch (\Exception $e) {
-            DB::rollback();//回滚事务
+            \DB::rollback();//回滚事务
 
             return $this->eResponse($e->getMessage(), $e->getCode());
         }
@@ -111,13 +108,13 @@ class NodeController extends BaseController
     public function edit($id)
     {
         $systemNode = SystemNode::find($id);
-        if (!$systemNode) {
+        if (!$systemNode || $systemNode->id <= 2) {
             abort(403, '参数无效');
         }
-        $systemNodes = SystemNode::orderBy('sort', 'asc')->get()->toArray();
-        $HdArr = new Arr();
-        $tree = $HdArr->channelList($systemNodes, 0, "&nbsp;│&nbsp;", 'id', 'pid');
-        return view('/admin/system/node/edit', compact('systemNode','tree'));
+        $treeNodes = SystemNode::treeNodes(0, '', $systemNode);
+
+        return view('/admin/system/node/edit',
+                    compact('systemNode', 'treeNodes'));
     }
 
     /**
@@ -131,10 +128,10 @@ class NodeController extends BaseController
     public function update(SystemNodeRequest $systemNodeRequest, $id)
     {
         $systemNode = SystemNode::find($id);
-        if (!$systemNode) {
+        if (!$systemNode || $systemNode->id <= 2) {
             return $this->response('参数无效', 403);
         }
-        DB::beginTransaction();//开启事务
+        \DB::beginTransaction();//开启事务
         try {
             $data = $systemNodeRequest->all();
             $data = array_map(function ($value) {
@@ -144,20 +141,36 @@ class NodeController extends BaseController
                     return $value;
                 }
             }, $data);
+            if ($data['pid'] > 0) {
+                $pSystemNode = SystemNode::find($data['pid']);
+                $data['level'] = $pSystemNode->level + 1;
+            } else {
+                $data['level'] = 1;
+            }
             $data['pid'] = (int)$data['pid'];
             $data['status'] = $data['status'] ?? 0;
             $data['sort'] = (int)$data['sort'];
+            if ($systemNode->status != $data['status']) {
+                if ($data['status']) {
+                    $run_ids = SystemNode::elderNodes($id, 1);
+                    $run_ids[] = $id;
+                } else {
+                    $run_ids = SystemNode::progenyNodes($id, '', 1);
+                    $run_ids[] = $id;
+                }
+                SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
+                    ->update(['status' => $data['status']]);
+            }
             $systemNode->update($data);
             $response = [
-                'url' => action('Admin\System\NodeController@edit',
-                                ['id' => $id])
+                'url' => action('Admin\System\NodeController@index')
             ];
-            DB::commit();//提交事务
+            \DB::commit();//提交事务
 
             return $this->response('修改成功', 200, $response);
 
         } catch (\Exception $e) {
-            DB::rollback();//回滚事务
+            \DB::rollback();//回滚事务
 
             return $this->eResponse($e->getMessage(), $e->getCode());
         }
@@ -172,6 +185,155 @@ class NodeController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        \DB::beginTransaction();//开启事务
+        try {
+            if ($id > 2) {
+                $run_ids = SystemNode::progenyNodes($id, '', 1);
+                $run_ids[] = $id;
+                SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
+                    ->delete();
+                //                    \DB::table('bs_personates')->where('bs_admin_id', $id)
+                //                        ->delete();
+                //                    \DB::table('bs_belongs')->where('bs_admin_id', $id)
+                //                        ->delete();
+                \DB::commit();//提交事务
+
+                return $this->response('删除成功', 200);
+            } else {
+                \DB::rollback();//回滚事务
+
+                return $this->Response('系统专属节点不可操作', 400);
+            }
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * @param         $id
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function enable($id)
+    {
+        \DB::beginTransaction();//开启事务
+        try {
+            if ($id > 2) {
+                $run_ids = SystemNode::elderNodes($id, 1);
+                $run_ids[] = $id;
+                SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
+                    ->update(['status' => '1']);
+                \DB::commit();//提交事务
+
+                return $this->response('启用成功', 200);
+            } else {
+                \DB::rollback();//回滚事务
+
+                return $this->Response('非法操作', 400);
+            }
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * @param         $id
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function disable($id)
+    {
+        \DB::beginTransaction();//开启事务
+        try {
+            if ($id > 2) {
+                $run_ids = SystemNode::progenyNodes($id, '', 1);
+                $run_ids[] = $id;
+                SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
+                    ->update(['status' => '0']);
+                \DB::commit();//提交事务
+
+                return $this->response('禁用成功', 200);
+            } else {
+                \DB::rollback();//回滚事务
+
+                return $this->Response('系统专属节点不可禁用', 400);
+            }
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function sort(Request $request)
+    {
+        \DB::beginTransaction();//开启事务
+        try {
+            $data = $request->sort_list;
+            if ($data) {
+                $data = SystemNode::parseNodes($data);
+                foreach ($data as $d) {
+                    $where = ['id' => $d['id']];
+                    unset($d['id']);
+                    SystemNode::where($where)->update($d);
+                }
+                \DB::commit();//提交事务
+
+                return $this->response('排序成功', 200);
+            } else {
+                \DB::rollback();//提交事务
+
+                return $this->response('未知请求', 400);
+            }
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function moduleSort(Request $request)
+    {
+        if ($request->method() == 'POST') {
+            \DB::beginTransaction();//开启事务
+            try {
+                $data = $request->ids;
+                if ($data) {
+                    foreach ($data as $k => $v) {
+                        SystemNode::where('id', $v)->update(['sort' => $k + 1]);
+                    }
+                    \DB::commit();//提交事务
+
+                    return $this->response('排序成功', 200);
+                } else {
+                    \DB::rollback();//提交事务
+
+                    return $this->response('未知请求', 400);
+                }
+            } catch (\Exception $e) {
+                \DB::rollback();//回滚事务
+
+                return $this->eResponse($e->getMessage(), $e->getCode());
+            }
+        }
+        $modules = SystemNode::modules();
+
+        return view('/admin/system/node/module_sort', compact('modules'));
     }
 }

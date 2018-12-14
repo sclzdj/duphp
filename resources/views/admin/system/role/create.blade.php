@@ -22,7 +22,7 @@
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-name">
                                     <label class="col-md-1 control-label form-option-line">
                                         <span class="form-option-require"></span>
-                                        账号
+                                        名称
                                     </label>
                                     <div class="col-md-6 form-option-line">
                                         <input class="form-control" type="text" name="name" value="" placeholder="请输入角色">
@@ -102,7 +102,11 @@
                         } else if (xhr.status == 419) { // csrf错误，错误码固定为419
                             Dolphin.notify('请勿重复请求~', 'danger');
                         } else {
-                            Dolphin.notify('服务器错误~', 'danger');
+                            if (response.message) {
+                                Dolphin.notify(response.message, 'danger');
+                            } else {
+                                Dolphin.notify('服务器错误~', 'danger');
+                            }
                         }
                     }
                 });

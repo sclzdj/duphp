@@ -130,7 +130,7 @@ class UserController extends BaseController
      */
     public function store(SystemUserRequest $systemUserRequest)
     {
-        DB::beginTransaction();//开启事务
+        \DB::beginTransaction();//开启事务
         try {
             $data = $systemUserRequest->all();
             $data = array_map(function ($value) {
@@ -148,12 +148,12 @@ class UserController extends BaseController
                 'url' => action('Admin\System\UserController@index'),
                 'id' => $systemUser->id
             ];
-            DB::commit();//提交事务
+            \DB::commit();//提交事务
 
             return $this->response('添加成功', 201, $response);
 
         } catch (\Exception $e) {
-            DB::rollback();//回滚事务
+            \DB::rollback();//回滚事务
 
             return $this->eResponse($e->getMessage(), $e->getCode());
         }
@@ -181,7 +181,7 @@ class UserController extends BaseController
     public function edit($id)
     {
         $systemUser = SystemUser::find($id);
-        if (!$systemUser) {
+        if (!$systemUser || $systemUser->id == 1) {
             abort(403, '参数无效');
         }
 
@@ -199,10 +199,10 @@ class UserController extends BaseController
     public function update(SystemUserRequest $systemUserRequest, $id)
     {
         $systemUser = SystemUser::find($id);
-        if (!$systemUser) {
+        if (!$systemUser || $systemUser->id == 1) {
             return $this->response('参数无效', 403);
         }
-        DB::beginTransaction();//开启事务
+        \DB::beginTransaction();//开启事务
         try {
             $data = $systemUserRequest->all();
             $data = array_map(function ($value) {
@@ -220,15 +220,14 @@ class UserController extends BaseController
             $data['status'] = $data['status'] ?? 0;
             $systemUser->update($data);
             $response = [
-                'url' => action('Admin\System\UserController@edit',
-                                ['id' => $id])
+                'url' => action('Admin\System\UserController@index')
             ];
-            DB::commit();//提交事务
+            \DB::commit();//提交事务
 
             return $this->response('修改成功', 200, $response);
 
         } catch (\Exception $e) {
-            DB::rollback();//回滚事务
+            \DB::rollback();//回滚事务
 
             return $this->eResponse($e->getMessage(), $e->getCode());
         }
@@ -241,8 +240,120 @@ class UserController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        //
+        \DB::beginTransaction();//开启事务
+        try {
+            if ($id > 0) {
+                if ($id > 1) {
+                    SystemUser::where('id', $id)->delete();
+                    //                    \DB::table('bs_personates')->where('bs_admin_id', $id)
+                    //                        ->delete();
+                    //                    \DB::table('bs_belongs')->where('bs_admin_id', $id)
+                    //                        ->delete();
+                    \DB::commit();//提交事务
+
+                    return $this->response('删除成功', 200);
+                } else {
+                    \DB::rollback();//回滚事务
+
+                    return $this->Response('系统专属账号不可操作', 400);
+                }
+            } else {
+                $ids = is_array($request->ids) ?
+                    $request->ids :
+                    explode(',', $request->ids);
+                SystemUser::where('id', '<>', '1')->whereIn('id', $ids)
+                    ->delete();
+                //                \DB::table('bs_personates')->where('bs_admin_id', '<>', '1')
+                //                    ->whereIn('bs_admin_id', $ids)->delete();
+                //                \DB::table('bs_belongs')->where('bs_admin_id', '<>', '1')
+                //                    ->whereIn('bs_admin_id', $ids)->delete();
+                \DB::commit();//提交事务
+
+                return $this->response('批量删除成功', 200);
+            }
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
     }
+
+    /**
+     * @param         $id
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function enable($id, Request $request)
+    {
+        \DB::beginTransaction();//开启事务
+        try {
+            if ($id > 0) {
+                if ($id > 1) {
+                    SystemUser::where('id', $id)->update(['status' => '1']);
+                    \DB::commit();//提交事务
+
+                    return $this->response('启用成功', 200);
+                } else {
+                    \DB::rollback();//回滚事务
+
+                    return $this->Response('非法操作', 400);
+                }
+            } else {
+                $ids = is_array($request->ids) ?
+                    $request->ids :
+                    explode(',', $request->ids);
+                SystemUser::where('id', '<>', '1')->whereIn('id', $ids)
+                    ->update(['status' => '1']);
+                \DB::commit();//提交事务
+
+                return $this->response('批量启用成功', 200);
+            }
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * @param         $id
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function disable($id, Request $request)
+    {
+        \DB::beginTransaction();//开启事务
+        try {
+            if ($id > 0) {
+                if ($id > 1) {
+                    SystemUser::where('id', $id)->update(['status' => '0']);
+                    \DB::commit();//提交事务
+
+                    return $this->response('禁用成功', 200);
+                } else {
+                    \DB::rollback();//回滚事务
+
+                    return $this->Response('系统专属账号不可禁用', 400);
+                }
+            } else {
+                $ids = is_array($request->ids) ?
+                    $request->ids :
+                    explode(',', $request->ids);
+                SystemUser::where('id', '<>', '1')->whereIn('id', $ids)
+                    ->update(['status' => '0']);
+                \DB::commit();//提交事务
+
+                return $this->response('批量禁用成功', 200);
+            }
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
 }

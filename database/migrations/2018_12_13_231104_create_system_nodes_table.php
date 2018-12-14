@@ -19,7 +19,9 @@ class CreateSystemNodesTable extends Migration
             $table->string('name')->unique()->default('')->comment('名称');
             $table->unsignedInteger('pid')->default(0)->comment('所属父级');
             $table->string('action')->index()->default('')->comment('动作方法');
-            $table->text('relate_actions', '1000')->comment('关联的其它动作方法，多个换行隔开');
+            $table->text('relate_actions', '1000')->comment('关联动作方法，多个换行隔开');
+            $table->string('icon')->default('')->comment('图标');
+            $table->unsignedTinyInteger('level')->default(1)->comment('级别');
             $table->unsignedTinyInteger('status')->default(1)
                 ->comment('状态:0=>禁用 1=>启用');
             $table->integer('sort')->default(0)->comment('排序');

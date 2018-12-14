@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\Admin\SystemRoleRequest;
 use App\Model\Admin\SystemRole;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class RoleController extends BaseController
 {
@@ -118,7 +117,7 @@ class RoleController extends BaseController
      */
     public function store(SystemRoleRequest $systemRoleRequest)
     {
-        DB::beginTransaction();//开启事务
+        \DB::beginTransaction();//开启事务
         try {
             $data = $systemRoleRequest->all();
             $data = array_map(function ($value) {
@@ -134,12 +133,12 @@ class RoleController extends BaseController
                 'url' => action('Admin\System\RoleController@index'),
                 'id' => $systemRole->id
             ];
-            DB::commit();//提交事务
+            \DB::commit();//提交事务
 
             return $this->response('添加成功', 201, $response);
 
         } catch (\Exception $e) {
-            DB::rollback();//回滚事务
+            \DB::rollback();//回滚事务
 
             return $this->eResponse($e->getMessage(), $e->getCode());
         }
@@ -167,7 +166,7 @@ class RoleController extends BaseController
     public function edit($id)
     {
         $systemRole = SystemRole::find($id);
-        if (!$systemRole) {
+        if (!$systemRole || $systemRole->id == 1) {
             abort(403, '参数无效');
         }
 
@@ -185,10 +184,10 @@ class RoleController extends BaseController
     public function update(SystemRoleRequest $systemRoleRequest, $id)
     {
         $systemRole = SystemRole::find($id);
-        if (!$systemRole) {
+        if (!$systemRole || $systemRole->id == 1) {
             return $this->response('参数无效', 403);
         }
-        DB::beginTransaction();//开启事务
+        \DB::beginTransaction();//开启事务
         try {
             $data = $systemRoleRequest->all();
             $data = array_map(function ($value) {
@@ -201,15 +200,14 @@ class RoleController extends BaseController
             $data['status'] = $data['status'] ?? 0;
             $systemRole->update($data);
             $response = [
-                'url' => action('Admin\System\RoleController@edit',
-                                ['id' => $id])
+                'url' => action('Admin\System\RoleController@index')
             ];
-            DB::commit();//提交事务
+            \DB::commit();//提交事务
 
             return $this->response('修改成功', 200, $response);
 
         } catch (\Exception $e) {
-            DB::rollback();//回滚事务
+            \DB::rollback();//回滚事务
 
             return $this->eResponse($e->getMessage(), $e->getCode());
         }
@@ -222,8 +220,119 @@ class RoleController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        //
+        \DB::beginTransaction();//开启事务
+        try {
+            if ($id > 0) {
+                if ($id > 1) {
+                    SystemRole::where('id', $id)->delete();
+                    //                    \DB::table('bs_personates')->where('bs_admin_id', $id)
+                    //                        ->delete();
+                    //                    \DB::table('bs_belongs')->where('bs_admin_id', $id)
+                    //                        ->delete();
+                    \DB::commit();//提交事务
+
+                    return $this->response('删除成功', 200);
+                } else {
+                    \DB::rollback();//回滚事务
+
+                    return $this->Response('系统专属角色不可操作', 400);
+                }
+            } else {
+                $ids = is_array($request->ids) ?
+                    $request->ids :
+                    explode(',', $request->ids);
+                SystemRole::where('id', '<>', '1')->whereIn('id', $ids)
+                    ->delete();
+                //                \DB::table('bs_personates')->where('bs_admin_id', '<>', '1')
+                //                    ->whereIn('bs_admin_id', $ids)->delete();
+                //                \DB::table('bs_belongs')->where('bs_admin_id', '<>', '1')
+                //                    ->whereIn('bs_admin_id', $ids)->delete();
+                \DB::commit();//提交事务
+
+                return $this->response('批量删除成功', 200);
+            }
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * @param         $id
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function enable($id, Request $request)
+    {
+        \DB::beginTransaction();//开启事务
+        try {
+            if ($id > 0) {
+                if ($id > 1) {
+                    SystemRole::where('id', $id)->update(['status' => '1']);
+                    \DB::commit();//提交事务
+
+                    return $this->response('启用成功', 200);
+                } else {
+                    \DB::rollback();//回滚事务
+
+                    return $this->Response('非法操作', 400);
+                }
+            } else {
+                $ids = is_array($request->ids) ?
+                    $request->ids :
+                    explode(',', $request->ids);
+                SystemRole::where('id', '<>', '1')->whereIn('id', $ids)
+                    ->update(['status' => '1']);
+                \DB::commit();//提交事务
+
+                return $this->response('批量启用成功', 200);
+            }
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * @param         $id
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function disable($id, Request $request)
+    {
+        \DB::beginTransaction();//开启事务
+        try {
+            if ($id > 0) {
+                if ($id > 1) {
+                    SystemRole::where('id', $id)->update(['status' => '0']);
+                    \DB::commit();//提交事务
+
+                    return $this->response('禁用成功', 200);
+                } else {
+                    \DB::rollback();//回滚事务
+
+                    return $this->Response('系统专属角色不可禁用', 400);
+                }
+            } else {
+                $ids = is_array($request->ids) ?
+                    $request->ids :
+                    explode(',', $request->ids);
+                SystemRole::where('id', '<>', '1')->whereIn('id', $ids)
+                    ->update(['status' => '0']);
+                \DB::commit();//提交事务
+
+                return $this->response('批量禁用成功', 200);
+            }
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
     }
 }
