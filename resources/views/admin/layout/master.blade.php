@@ -80,6 +80,8 @@
 <!-- END Apps Modal -->
 <!-- Page JS Plugins -->
 <script src="/static/admin/js/core/jquery.min.js?v=20180327"></script>
+<!--vuejs引入和相关代码-->
+@yield('vuejs','')
 <script src="/static/admin/js/core/bootstrap.min.js?v=20180327"></script>
 <script src="/static/admin/js/core/jquery.slimscroll.min.js?v=20180327"></script>
 <script src="/static/admin/js/core/jquery.scrollLock.min.js?v=20180327"></script>
@@ -103,8 +105,6 @@
     var server_upload_image_url = "{{action('Admin\System\FileController@upload')}}";//上传地址
     var server_image_host = "";//图片显示前缀域名，上传成功后返回的是完整图片地址就留空
 </script>
-<!--vuejs引入和相关代码-->
-@yield('vuejs','')
 <!--自定义js-->
 <script src="/static/admin/js/custom.js?v=20180327"></script>
 <script>
@@ -116,13 +116,10 @@
                 url: '/admin/logout',
                 dataType: 'JSON',
                 success: function (response) {
-                    Dolphin.loading('hide');
                     if (response.status_code >= 200 && response.status_code < 300) {
-                        Dolphin.notify(response.message, 'success');
-                        setTimeout(function () {
-                            location.href = response.data.url;
-                        }, 1500);
+                        Dolphin.jNotify(response.message, 'success', response.data.url);
                     } else {
+                        Dolphin.loading('hide');
                         Dolphin.notify(response.message, 'danger');
                     }
                 },

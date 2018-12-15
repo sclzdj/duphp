@@ -16,7 +16,7 @@
                             <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"><i class="si si-size-fullscreen"></i></button>
                         </li>
                     </ul>
-                    <h3 class="block-title">用户管理</h3>
+                    <h3 class="block-title">角色管理</h3>
                 </div>
                 <div class="block-content tab-content">
                     <div class="tab-pane active">

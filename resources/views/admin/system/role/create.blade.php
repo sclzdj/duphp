@@ -32,6 +32,54 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-system_node_ids">
+                                    <label class="col-md-1 control-label form-option-line">
+                                        <span class="form-option-require"></span>
+                                        分配节点
+                                    </label>
+                                    <div class="col-md-11 form-option-line">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                @php $html=''; @endphp
+                                                @foreach($treeNodes as $node)
+                                                    @if($node['level']<4)
+                                                        <div class="small-input-checkbox" style="margin-left: 60px;">{!! $html !!}</div>
+                                                        @php
+                                                            $html='';
+                                                            $marginLeft=($node['level']-1)*20;
+                                                        @endphp
+                                                        <div class="small-input-checkbox" style="margin-left: {{$marginLeft}}px;">
+                                                            <label style="@if($node['level']==1)font-weight: bold;@endif" title="@if($node['level']==1)模块@else{{$node['level']}}级节点@endif" class="css-input css-checkbox css-checkbox-primary css-checkbox-sm css-checkbox-rounded">
+                                                                <input level="{{$node['level']}}" type="checkbox" name="system_node_ids[]" value="{{$node['id']}}">
+                                                                <span></span> {{$node['name']}}
+                                                                @if($node['level']==1)
+                                                                    <i style="font-weight: normal;color: #888;">----模块</i>
+                                                                @elseif($node['level']==2)
+                                                                    <i style="font-weight: normal;color: #aaa;">----2级节点</i>
+                                                                @elseif($node['level']==3)
+                                                                    <i style="font-weight: normal;color: #ccc;">----3级节点</i>
+                                                                @endif
+                                                            </label>
+                                                        </div>
+                                                    @else
+                                                        @php
+                                                            $html.='<label class="css-input css-checkbox css-checkbox-primary css-checkbox-sm css-checkbox-rounded">
+                                                                <input level="'.$node['level'].'" type="checkbox" name="system_node_ids[]" value="'.$node['id'].'">
+                                                                <span></span> '.$node['name'].'</label>';
+                                                        @endphp
+                                                    @endif
+                                                @endforeach
+                                                @if($html!=='')
+                                                    <div class="small-input-checkbox" style="margin-left: 60px;">{!! $html !!}</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-11 col-md-offset-1 form-control-static form-option-line">
+                                        <div class="help-block help-block-line">至少选择一个节点</div>
+                                    </div>
+                                </div>
+
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-status">
                                     <label class="col-md-1 control-label form-option-line">
                                         状态
@@ -63,6 +111,7 @@
     </div>
 @endsection
 @section('javascript')
+    <script src="/static/admin/js/change-node.js?v=20180327"></script>
     <script>
         $(function () {
             $(document).on('click', '#create-submit', function () {
@@ -75,13 +124,10 @@
                     dataType: 'JSON',
                     data: data,
                     success: function (response) {
-                        Dolphin.loading('hide');
                         if (response.status_code >= 200 && response.status_code < 300) {
-                            Dolphin.notify(response.message, 'success');
-                            setTimeout(function () {
-                                location.href = response.data.url;
-                            }, 1500);
+                            Dolphin.jNotify(response.message, 'success',response.data.url);
                         } else {
+                            Dolphin.loading('hide');
                             Dolphin.notify(response.message, 'danger');
                         }
                     },

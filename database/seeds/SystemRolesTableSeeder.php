@@ -14,11 +14,11 @@ class SystemRolesTableSeeder extends Seeder
         $systemRoles =
             factory(\App\Model\Admin\SystemRole::class, 30)->create();
         $systemRole = $systemRoles[0];
-        $systemRole->name = '超级管理员';
+        $systemRole->name = '普通管理员';
         $systemRole->status = 1;
         $systemRole->save();
         $systemRole = $systemRoles[1];
-        $systemRole->name = '普通管理员';
+        $systemRole->name = '编辑人员';
         $systemRole->status = 1;
         $systemRole->save();
         $systemRole = $systemRoles[2];

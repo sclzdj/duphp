@@ -10,17 +10,14 @@ $(function () {
             url: url,
             dataType: 'JSON',
             success: function (response) {
-                Dolphin.loading('hide');
                 if (response.status_code >= 200 && response.status_code < 300) {
-                    Dolphin.notify(response.message, 'success');
-                    setTimeout(function () {
-                        if (response.data.url !== undefined) {
-                            location.href = response.data.url;
-                        } else {
-                            location.reload();
-                        }
-                    }, 1000);
+                    if (response.data.url !== undefined) {
+                        Dolphin.jNotify(response.message, 'success', response.data.url, 1000);
+                    } else {
+                        Dolphin.rNotify(response.message, 'success', 1000);
+                    }
                 } else {
+                    Dolphin.loading('hide');
                     Dolphin.notify(response.message, 'danger');
                 }
             },
@@ -60,30 +57,27 @@ $(function () {
         }
     });
 
-    // 保存节点
+    // 移动节点保存排序
     $(document).delegate('#save', 'click', function () {
         var url = $(this).attr('href');
         var type = $(this).attr('submit-type');
         var sort_list = $('#node_list').nestable('serialize');
+        var pid = $('#node_list').attr('pid');
         Dolphin.loading();
         $.ajax({
             type: type,
             url: url,
             dataType: 'JSON',
-            data: {sort_list: sort_list},
+            data: {sort_list: sort_list,pid:pid},
             success: function (response) {
-                Dolphin.loading('hide');
                 if (response.status_code >= 200 && response.status_code < 300) {
-                    Dolphin.notify(response.message, 'success');
-                    $('#save').removeClass('btn-success').addClass('btn-default disabled');
-                    setTimeout(function () {
-                        if (response.data.url !== undefined) {
-                            location.href = response.data.url;
-                        } else {
-                            location.reload();
-                        }
-                    }, 1500);
+                    if (response.data.url !== undefined) {
+                        Dolphin.jNotify(response.message, 'success', response.data.url, 1000);
+                    } else {
+                        Dolphin.rNotify(response.message, 'success', 1000);
+                    }
                 } else {
+                    Dolphin.loading('hide');
                     Dolphin.notify(response.message, 'danger');
                 }
             },

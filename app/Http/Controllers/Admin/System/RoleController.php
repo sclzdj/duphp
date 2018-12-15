@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\System;
 
 use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\Admin\SystemRoleRequest;
+use App\Model\Admin\SystemNode;
 use App\Model\Admin\SystemRole;
 use Illuminate\Http\Request;
 
@@ -105,7 +106,10 @@ class RoleController extends BaseController
      */
     public function create()
     {
-        return view('/admin/system/role/create');
+        $treeNodes =
+            SystemNode::treeNodes(0, '', '', '&nbsp;&nbsp;&nbsp;&nbsp;');
+
+        return view('/admin/system/role/create', compact('treeNodes'));
     }
 
     /**
@@ -129,6 +133,12 @@ class RoleController extends BaseController
             }, $data);
             $data['status'] = $data['status'] ?? 0;
             $systemRole = SystemRole::create($data);
+            foreach ($data['system_node_ids'] as $v) {
+                \DB::table('system_role_nodes')->insert([
+                                                            'system_role_id' => $systemRole->id,
+                                                            'system_node_id' => $v,
+                                                        ]);
+            }
             $response = [
                 'url' => action('Admin\System\RoleController@index'),
                 'id' => $systemRole->id
@@ -169,8 +179,11 @@ class RoleController extends BaseController
         if (!$systemRole || $systemRole->id == 1) {
             abort(403, '参数无效');
         }
+        $treeNodes =
+            SystemNode::treeNodes(0, '', '', '&nbsp;&nbsp;&nbsp;&nbsp;');
 
-        return view('/admin/system/role/edit', compact('systemRole'));
+        return view('/admin/system/role/edit',
+                    compact('systemRole', 'treeNodes'));
     }
 
     /**
@@ -199,6 +212,14 @@ class RoleController extends BaseController
             }, $data);
             $data['status'] = $data['status'] ?? 0;
             $systemRole->update($data);
+            \DB::table('system_role_nodes')
+                ->where('system_role_id', $systemRole->id)->delete();
+            foreach ($data['system_node_ids'] as $v) {
+                \DB::table('system_role_nodes')->insert([
+                                                            'system_role_id' => $systemRole->id,
+                                                            'system_node_id' => $v,
+                                                        ]);
+            }
             $response = [
                 'url' => action('Admin\System\RoleController@index')
             ];
@@ -227,10 +248,8 @@ class RoleController extends BaseController
             if ($id > 0) {
                 if ($id > 1) {
                     SystemRole::where('id', $id)->delete();
-                    //                    \DB::table('bs_personates')->where('bs_admin_id', $id)
-                    //                        ->delete();
-                    //                    \DB::table('bs_belongs')->where('bs_admin_id', $id)
-                    //                        ->delete();
+                    \DB::table('system_role_nodes')
+                        ->where('system_role_id', $id)->delete();
                     \DB::commit();//提交事务
 
                     return $this->response('删除成功', 200);
@@ -245,10 +264,8 @@ class RoleController extends BaseController
                     explode(',', $request->ids);
                 SystemRole::where('id', '<>', '1')->whereIn('id', $ids)
                     ->delete();
-                //                \DB::table('bs_personates')->where('bs_admin_id', '<>', '1')
-                //                    ->whereIn('bs_admin_id', $ids)->delete();
-                //                \DB::table('bs_belongs')->where('bs_admin_id', '<>', '1')
-                //                    ->whereIn('bs_admin_id', $ids)->delete();
+                \DB::table('system_role_nodes')->whereIn('system_role_id', $ids)
+                    ->delete();
                 \DB::commit();//提交事务
 
                 return $this->response('批量删除成功', 200);

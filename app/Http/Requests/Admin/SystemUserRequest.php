@@ -35,8 +35,8 @@ class SystemUserRequest extends FormRequest
                 'password' => 'required|min:5|max:18|regex:/^[0-9a-zA-Z_!@#$%^&*]+$/',
                 'nickname' => 'required|min:2|max:10',
                 'type' => 'required|in:0,1,2',
-                //                'bs_role_ids' => 'required_if:access_type,0',
-                //                'bs_node_ids' => 'required_if:access_type,1',
+                'system_role_ids' => 'required_if:type,1',
+                'system_node_ids' => 'required_if:type,2',
                 'status' => 'in:1',
             ];
         } elseif ($actionName ==
@@ -50,8 +50,8 @@ class SystemUserRequest extends FormRequest
                 'password' => 'nullable|min:5|max:18|regex:/^[0-9a-zA-Z_!@#$%^&*]+$/',
                 'nickname' => 'required|min:2|max:10',
                 'type' => 'required|in:0,1,2',
-                //                'bs_role_ids' => 'required_if:access_type,0',
-                //                'bs_node_ids' => 'required_if:access_type,1',
+                'system_role_ids' => 'required_if:type,1',
+                'system_node_ids' => 'required_if:type,2',
                 'status' => 'in:1',
             ];
         } else {

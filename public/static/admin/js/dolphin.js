@@ -651,6 +651,30 @@ var Dolphin = function () {
         notify: function ($msg, $type, $icon, $from, $align) {
             tips($msg, $type, $icon, $from, $align);
         },
+        // 遮罩页面小提示
+        lNotify: function ($msg, $type, $time, $icon, $from, $align) {
+            jQuery('#loading .loading-box').remove();
+            tips($msg, $type, $icon, $from, $align);
+            setTimeout(function () {
+                jQuery('#loading').remove();
+            }, $time ? $time : 1500);
+        },
+        // 刷新页面小提示
+        rNotify: function ($msg, $type, $time, $icon, $from, $align) {
+            jQuery('#loading .loading-box').remove();
+            tips($msg, $type, $icon, $from, $align);
+            setTimeout(function () {
+                location.reload();
+            }, $time ? $time : 1500);
+        },
+        // 跳转页面小提示
+        jNotify: function ($msg, $type, $url, $time, $icon, $from, $align) {
+            jQuery('#loading .loading-box').remove();
+            tips($msg, $type, $icon, $from, $align);
+            setTimeout(function () {
+                location.href = $url;
+            }, $time ? $time : 1500);
+        },
         // 启用图标搜索
         iconSearch: function () {
             iconSearchLoader();

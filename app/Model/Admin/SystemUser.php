@@ -22,7 +22,7 @@ class SystemUser extends Authenticatable
         'status',
         'remember_token'
     ];
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -31,4 +31,22 @@ class SystemUser extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function systemRoles()
+    {
+        return $this->belongsToMany(SystemRole::class, 'system_user_roles',
+                                    'system_user_id', 'system_role_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function systemNodes()
+    {
+        return $this->belongsToMany(SystemNode::class, 'system_user_nodes',
+                                    'system_user_id', 'system_node_id');
+    }
 }

@@ -42,8 +42,13 @@
                 <div class="block-content tab-content">
                     <div class="tab-pane active">
                         <form class="sort-form">
-                            <button href="{{action('Admin\System\NodeController@moduleSort')}}" submit-type="POST" title="保存" type="button" class="btn btn-success push-10 ids-submit">保存排序</button>
                             <div class="row">
+                                <div class="col-sm-12" style="margin-bottom: 15px;">
+                                    <div class="toolbar-btn-action">
+                                        <a title="添加模块" class="btn btn-primary" href="{{action('Admin\System\NodeController@create',['pid'=>0])}}"><i class="fa fa-plus-circle"></i> 添加模块</a>
+                                        <button href="{{action('Admin\System\NodeController@moduleSort')}}" submit-type="POST" title="保存" type="button" class="btn btn-success ids-submit">保存排序</button>
+                                    </div>
+                                </div>
                                 <div class="col-md-12">
                                     <div id="sortable" class="connectedSortable push-20 ui-sortable">
                                         @foreach($modules as $module)
@@ -84,17 +89,14 @@
                     dataType: 'JSON',
                     data: {ids: ids},
                     success: function (response) {
-                        Dolphin.loading('hide');
                         if (response.status_code >= 200 && response.status_code < 300) {
-                            Dolphin.notify(response.message, 'success');
-                            setTimeout(function () {
-                                if (response.data.url !== undefined) {
-                                    location.href = response.data.url;
-                                } else {
-                                    location.reload();
-                                }
-                            }, 1500);
+                            if (response.data.url !== undefined) {
+                                Dolphin.jNotify(response.message, 'success', response.data.url);
+                            } else {
+                                Dolphin.rNotify(response.message, 'success');
+                            }
                         } else {
+                            Dolphin.loading('hide');
                             Dolphin.notify(response.message, 'danger');
                         }
                     },

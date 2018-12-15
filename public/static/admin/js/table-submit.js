@@ -10,17 +10,14 @@ $(function () {
             dataType: 'JSON',
             data: {ids: ids},
             success: function (response) {
-                Dolphin.loading('hide');
                 if (response.status_code >= 200 && response.status_code < 300) {
-                    Dolphin.notify(response.message, 'success');
-                    setTimeout(function () {
-                        if (response.data.url !== undefined) {
-                            location.href = response.data.url;
-                        } else {
-                            location.reload();
-                        }
-                    }, 1500);
+                    if (response.data.url !== undefined) {
+                        Dolphin.jNotify(response.message, 'success', response.data.url);
+                    } else {
+                        Dolphin.rNotify(response.message, 'success');
+                    }
                 } else {
+                    Dolphin.loading('hide');
                     Dolphin.notify(response.message, 'danger');
                 }
             },
@@ -78,17 +75,14 @@ $(function () {
             url: url,
             dataType: 'JSON',
             success: function (response) {
-                Dolphin.loading('hide');
                 if (response.status_code >= 200 && response.status_code < 300) {
-                    Dolphin.notify(response.message, 'success');
-                    setTimeout(function () {
-                        if (response.data.url !== undefined) {
-                            location.href = response.data.url;
-                        } else {
-                            location.reload();
-                        }
-                    }, 1500);
+                    if (response.data.url !== undefined) {
+                        Dolphin.jNotify(response.message, 'success', response.data.url);
+                    } else {
+                        Dolphin.rNotify(response.message, 'success');
+                    }
                 } else {
+                    Dolphin.loading('hide');
                     Dolphin.notify(response.message, 'danger');
                 }
             },
@@ -148,13 +142,6 @@ $(function () {
                 Dolphin.loading('hide');
                 if (response.status_code >= 200 && response.status_code < 300) {
                     Dolphin.notify(response.message, 'success');
-                    setTimeout(function () {
-                        if (response.data.url !== undefined) {
-                            location.href = response.data.url;
-                        } else {
-                            location.reload();
-                        }
-                    }, 1500);
                 } else {
                     Dolphin.notify(response.message, 'danger');
                 }

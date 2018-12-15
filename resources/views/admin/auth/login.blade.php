@@ -136,13 +136,10 @@
                 dataType: 'JSON',
                 data: data,
                 success: function (response) {
-                    Dolphin.loading('hide');
                     if (response.status_code >= 200 && response.status_code < 300) {
-                        Dolphin.notify(response.message, 'success');
-                        setTimeout(function () {
-                            location.href = response.data.url;
-                        }, 1500);
+                        Dolphin.jNotify(response.message, 'success', response.data.url);
                     } else {
+                        Dolphin.loading('hide');
                         Dolphin.notify(response.message, 'danger');
                     }
                 },

@@ -22,4 +22,13 @@ class SystemRole extends Model
      * @var array
      */
     protected $hidden = [];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function systemNodes()
+    {
+        return $this->belongsToMany(SystemNode::class, 'system_role_nodes',
+                                    'system_role_id', 'system_node_id');
+    }
 }

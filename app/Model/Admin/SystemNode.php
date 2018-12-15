@@ -230,6 +230,10 @@ class SystemNode extends Model
             $innerHtml .= '<div class="dd3-content"><i class="' . $v['icon'] .
                 '"></i> <span class="dd3-level" data-toggle="tooltip" data-original-title="' .
                 $v['level'] . '级节点">' . $v['level'] . '</span>' . $v['name'];
+            if ($v['action'] !== '') {
+                $innerHtml .= '<span class="link"><i class="fa fa-link"></i>' .
+                    $v['action'] . '</span>';
+            }
             $innerHtml .= '<div class="action"><a href="' .
                 action('Admin\System\NodeController@create',
                        ['pid' => $v['id']]) .
@@ -277,7 +281,7 @@ class SystemNode extends Model
      *
      * @return array 解析成可以写入数据库的格式
      */
-    public static function parseNodes($data = [], $pid = 0)
+    public static function parseNodes($data = [], $pid = 0, $level = 1)
     {
         $sort = 1;
         $result = [];
@@ -286,10 +290,12 @@ class SystemNode extends Model
                 'id' => (int)$d['id'],
                 'pid' => (int)$pid,
                 'sort' => $sort,
+                'level' => $level,
             ];
             if (isset($d['children'])) {
-                $result = array_merge($result, self::parseNodes($d['children'],
-                                                                $d['id']));
+                $result = array_merge($result,
+                                      self::parseNodes($d['children'], $d['id'],
+                                                       $level + 1));
             }
             $sort++;
         }

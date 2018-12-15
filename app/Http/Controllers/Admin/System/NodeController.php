@@ -67,7 +67,17 @@ class NodeController extends BaseController
             } else {
                 $data['level'] = 1;
             }
+            if ($data['level'] > 4) {
+                \DB::rollback();//回滚事务
+
+                return $this->response('本系统最高只支持4级节点', 400);
+            }
             $data['pid'] = (int)$data['pid'];
+            if ($data['pid'] == 2) {
+                \DB::rollback();//提交事务
+
+                return $this->response('系统主页节点下面不能包含子节点', 400);
+            }
             $data['status'] = $data['status'] ?? 0;
             $data['sort'] = (int)$data['sort'];
             $systemNode = SystemNode::create($data);
@@ -141,25 +151,46 @@ class NodeController extends BaseController
                     return $value;
                 }
             }, $data);
+            if ($data['pid'] == 2) {
+                \DB::rollback();//回滚事务
+
+                return $this->response('系统主页节点下面不能包含子节点', 400);
+            }
             if ($data['pid'] > 0) {
                 $pSystemNode = SystemNode::find($data['pid']);
                 $data['level'] = $pSystemNode->level + 1;
             } else {
                 $data['level'] = 1;
             }
+            if ($data['level'] > 4) {
+                \DB::rollback();//回滚事务
+
+                return $this->response('本系统最高只支持4级节点', 400);
+            }
             $data['pid'] = (int)$data['pid'];
             $data['status'] = $data['status'] ?? 0;
             $data['sort'] = (int)$data['sort'];
+            $child_ids = SystemNode::progenyNodes($id, '', 1);
             if ($systemNode->status != $data['status']) {
                 if ($data['status']) {
                     $run_ids = SystemNode::elderNodes($id, 1);
                     $run_ids[] = $id;
                 } else {
-                    $run_ids = SystemNode::progenyNodes($id, '', 1);
+                    $run_ids = $child_ids;
                     $run_ids[] = $id;
                 }
                 SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
                     ->update(['status' => $data['status']]);
+            }
+            if ($systemNode->level != $data['level']) {
+                foreach ($child_ids as $v) {
+                    $cSystemNode = SystemNode::find($v);
+                    $cSystemNode->update([
+                                             'level' => $data['level'] -
+                                                 $systemNode->level +
+                                                 $cSystemNode->level
+                                         ]);
+                }
             }
             $systemNode->update($data);
             $response = [
@@ -223,6 +254,8 @@ class NodeController extends BaseController
         try {
             if ($id > 2) {
                 $run_ids = SystemNode::elderNodes($id, 1);
+                $run_ids =
+                    array_merge($run_ids, SystemNode::progenyNodes($id, '', 1));
                 $run_ids[] = $id;
                 SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
                     ->update(['status' => '1']);
@@ -281,13 +314,49 @@ class NodeController extends BaseController
         \DB::beginTransaction();//开启事务
         try {
             $data = $request->sort_list;
+            $pid = $request->pid;
+            $level = $pid > 0 ?
+                2 :
+                1;
             if ($data) {
-                $data = SystemNode::parseNodes($data);
+                $data = SystemNode::parseNodes($data, $pid, $level);
                 foreach ($data as $d) {
+                    if ($d['id'] == 1) {
+                        if ($d['pid'] != 0 || $d['level'] != 1) {
+                            \DB::rollback();//提交事务
+
+                            return $this->response('系统模块不可被操作', 400);
+                        }
+                    } elseif ($d['id'] == 2) {
+                        if ($d['pid'] != 1 || $d['level'] != 2) {
+                            \DB::rollback();//回滚事务
+
+                            return $this->response('系统主页节点不可被操作', 400);
+                        }
+                    } elseif ($d['pid'] == 2) {
+                        \DB::rollback();//提交事务
+
+                        return $this->response('系统主页节点下面不能包含子节点', 400);
+                    }
                     $where = ['id' => $d['id']];
                     unset($d['id']);
                     SystemNode::where($where)->update($d);
                 }
+                //这段代码应该放在队列执行
+                //                $pix = false;
+                //                if ($pix == true) {
+                //                    $systemNodes =
+                //                        SystemNode::where('status', 0)->get()->toArray();
+                //                    $run_ids = [];
+                //                    foreach ($systemNodes as $systemNode) {
+                //                        $run_ids = array_merge($run_ids,
+                //                                               SystemNode::progenyNodes($systemNode['id'],
+                //                                                                        0, 1));
+                //                    }
+                //                    $run_ids = array_unique($run_ids);
+                //                    SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
+                //                        ->update(['status' => 0]);
+                //                }
                 \DB::commit();//提交事务
 
                 return $this->response('排序成功', 200);

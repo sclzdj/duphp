@@ -31,7 +31,7 @@ class SystemRoleRequest extends FormRequest
         ) {//添加场景
             $rules = [
                 'name' => 'required|min:2|max:10|unique:system_roles,name',
-                //                'bs_node_ids' => 'required_if:access_type,1',
+                'system_node_ids' => 'required',
                 'status' => 'in:1',
             ];
         } elseif ($actionName ==
@@ -42,7 +42,7 @@ class SystemRoleRequest extends FormRequest
             $rules = [
                 'name' => 'required|min:2|max:10|unique:system_roles,name,' .
                     $id,
-                //                'bs_node_ids' => 'required_if:access_type,1',
+                'system_node_ids' => 'required',
                 'status' => 'in:1',
             ];
         } else {
@@ -59,7 +59,7 @@ class SystemRoleRequest extends FormRequest
             'name.min' => '名称长度最小2位',
             'name.max' => '名称长度最大10位',
             'name.unique' => '名称已存在',
-            'system_node_ids.required_if' => '至少选择一个节点',
+            'system_node_ids.required' => '至少选择一个节点',
             'status.in' => '状态值错误',
         ];
     }

@@ -32,8 +32,8 @@ class SystemNodeRequest extends FormRequest
             $rules = [
                 'pid' => 'nullable|numeric|exists:system_nodes,id',
                 'name' => 'required|min:2|max:10|unique:system_nodes,name',
-                'action' => 'required|min:3|max:10|regex:/^^[\x4e00-\x9fa5]+$/',
-                'relate_actions' => 'nullable|min:3|max:100',
+                'action' => 'required|min:3|max:100|regex:/^^[\x4e00-\x9fa5]+$/',
+                //'relate_actions' => 'nullable|min:3|max:100',
                 'status' => 'in:1',
                 'sort' => 'nullable|numeric',
             ];
@@ -47,7 +47,7 @@ class SystemNodeRequest extends FormRequest
                 'name' => 'required|min:2|max:10|unique:system_nodes,name,' .
                     $id,
                 'action' => 'required|min:3|max:100|regex:/^^[\x4e00-\x9fa5]+$/',
-                'relate_actions' => 'nullable|min:3|max:1000',
+                //'relate_actions' => 'nullable|min:3|max:1000',
                 'status' => 'in:1',
                 'sort' => 'nullable|numeric',
             ];
@@ -71,8 +71,8 @@ class SystemNodeRequest extends FormRequest
             'action.min' => '动作方法长度最小3位',
             'action.max' => '动作方法长度最大100位',
             'action.regex' => '动作方法不能含有中文或空格',
-            'relate_actions.min' => '关联动作方法长度最小3位',
-            'relate_actions.max' => '关联动作方法长度最大1000位',
+            //'relate_actions.min' => '关联动作方法长度最小3位',
+            //'relate_actions.max' => '关联动作方法长度最大1000位',
             'sort.numeric' => '排序只能是数值',
             'status.in' => '状态值错误',
         ];
