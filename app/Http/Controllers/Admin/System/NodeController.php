@@ -185,6 +185,11 @@ class NodeController extends BaseController
             if ($systemNode->level != $data['level']) {
                 foreach ($child_ids as $v) {
                     $cSystemNode = SystemNode::find($v);
+                    if ($systemNode->level + $cSystemNode->level > 4) {
+                        \DB::rollback();//回滚事务
+
+                        return $this->response('本系统最高只支持4级节点', 400);
+                    }
                     $cSystemNode->update([
                                              'level' => $data['level'] -
                                                  $systemNode->level +

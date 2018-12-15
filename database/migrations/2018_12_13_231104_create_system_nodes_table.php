@@ -16,9 +16,9 @@ class CreateSystemNodesTable extends Migration
         Schema::create('system_nodes', function (Blueprint $table) {
             $table->engine = 'innodb';
             $table->increments('id');
-            $table->string('name')->unique()->default('')->comment('名称');
+            $table->string('name')->index()->default('')->comment('名称');
             $table->unsignedInteger('pid')->default(0)->comment('所属父级');
-            $table->string('action')->index()->default('')->comment('动作方法');
+            $table->string('action',100)->index()->default('')->comment('动作方法');
             //$table->text('relate_actions', '1000')->comment('关联动作方法，多个换行隔开');
             $table->string('icon')->default('')->comment('图标');
             $table->unsignedTinyInteger('level')->default(1)->comment('级别');

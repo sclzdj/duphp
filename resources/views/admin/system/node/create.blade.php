@@ -67,7 +67,7 @@
                                         <input class="form-control" type="text" name="action" value="" placeholder="请输入动作方法">
                                     </div>
                                     <div class="col-md-5 form-control-static form-option-line">
-                                        <div class="help-block help-block-line">3-100个字符</div>
+                                        <div class="help-block help-block-line">3-100个字符，格式示例：Admin\Module\CtrlController@action</div>
                                     </div>
                                 </div>
 

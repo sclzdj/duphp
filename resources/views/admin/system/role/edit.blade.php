@@ -25,10 +25,10 @@
                                         名称
                                     </label>
                                     <div class="col-md-6 form-option-line">
-                                        <input class="form-control" type="text" name="name" value="{{$systemRole->name}}" placeholder="请输入角色">
+                                        <input @if($systemRole->id==1) readonly @endif class="form-control" type="text" name="name" value="{{$systemRole->name}}" placeholder="请输入角色">
                                     </div>
                                     <div class="col-md-5 form-control-static form-option-line">
-                                        <div class="help-block help-block-line">2-10个字符，不包含中文</div>
+                                        <div class="help-block help-block-line">@if($systemRole->id==1) 系统专属角色不可修改名称 @else 2-10个字符，不包含中文 @endif</div>
                                     </div>
                                 </div>
 

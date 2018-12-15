@@ -67,20 +67,20 @@
                                         <input class="form-control" type="text" name="action" value="{{$systemNode['action']}}" placeholder="请输入动作方法">
                                     </div>
                                     <div class="col-md-5 form-control-static form-option-line">
-                                        <div class="help-block help-block-line">3-100个字符</div>
+                                        <div class="help-block help-block-line">3-100个字符，格式示例：Admin\Module\CtrlController@action</div>
                                     </div>
                                 </div>
 
                                 {{--<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-relate_actions">--}}
-                                    {{--<label class="col-md-1 control-label form-option-line">--}}
-                                        {{--关联动作方法--}}
-                                    {{--</label>--}}
-                                    {{--<div class="col-md-6 form-option-line">--}}
-                                        {{--<textarea class="form-control" rows="7" name="relate_actions" placeholder="请输入关联动作方法，多个换行隔开">{{$systemNode['relate_actions']}}</textarea>--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-md-5 form-control-static form-option-line">--}}
-                                        {{--<div class="help-block help-block-line">3-1000个字符，多个换行隔开</div>--}}
-                                    {{--</div>--}}
+                                {{--<label class="col-md-1 control-label form-option-line">--}}
+                                {{--关联动作方法--}}
+                                {{--</label>--}}
+                                {{--<div class="col-md-6 form-option-line">--}}
+                                {{--<textarea class="form-control" rows="7" name="relate_actions" placeholder="请输入关联动作方法，多个换行隔开">{{$systemNode['relate_actions']}}</textarea>--}}
+                                {{--</div>--}}
+                                {{--<div class="col-md-5 form-control-static form-option-line">--}}
+                                {{--<div class="help-block help-block-line">3-1000个字符，多个换行隔开</div>--}}
+                                {{--</div>--}}
                                 {{--</div>--}}
 
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-status">
@@ -142,7 +142,7 @@
                     data: data,
                     success: function (response) {
                         if (response.status_code >= 200 && response.status_code < 300) {
-                            Dolphin.jNotify(response.message, 'success',response.data.url);
+                            Dolphin.jNotify(response.message, 'success', response.data.url);
                         } else {
                             Dolphin.loading('hide');
                             Dolphin.notify(response.message, 'danger');

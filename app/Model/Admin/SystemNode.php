@@ -227,35 +227,43 @@ class SystemNode extends Model
             $innerHtml .= '<li class="dd-item dd3-item ' . $disable .
                 '" data-id="' . $v['id'] .
                 '"><div class="dd-handle dd3-handle">拖拽</div>';
-            $innerHtml .= '<div class="dd3-content"><i class="' . $v['icon'] .
-                '"></i> <span class="dd3-level" data-toggle="tooltip" data-original-title="' .
-                $v['level'] . '级节点">' . $v['level'] . '</span>' . $v['name'];
+            $innerHtml .= '<div class="dd3-content"> <span class="dd3-level" data-toggle="tooltip" data-original-title="' .
+                $v['level'] . '级节点">' . $v['level'] . '</span><i class="' .
+                $v['icon'] . '"></i>' . $v['name'];
             if ($v['action'] !== '') {
                 $innerHtml .= '<span class="link"><i class="fa fa-link"></i>' .
                     $v['action'] . '</span>';
             }
-            $innerHtml .= '<div class="action"><a href="' .
-                action('Admin\System\NodeController@create',
-                       ['pid' => $v['id']]) .
-                '" data-toggle="tooltip" data-original-title="添加子节点"><i class="list-icon fa fa-plus fa-fw"></i></a>';
-            $innerHtml .= '<a href="' .
-                action('Admin\System\NodeController@edit', ['id' => $v['id']]) .
-                '" data-toggle="tooltip" data-original-title="修改"><i class="list-icon fa fa-pencil fa-fw"></i></a>';
-            if ($v['status']) {
+            $innerHtml .= '<div class="action">';
+            if ($v['id'] != 2) {
                 $innerHtml .= '<a href="' .
-                    action('Admin\System\NodeController@disable',
-                           ['id' => $v['id']]) .
-                    '" submit-type="PATCH" submit-status="disable" class="disable id-submit" data-toggle="tooltip" data-original-title="禁用"><i class="list-icon fa fa-ban fa-fw"></i></a>';
-            } else {
-                $innerHtml .= '<a href="' .
-                    action('Admin\System\NodeController@enable',
-                           ['id' => $v['id']]) .
-                    '" submit-type="PATCH" submit-status="enable" class="enable id-submit" data-toggle="tooltip" data-original-title="启用"><i class="list-icon fa fa-check-circle-o fa-fw"></i></a>';
+                    action('Admin\System\NodeController@create',
+                           ['pid' => $v['id']]) .
+                    '" data-toggle="tooltip" data-original-title="添加子节点"><i class="list-icon fa fa-plus fa-fw"></i></a>';
             }
-            $innerHtml .= '<a href="' .
-                action('Admin\System\NodeController@destroy',
-                       ['id' => $v['id']]) .
-                '" submit-type="DELETE" confirm="确定删除?" class="id-submit" data-toggle="tooltip" data-original-title="删除"><i class="list-icon fa fa-times fa-fw"></i></a>';
+
+            if ($v['id'] != 1 && $v['id'] != 2) {
+                $innerHtml .= '<a href="' .
+                    action('Admin\System\NodeController@edit',
+                           ['id' => $v['id']]) .
+                    '" data-toggle="tooltip" data-original-title="修改"><i class="list-icon fa fa-pencil fa-fw"></i></a>';
+                if ($v['status']) {
+                    $innerHtml .= '<a href="' .
+                        action('Admin\System\NodeController@disable',
+                               ['id' => $v['id']]) .
+                        '" submit-type="PATCH" submit-status="disable" class="disable id-submit" data-toggle="tooltip" data-original-title="禁用"><i class="list-icon fa fa-ban fa-fw"></i></a>';
+                } else {
+                    $innerHtml .= '<a href="' .
+                        action('Admin\System\NodeController@enable',
+                               ['id' => $v['id']]) .
+                        '" submit-type="PATCH" submit-status="enable" class="enable id-submit" data-toggle="tooltip" data-original-title="启用"><i class="list-icon fa fa-check-circle-o fa-fw"></i></a>';
+                }
+                $innerHtml .= '<a href="' .
+                    action('Admin\System\NodeController@destroy',
+                           ['id' => $v['id']]) .
+                    '" submit-type="DELETE" confirm="确定删除?" class="id-submit" data-toggle="tooltip" data-original-title="删除"><i class="list-icon fa fa-times fa-fw"></i></a>';
+
+            }
             $innerHtml .= '</div></div>';
             if ($max_level == 0 || $level != $max_level) {
                 unset($systemNodes[$k]);

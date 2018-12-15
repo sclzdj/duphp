@@ -176,7 +176,7 @@ class RoleController extends BaseController
     public function edit($id)
     {
         $systemRole = SystemRole::find($id);
-        if (!$systemRole || $systemRole->id == 1) {
+        if (!$systemRole) {
             abort(403, '参数无效');
         }
         $treeNodes =
@@ -197,12 +197,15 @@ class RoleController extends BaseController
     public function update(SystemRoleRequest $systemRoleRequest, $id)
     {
         $systemRole = SystemRole::find($id);
-        if (!$systemRole || $systemRole->id == 1) {
+        if (!$systemRole) {
             return $this->response('参数无效', 403);
         }
         \DB::beginTransaction();//开启事务
         try {
             $data = $systemRoleRequest->all();
+            if ($systemRole->id == 1) {
+                $data['name'] = $systemRole->name;
+            }
             $data = array_map(function ($value) {
                 if ($value === null) {
                     return '';
