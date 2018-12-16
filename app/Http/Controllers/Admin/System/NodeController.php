@@ -54,6 +54,7 @@ class NodeController extends BaseController
         \DB::beginTransaction();//开启事务
         try {
             $data = $systemNodeRequest->all();
+            action($data['action']);
             $data = array_map(function ($value) {
                 if ($value === null) {
                     return '';
@@ -67,6 +68,8 @@ class NodeController extends BaseController
             } else {
                 $data['level'] = 1;
             }
+
+
             if ($data['level'] > 4) {
                 \DB::rollback();//回滚事务
 
@@ -144,6 +147,7 @@ class NodeController extends BaseController
         \DB::beginTransaction();//开启事务
         try {
             $data = $systemNodeRequest->all();
+            action($data['action']);
             $data = array_map(function ($value) {
                 if ($value === null) {
                     return '';
@@ -347,21 +351,6 @@ class NodeController extends BaseController
                     unset($d['id']);
                     SystemNode::where($where)->update($d);
                 }
-                //这段代码应该放在队列执行
-                //                $pix = false;
-                //                if ($pix == true) {
-                //                    $systemNodes =
-                //                        SystemNode::where('status', 0)->get()->toArray();
-                //                    $run_ids = [];
-                //                    foreach ($systemNodes as $systemNode) {
-                //                        $run_ids = array_merge($run_ids,
-                //                                               SystemNode::progenyNodes($systemNode['id'],
-                //                                                                        0, 1));
-                //                    }
-                //                    $run_ids = array_unique($run_ids);
-                //                    SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
-                //                        ->update(['status' => 0]);
-                //                }
                 \DB::commit();//提交事务
 
                 return $this->response('排序成功', 200);

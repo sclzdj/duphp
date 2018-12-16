@@ -13,22 +13,16 @@
                 </div>
                 <div class="block-content">
                     <div class="row text-center">
+                        @foreach(\App\Servers\NavigationServer::modules() as $module)
                         <div class="col-xs-6 col-sm-3">
-                            <a class="block block-rounded" href="javascript:void(0);" target="_self">
-                                <div class="block-content text-white bg-primary">
-                                    <i class="fa fa-fw fa-cab fa-2x"></i>
-                                    <div class="font-w600 push-15-t push-15">模块一</div>
+                            <a class="block block-rounded" href="{{$module['url']}}" target="_self">
+                                <div class="block-content @if($module['id']==\App\Servers\NavigationServer::currentModuleId()) text-white bg-primary @else text-white bg-primary-dark @endif">
+                                    <i class="{{$module['icon']}}"></i>
+                                    <div class="font-w600 push-15-t push-15">{{$module['name']}}</div>
                                 </div>
                             </a>
                         </div>
-                        <div class="col-xs-6 col-sm-3">
-                            <a class="block block-rounded" href="javascript:void(0);" target="_self">
-                                <div class="block-content text-white bg-primary-dark">
-                                    <i class="fa fa-fw fa-cab fa-2x"></i>
-                                    <div class="font-w600 push-15-t push-15">模块二</div>
-                                </div>
-                            </a>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

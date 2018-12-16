@@ -163,8 +163,25 @@ class PermissionServer
                 return ['status' => true];
             } else {
                 return true;
+
             }
         }
+    }
+
+    /**
+     * 当前登录账号是否可登录后台(只执行一次)
+     *
+     * @return array|bool|null
+     */
+    public static function allowLoginOne($type = false, $validateNode = false)
+    {
+        if (isset($GLOBALS['permission'][$type][$validateNode])) {
+            return $GLOBALS['permission'][$type][$validateNode];
+        }
+
+        return $GLOBALS['permission'][$type][$validateNode] =
+            self::allowLogin(0, $type, $validateNode);
+
     }
 
     /**
@@ -246,6 +263,23 @@ class PermissionServer
     }
 
     /**
+     *当前登录账号允许的节点(只执行一次)
+     *
+     * @return array|bool|object
+     */
+    public static function allowNodesOne($node_status = 1, $role_status = 1,
+        $type = false
+    ) {
+        if (isset($GLOBALS['permission'][$node_status][$role_status][$type])) {
+            return $GLOBALS['permission'][$node_status][$role_status][$type];
+        }
+
+        return $GLOBALS['permission'][$node_status][$role_status][$type] =
+            self::allowNodes(0, $node_status, $role_status, $type);
+
+    }
+
+    /**
      * 允许访问的所有方法
      *
      * @param int  $id
@@ -301,6 +335,63 @@ class PermissionServer
     }
 
     /**
+     *当前登录账号允许的方法(只执行一次)
+     *
+     * @return array
+     */
+    public static function allowActionsOne($type = false)
+    {
+        if (isset($GLOBALS['permission'][$type])) {
+            return $GLOBALS['permission'][$type];
+        }
+
+        $nodes = self::allowNodesOne(1, 1, true);
+        if ($nodes === true) {
+            $nodes = SystemNode::get();
+        }
+        $actions = [];
+        if (count($nodes) > 0) {
+            foreach ($nodes as $node) {
+                if ($node->action !== '') {
+                    $pix = $node->action;
+                    if ($type) {
+                        $pix = strtolower($pix);
+                    }
+                    $actions[] = $pix;
+                    if (explode('@', $node->action)[1] == 'create') {
+                        $pix = explode('@', $node->action)[0] . '@store';
+                        if ($type) {
+                            $pix = strtolower($pix);
+                        }
+                        $actions[] = $pix;
+                    } elseif (explode('@', $node->action)[1] == 'store') {
+                        $pix = explode('@', $node->action)[0] . '@create';
+                        if ($type) {
+                            $pix = strtolower($pix);
+                        }
+                        $actions[] = $pix;
+                    } elseif (explode('@', $node->action)[1] == 'edit') {
+                        $pix = explode('@', $node->action)[0] . '@update';
+                        if ($type) {
+                            $pix = strtolower($pix);
+                        }
+                        $actions[] = $pix;
+                    } elseif (explode('@', $node->action)[1] == 'update') {
+                        $pix = explode('@', $node->action)[0] . '@edit';
+                        if ($type) {
+                            $pix = strtolower($pix);
+                        }
+                        $actions[] = $pix;
+                    }
+                }
+            }
+        }
+
+        return $GLOBALS['permission'][$type] = $actions;
+
+    }
+
+    /**
      * 判断此方法是否允许
      *
      * @param      $action
@@ -318,4 +409,20 @@ class PermissionServer
 
         return in_array($action, $actions);
     }
+
+    /**
+     *当前登录账号判断此方法是否允许(只执行一次)
+     *
+     * @return bool
+     */
+    public static function allowActionOne($action, $type = false)
+    {
+        $actions = self::allowActionsOne($type);
+        if ($type) {
+            $action = strtolower($action);
+        }
+
+        return in_array($action, $actions);
+    }
+
 }

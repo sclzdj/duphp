@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\Admin\SystemRoleRequest;
 use App\Model\Admin\SystemNode;
 use App\Model\Admin\SystemRole;
+use App\Servers\NavigationServer;
 use Illuminate\Http\Request;
 
 class RoleController extends BaseController

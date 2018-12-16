@@ -92,23 +92,52 @@ class SystemNode extends Model
      */
     public static function elderNodes($id, $type = 0)
     {
+        $elderNodes = self::_elderNodes($id);
+        $elderNodes = array_reverse($elderNodes);
+        if ($type == 0) {
+            $data = [];
+            foreach ($elderNodes as $v) {
+                $data[] = self::find($v);
+            }
+
+            return $data;
+        } else {
+            return $elderNodes;
+        }
+    }
+
+    protected static function _elderNodes($id,$pix=true)
+    {
         static $data = [];
-        $systemNode = self::find($id);
-        if ($systemNode) {
-            $systemNode = $systemNode->toArray();
-            $pSystemNode = self::find($systemNode['pid']);
+        $systemNode = self::find($id);var_dump($pix);
+        if ($systemNode && $systemNode->pid > 0) {
+            $pSystemNode = self::find($systemNode->pid);
             if ($pSystemNode) {
-                $pSystemNode = $pSystemNode->toArray();
-                if ($type == 1) {
-                    array_unshift($data, $pSystemNode['id']);
-                } else {
-                    array_unshift($data, $pSystemNode);
-                }
-                $data = self::elderNodes($pSystemNode['id'], $type);
+                $data[] = $pSystemNode->id;
+                self::_elderNodes($pSystemNode->id,false);
             }
         }
-
         return $data;
+
+    }
+
+    /**
+     * 根节点
+     *
+     * @param $id
+     */
+    public static function rootNode($id, $type = 0)
+    {
+        $roots = self::elderNodes($id, 1);
+
+        $root_id = count($roots) > 0 ?
+            $roots[0] :
+            $id;
+        if ($type == 0) {
+            return self::find($root_id);
+        } else {
+            return $root_id;
+        }
     }
 
     /**
@@ -289,21 +318,35 @@ class SystemNode extends Model
      *
      * @return array 解析成可以写入数据库的格式
      */
-    public static function parseNodes($data = [], $pid = 0, $level = 1)
-    {
+    public static function parseNodes($data = [], $pid = 0, $level = 1,
+        $status = 1, $status_level = 1
+    ) {
         $sort = 1;
         $result = [];
         foreach ($data as $d) {
+            $id = (int)$d['id'];
+            if ($level <= $status_level) {
+                $status = 1;
+            }
+            if ($status == 1) {
+                $systemNode = self::find($id);
+                if ($systemNode->status == 0) {
+                    $status = 0;
+                    $status_level = $level;
+                }
+            }
             $result[] = [
-                'id' => (int)$d['id'],
+                'id' => $id,
                 'pid' => (int)$pid,
                 'sort' => $sort,
                 'level' => $level,
+                'status' => $status,
             ];
             if (isset($d['children'])) {
                 $result = array_merge($result,
-                                      self::parseNodes($d['children'], $d['id'],
-                                                       $level + 1));
+                                      self::parseNodes($d['children'], $id,
+                                                       $level + 1, $status,
+                                                       $status_level));
             }
             $sort++;
         }

@@ -42,7 +42,7 @@
                 <div class="block-content tab-content">
                     <div class="alert alert-warning alert-dismissable">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <p><strong><i class="fa fa-fw fa-info-circle"></i> 提示：</strong>按住表头可拖动节点，调整后点击【保存排序】，排序功能会导致节点启用禁用状态有延迟；启用节点会连它的<span class="text-primary">所有长辈节点和所有后代节点</span>一起启用；禁用节点会连它的<span class="text-primary">所有后代节点</span>一起禁用</p>
+                        <p><strong><i class="fa fa-fw fa-info-circle"></i> 提示：</strong>按住表头可拖动节点，调整后点击【保存排序】，启用节点拖动到禁用节点下那么它也将被禁用；启用节点会连它的<span class="text-primary">所有长辈节点和所有后代节点</span>一起启用；禁用节点会连它的<span class="text-primary">所有后代节点</span>一起禁用</p>
                     </div>
                     <div class="tab-pane active">
                         <div class="row data-table-toolbar">

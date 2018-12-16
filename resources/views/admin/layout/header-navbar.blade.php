@@ -8,7 +8,8 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <li class="dropdown-header">用户名称 (角色名称)</li>
+                    <li class="dropdown-header">@if(auth()->user()->nickname!=='') {{auth()->user()->nickname}} @else {{auth()->user()->username}} @endif
+                        @if(auth()->user()->type==0) (超级管理员)@elseif(auth()->user()->type==1) (角色权限)@elseif(auth()->user()->type==2) (直赋权限)@endif</li>
                     <li>
                         <a tabindex="-1" href="修改密码链接">
                             <i class="si si-wrench pull-right"></i>修改密码
@@ -47,12 +48,12 @@
             <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
             <a href="javascript:void(0)" title="打开/关闭左侧导航" data-toggle="layout" data-action="sidebar_mini_toggle"><i class="fa fa-bars"></i></a>
         </li>
-        <li class="hidden-xs hidden-sm active">
-            <a href="javascript:void(0);" target="_self" class=""><i class="fa fa-fw fa-cab"></i>模块一</a>
-        </li>
-        <li class="hidden-xs hidden-sm">
-            <a href="javascript:void(0);" target="_self" class=""><i class="fa fa-fw fa-cab"></i>模块二</a>
-        </li>
+        @foreach(\App\Servers\NavigationServer::modules() as $module)
+            <li class="hidden-xs hidden-sm @if($module['id']==\App\Servers\NavigationServer::currentModuleId()) active @endif">
+                <a href="{{$module['url']}}" target="_self" class=""><i class="{{$module['icon']}}"></i>{{$module['name']}}</a>
+            </li>
+        @endforeach
+
         <li>
             <!-- Opens the Apps modal found at the bottom of the page, before including JS code -->
             <a href="#" data-toggle="modal" data-target="#apps-modal"><i class="si si-grid"></i></a>

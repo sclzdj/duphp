@@ -8,8 +8,8 @@
                 <i class="fa fa-times"></i>
             </button>
             <span>
-                    <img class="img-avatar img-avatar32" src="/static/admin/img/avatar.jpg" alt="用户头像">
-                    <span class="font-w600 push-10-l">用户名称</span>
+                    <img class="img-avatar img-avatar32" src="@if(auth('admin')->user()->avatar!=='') {{auth('admin')->user()->avatar}} @else /static/admin/img/avatar.jpg @endif" alt="用户头像">
+                    <span class="font-w600 push-10-l">{{auth('admin')->user()->username}}</span>
                 </span>
         </div>
         <!-- END Side Header -->

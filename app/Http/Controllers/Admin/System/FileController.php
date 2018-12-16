@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Storage;
 
 class FileController extends BaseController
 {
+    public function index()
+    {
+        return;
+    }
+
     /**
      * 文件上传
      *
@@ -44,5 +49,10 @@ class FileController extends BaseController
             return $this->eResponse($e->getMessage(), $e->getCode());
         }
 
+    }
+
+    public function destroy()
+    {
+        return;
     }
 }

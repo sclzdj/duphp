@@ -20,7 +20,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     //这里面写需要登录的路由
     Route::group(['middleware' => 'auth:admin'], function () {
         //系统模块
-        Route::get('system/index/index', 'System\IndexController@index');
+        Route::get('system/index/index', 'System\IndexController@index')
+            ->middleware('permission');
         Route::resource('system/user', 'System\UserController');
         Route::patch('system/user/{id}/enable', 'System\UserController@enable');
         Route::patch('system/user/{id}/disable',
@@ -36,6 +37,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::post('system/node/all/sort', 'System\NodeController@sort');
         Route::any('system/node/module/sort',
                    'System\NodeController@moduleSort');
+        Route::get('system/file', 'System\FileController@index');
+        Route::delete('system/file', 'System\FileController@destroy');
 
         //其他模块
 

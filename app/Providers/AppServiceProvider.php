@@ -14,10 +14,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $GLOBALS['permission'] = null;//主要防止过多查询数据库
+        $GLOBALS['navigation'] = null;//主要防止过多查询数据库
         \Schema::defaultStringLength(191);
         Paginator::defaultView('pagination::du-bootstrap');
     }
-    
+
     /**
      * Register any application services.
      *
@@ -26,9 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         if ($this->app->environment() !== 'production') {
-            $this->app->register(
-                \Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class
-            );
+            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
         //
     }

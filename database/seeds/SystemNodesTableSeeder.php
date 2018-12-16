@@ -190,9 +190,18 @@ class SystemNodesTableSeeder extends Seeder
                 ]
             ],
             [
-                'name' => '小程序',
+                'name' => '微信',
                 'icon' => 'fa fa-fw fa-laptop',
-                'children' => []
+                'children' => [
+                    [
+                        'name' => '公众号板块',
+                        'icon' => 'fa fa-fw fa-laptop',
+                    ],
+                    [
+                        'name' => '小程序板块',
+                        'icon' => 'fa fa-fw fa-laptop',
+                    ]
+                ]
             ],
         ];
         \App\Servers\ArrServer::parseData($systemNodes);
