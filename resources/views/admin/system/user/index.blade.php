@@ -24,10 +24,18 @@
                         <div class="row data-table-toolbar">
                             <div class="col-sm-12">
                                 <div class="pull-left toolbar-btn-action">
-                                    <a class="btn btn-primary btn-table-top" href="{{action('Admin\System\UserController@create')}}"><i class="fa fa-plus-circle"></i> 添加</a>
-                                    <a class="btn btn-success btn-table-top ids-submit" submit-type="PATCH" href="{{action('Admin\System\UserController@enable',['id'=>0])}}"><i class="fa fa-check-circle-o"></i> 启用</a>
-                                    <a class="btn btn-warning btn-table-top ids-submit" submit-type="PATCH" href="{{action('Admin\System\UserController@disable',['id'=>0])}}"><i class="fa fa-ban"></i> 禁用</a>
-                                    <a class="btn btn-danger btn-table-top ids-submit" submit-type="DELETE" href="{{action('Admin\System\UserController@destroy',['id'=>0])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>"><i class="fa fa-times-circle-o"></i> 删除</a>
+                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\UserController@create'))
+                                        <a class="btn btn-primary btn-table-top" href="{{action('Admin\System\UserController@create')}}"><i class="fa fa-plus-circle"></i> 添加</a>
+                                    @endif
+                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\UserController@enable'))
+                                        <a class="btn btn-success btn-table-top ids-submit" submit-type="PATCH" href="{{action('Admin\System\UserController@enable',['id'=>0])}}"><i class="fa fa-check-circle-o"></i> 启用</a>
+                                    @endif
+                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\UserController@disable'))
+                                        <a class="btn btn-warning btn-table-top ids-submit" submit-type="PATCH" href="{{action('Admin\System\UserController@disable',['id'=>0])}}"><i class="fa fa-ban"></i> 禁用</a>
+                                    @endif
+                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\UserController@destroy'))
+                                        <a class="btn btn-danger btn-table-top ids-submit" submit-type="DELETE" href="{{action('Admin\System\UserController@destroy',['id'=>0])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>"><i class="fa fa-times-circle-o"></i> 删除</a>
+                                    @endif
                                 </div>
                                 <form action="{{action('Admin\System\UserController@index')}}" method="get">
                                     <input type="hidden" name="order_field" value="{{$orderBy['order_field']}}">
@@ -244,9 +252,12 @@
                                                     <div class="table-cell">
                                                         <div class="btn-group">
                                                             @if($systemUser->id!=1)
-                                                                <a class="btn btn-xs btn-default" href="{{action('Admin\System\UserController@show',['id'=>$systemUser->id])}}">详情</a>
-                                                                <a class="btn btn-xs btn-default" href="{{action('Admin\System\UserController@edit',['id'=>$systemUser->id])}}">修改</a>
-                                                                <a class="btn btn-xs btn-default id-submit" submit-type="DELETE" href="{{action('Admin\System\UserController@destroy',['id'=>$systemUser->id])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>">删除</a>
+                                                                @if(\App\Servers\PermissionServer::allowAction('Admin\System\UserController@edit'))
+                                                                    <a class="btn btn-xs btn-default" href="{{action('Admin\System\UserController@edit',['id'=>$systemUser->id])}}">修改</a>
+                                                                @endif
+                                                                @if(\App\Servers\PermissionServer::allowAction('Admin\System\UserController@destroy'))
+                                                                    <a class="btn btn-xs btn-default id-submit" submit-type="DELETE" href="{{action('Admin\System\UserController@destroy',['id'=>$systemUser->id])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>">删除</a>
+                                                                @endif
                                                             @else
                                                                 <button class="btn btn-danger btn-xs" type="button" disabled="">不可操作</button>
                                                             @endif

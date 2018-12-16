@@ -33,6 +33,18 @@ class NavigationServer
         return $GLOBALS['navigation']['homeUrl'] = '';
     }
 
+    public static function moduleUrl($id)
+    {
+        $modules = self::modules();
+        foreach ($modules as $module) {
+            if ($module['id'] == $id) {
+                return $module['url'];
+            }
+        }
+
+        return '';
+    }
+
     /**
      * 导航栏模块
      *
@@ -84,6 +96,7 @@ class NavigationServer
                     }
                 }
             }
+            unset($modules[$key]);
         }
 
         return $GLOBALS['navigation']['modules'] = $modules;
@@ -170,6 +183,7 @@ class NavigationServer
             $elderNodes = SystemNode::elderNodes($systemNode['id']);
             $elderNodes[] = $systemNode;
         }
+
         return $elderNodes;
     }
 
@@ -191,17 +205,15 @@ class NavigationServer
     protected static function _all($pid = 0, $max_level = 4)
     {
         $allowNodes = PermissionServer::allowNodesOne();
+
         if ($allowNodes !== true) {
-            $where = $pid == 0 ?
-                [] :
-                ['pid' => $pid];
-            $systemNodes = SystemNode::where($where)->whereIn('id', $allowNodes)
-                ->orderBy('sort', 'asc')->get()->toArray();
-            $alls = ArrServer::grMaxData($systemNodes, $pid, '', $max_level);
+            $alls =
+                SystemNode::grMaxNodes($pid, 1, '', $max_level, 1, $allowNodes);
 
         } else {
             $alls = SystemNode::grMaxNodes($pid, 1, '', $max_level);
         }
+
 
         return $alls;
     }

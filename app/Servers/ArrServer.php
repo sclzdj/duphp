@@ -69,26 +69,4 @@ class ArrServer
 
         return $result;
     }
-
-    public static function grMaxData($data = [], $pid = 0,
-        $html = '&nbsp;│&nbsp;', $max_level = 0, $level = 1
-    ) {
-        static $return = [];
-        foreach ($data as $key => $value) {
-            if ($value['pid'] == $pid) {
-                $pix = [];
-                $pix['_html'] = str_repeat($html, $level - 1);
-                $pix['_level'] = $level;
-                if ($max_level == 0 || $level != $max_level) {
-                    $pix['_data'] =
-                        self::grMaxData($data, $value['id'], $html, $max_level,
-                                        $level + 1);
-                }
-                $return[] = $pix;
-            }
-
-        }
-
-        return $return;
-    }
 }

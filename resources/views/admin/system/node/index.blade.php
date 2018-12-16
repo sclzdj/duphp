@@ -19,9 +19,11 @@
                             <a href="{{action('Admin\System\NodeController@index',['pid'=>$module->id])}}">{{$module->name}}</a>
                         </li>
                     @endforeach
-                    <li>
-                        <a href="{{action('Admin\System\NodeController@moduleSort')}}">模块排序</a>
-                    </li>
+                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\NodeController@moduleSort'))
+                        <li>
+                            <a href="{{action('Admin\System\NodeController@moduleSort')}}">模块排序</a>
+                        </li>
+                    @endif
                     <li class="pull-right">
                         <ul class="block-options push-10-t push-10-r">
                             <li>
@@ -48,8 +50,12 @@
                         <div class="row data-table-toolbar">
                             <div class="col-sm-12">
                                 <div class="toolbar-btn-action">
-                                    <a title="添加@if($pid)节点@else模块@endif" class="btn btn-primary" href="{{action('Admin\System\NodeController@create',['pid'=>$pid])}}"><i class="fa fa-plus-circle"></i> 添加@if($pid)节点@else模块@endif</a>
-                                    <button title="保存排序" type="button" class="btn btn-default disabled" href="{{action('Admin\System\NodeController@sort')}}" submit-type="POST" id="save" disabled=""><i class="fa fa-check-circle-o"></i> 保存排序</button>
+                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\NodeController@create'))
+                                        <a title="添加@if($pid)节点@else模块@endif" class="btn btn-primary" href="{{action('Admin\System\NodeController@create',['pid'=>$pid])}}"><i class="fa fa-plus-circle"></i> 添加@if($pid)节点@else模块@endif</a>
+                                    @endif
+                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\NodeController@sort'))
+                                        <button title="保存排序" type="button" class="btn btn-default disabled" href="{{action('Admin\System\NodeController@sort')}}" submit-type="POST" id="save" disabled=""><i class="fa fa-check-circle-o"></i> 保存排序</button>
+                                    @endif
                                     <button title="隐藏禁用节点" type="button" class="btn btn-danger" id="hide_disable"><i class="fa fa-eye-slash"></i> 隐藏禁用节点</button>
                                     <button title="显示禁用节点" type="button" class="btn btn-info" id="show_disable"><i class="fa fa-eye"></i> 显示禁用节点</button>
                                     <button title="展开所有节点" type="button" class="btn btn-success" id="expand-all"><i class="fa fa-plus"></i> 展开所有节点</button>

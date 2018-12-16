@@ -67,15 +67,19 @@ class PermissionServer
      * @return array|bool
      */
     public static function allowLogin($id = 0, $type = false,
-        $validateNode = false
+        $validateNode = false, $guard = false
     ) {
+        if ($guard === false) {
+            $guard = self::$guard;
+        }
         $id = $id > 0 ?
             $id :
-            auth(self::$guard)->id();
+            auth($guard)->id();
         $systemUser = SystemUser::find($id);
         if (!$systemUser) {
             return false;
         }
+
         if ($id == 1) {
             if ($type) {
                 return ['status' => true];
@@ -415,8 +419,12 @@ class PermissionServer
      *
      * @return bool
      */
-    public static function allowActionOne($action, $type = false)
+    public static function allowActionOne($action = '', $type = false)
     {
+        if ($action === '') {
+            $actionName = request()->route()->getActionName();
+            $action = str_replace('App\Http\Controllers\\', '', $actionName);
+        }
         $actions = self::allowActionsOne($type);
         if ($type) {
             $action = strtolower($action);

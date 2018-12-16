@@ -54,7 +54,6 @@ class NodeController extends BaseController
         \DB::beginTransaction();//开启事务
         try {
             $data = $systemNodeRequest->all();
-            action($data['action']);
             $data = array_map(function ($value) {
                 if ($value === null) {
                     return '';
@@ -69,12 +68,16 @@ class NodeController extends BaseController
                 $data['level'] = 1;
             }
 
-
             if ($data['level'] > 4) {
                 \DB::rollback();//回滚事务
 
                 return $this->response('本系统最高只支持4级节点', 400);
             }
+
+            if ($data['level'] < 4) {
+                action($data['action']);
+            }
+
             $data['pid'] = (int)$data['pid'];
             if ($data['pid'] == 2) {
                 \DB::rollback();//提交事务
@@ -147,7 +150,6 @@ class NodeController extends BaseController
         \DB::beginTransaction();//开启事务
         try {
             $data = $systemNodeRequest->all();
-            action($data['action']);
             $data = array_map(function ($value) {
                 if ($value === null) {
                     return '';
@@ -170,6 +172,9 @@ class NodeController extends BaseController
                 \DB::rollback();//回滚事务
 
                 return $this->response('本系统最高只支持4级节点', 400);
+            }
+            if ($data['level'] < 4) {
+                action($data['action']);
             }
             $data['pid'] = (int)$data['pid'];
             $data['status'] = $data['status'] ?? 0;

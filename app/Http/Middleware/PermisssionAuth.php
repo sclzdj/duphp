@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Servers\PermissionServer;
 use Closure;
 
 class PermisssionAuth
@@ -17,6 +18,21 @@ class PermisssionAuth
     public function handle($request, Closure $next)
     {
 
-        return $next($request);
+        if(!PermissionServer::website()){
+            $allowLoginOne=PermissionServer::allowLoginOne(true);
+            if($allowLoginOne['status']){
+                if(PermissionServer::allowActionOne()){
+                    return $next($request);
+                }else{
+                    return abort(403,'没有权限');
+                }
+            }else{
+                auth('admin')->logout();
+
+                return abort(401,$allowLoginOne['message']);
+            }
+        }else{
+            return $next($request);
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Model\Admin;
 
+use App\Servers\PermissionServer;
 use Illuminate\Database\Eloquent\Model;
 
 class SystemNode extends Model
@@ -106,18 +107,23 @@ class SystemNode extends Model
         }
     }
 
-    protected static function _elderNodes($id,$pix=true)
+    /*
+     * 查出所有长辈节点，顺序从父级到根级
+     * 切记此处返回数据千万不要用静态变量，会出现问题，具体不清楚
+     */
+    protected static function _elderNodes($id, $data = [])
     {
-        static $data = [];
-        $systemNode = self::find($id);var_dump($pix);
-        if ($systemNode && $systemNode->pid > 0) {
-            $pSystemNode = self::find($systemNode->pid);
-            if ($pSystemNode) {
-                $data[] = $pSystemNode->id;
-                self::_elderNodes($pSystemNode->id,false);
-            }
+        $systemNode = self::find($id);
+        if ($systemNode && $systemNode->pid > 0 &&
+            $pSystemNode = self::find($systemNode->pid)
+        ) {
+            $data[] = $pSystemNode->id;
+
+            return self::_elderNodes($pSystemNode->id, $data);
+        } else {
+            return $data;
         }
-        return $data;
+
 
     }
 
@@ -152,21 +158,27 @@ class SystemNode extends Model
      * @return mixed 多维数组
      */
     public static function grMaxNodes($pid = 0, $status = '',
-        $html = '&nbsp;│&nbsp;', $max_level = 0, $level = 1
+        $html = '&nbsp;│&nbsp;', $max_level = 0, $level = 1, $in = false
     ) {
         $where = ['pid' => $pid];
         if ($status !== '') {
             $where['status'] = $status;
         }
-        $systemNodes =
-            self::where($where)->orderBy('sort', 'asc')->get()->toArray();
+        if ($in !== false) {
+            $systemNodes =
+                self::where($where)->whereIn('id', $in)->orderBy('sort', 'asc')
+                    ->get()->toArray();
+        } else {
+            $systemNodes =
+                self::where($where)->orderBy('sort', 'asc')->get()->toArray();
+        }
         foreach ($systemNodes as $key => $systemNode) {
             $systemNodes[$key]['_html'] = str_repeat($html, $level - 1);
             $systemNodes[$key]['_level'] = $level;
             if ($max_level == 0 || $level != $max_level) {
                 $systemNodes[$key]['_data'] =
                     self::grMaxNodes($systemNode['id'], $status, $html,
-                                     $max_level, $level + 1);
+                                     $max_level, $level + 1, $in);
             }
         }
 
@@ -238,8 +250,17 @@ class SystemNode extends Model
      * @return mixed 多维数组
      */
     public static function grMaxHtml($pid = 0, $status = '', $max_level = 0,
-        $level = 1
+        $level = 1, $permission = []
     ) {
+        if (!$permission) {
+            $permission = [
+                'create' => PermissionServer::allowAction('Admin\System\NodeController@create'),
+                'edit' => PermissionServer::allowAction('Admin\System\NodeController@edit'),
+                'enable' => PermissionServer::allowAction('Admin\System\NodeController@enable'),
+                'disable' => PermissionServer::allowAction('Admin\System\NodeController@disable'),
+                'destroy' => PermissionServer::allowAction('Admin\System\NodeController@destroy'),
+            ];
+        }
         $innerHtml = '';
         $where = ['pid' => $pid];
         if ($status !== '') {
@@ -264,7 +285,7 @@ class SystemNode extends Model
                     $v['action'] . '</span>';
             }
             $innerHtml .= '<div class="action">';
-            if ($v['id'] != 2) {
+            if ($v['id'] != 2 && $permission['create']) {
                 $innerHtml .= '<a href="' .
                     action('Admin\System\NodeController@create',
                            ['pid' => $v['id']]) .
@@ -272,36 +293,44 @@ class SystemNode extends Model
             }
 
             if ($v['id'] != 1 && $v['id'] != 2) {
-                $innerHtml .= '<a href="' .
-                    action('Admin\System\NodeController@edit',
-                           ['id' => $v['id']]) .
-                    '" data-toggle="tooltip" data-original-title="修改"><i class="list-icon fa fa-pencil fa-fw"></i></a>';
-                if ($v['status']) {
+                if ($permission['edit']) {
                     $innerHtml .= '<a href="' .
-                        action('Admin\System\NodeController@disable',
+                        action('Admin\System\NodeController@edit',
                                ['id' => $v['id']]) .
-                        '" submit-type="PATCH" submit-status="disable" class="disable id-submit" data-toggle="tooltip" data-original-title="禁用"><i class="list-icon fa fa-ban fa-fw"></i></a>';
-                } else {
-                    $innerHtml .= '<a href="' .
-                        action('Admin\System\NodeController@enable',
-                               ['id' => $v['id']]) .
-                        '" submit-type="PATCH" submit-status="enable" class="enable id-submit" data-toggle="tooltip" data-original-title="启用"><i class="list-icon fa fa-check-circle-o fa-fw"></i></a>';
+                        '" data-toggle="tooltip" data-original-title="修改"><i class="list-icon fa fa-pencil fa-fw"></i></a>';
                 }
-                $innerHtml .= '<a href="' .
-                    action('Admin\System\NodeController@destroy',
-                           ['id' => $v['id']]) .
-                    '" submit-type="DELETE" confirm="确定删除?" class="id-submit" data-toggle="tooltip" data-original-title="删除"><i class="list-icon fa fa-times fa-fw"></i></a>';
+                if ($v['status']) {
+                    if ($permission['disable']) {
+                        $innerHtml .= '<a href="' .
+                            action('Admin\System\NodeController@disable',
+                                   ['id' => $v['id']]) .
+                            '" submit-type="PATCH" submit-status="disable" class="disable id-submit" data-toggle="tooltip" data-original-title="禁用"><i class="list-icon fa fa-ban fa-fw"></i></a>';
+                    }
+                } else {
+                    if ($permission['enable']) {
+                        $innerHtml .= '<a href="' .
+                            action('Admin\System\NodeController@enable',
+                                   ['id' => $v['id']]) .
+                            '" submit-type="PATCH" submit-status="enable" class="enable id-submit" data-toggle="tooltip" data-original-title="启用"><i class="list-icon fa fa-check-circle-o fa-fw"></i></a>';
+                    }
+                }
+                if ($permission['destroy']) {
+                    $innerHtml .= '<a href="' .
+                        action('Admin\System\NodeController@destroy',
+                               ['id' => $v['id']]) .
+                        '" submit-type="DELETE" confirm="确定删除?" class="id-submit" data-toggle="tooltip" data-original-title="删除"><i class="list-icon fa fa-times fa-fw"></i></a>';
 
+                }
             }
             $innerHtml .= '</div></div>';
             if ($max_level == 0 || $level != $max_level) {
                 unset($systemNodes[$k]);
-                $ii =
-                    self::grMaxHtml($v['id'], $status, $max_level, $level + 1);
+                $ii = self::grMaxHtml($v['id'], $status, $max_level, $level + 1,
+                                      $permission);
                 if ($ii) {
                     $innerHtml .= '<ol class="dd-list">' .
                         self::grMaxHtml($v['id'], $status, $max_level,
-                                        $level + 1) . '</ol>';
+                                        $level + 1, $permission) . '</ol>';
                 }
             }
             $innerHtml .= '</li>';

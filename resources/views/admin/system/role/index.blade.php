@@ -23,10 +23,18 @@
                         <div class="row data-table-toolbar">
                             <div class="col-sm-12">
                                 <div class="pull-left toolbar-btn-action">
-                                    <a class="btn btn-primary btn-table-top" href="{{action('Admin\System\RoleController@create')}}"><i class="fa fa-plus-circle"></i> 添加</a>
-                                    <a class="btn btn-success btn-table-top ids-submit" submit-type="PATCH" href="{{action('Admin\System\RoleController@enable',['id'=>0])}}"><i class="fa fa-check-circle-o"></i> 启用</a>
-                                    <a class="btn btn-warning btn-table-top ids-submit" submit-type="PATCH" href="{{action('Admin\System\RoleController@disable',['id'=>0])}}"><i class="fa fa-ban"></i> 禁用</a>
-                                    <a class="btn btn-danger btn-table-top ids-submit" submit-type="DELETE" href="{{action('Admin\System\RoleController@destroy',['id'=>0])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>"><i class="fa fa-times-circle-o"></i> 删除</a>
+                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\RoleController@create'))
+                                        <a class="btn btn-primary btn-table-top" href="{{action('Admin\System\RoleController@create')}}"><i class="fa fa-plus-circle"></i> 添加</a>
+                                    @endif
+                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\RoleController@enable'))
+                                        <a class="btn btn-success btn-table-top ids-submit" submit-type="PATCH" href="{{action('Admin\System\RoleController@enable',['id'=>0])}}"><i class="fa fa-check-circle-o"></i> 启用</a>
+                                    @endif
+                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\RoleController@disable'))
+                                        <a class="btn btn-warning btn-table-top ids-submit" submit-type="PATCH" href="{{action('Admin\System\RoleController@disable',['id'=>0])}}"><i class="fa fa-ban"></i> 禁用</a>
+                                    @endif
+                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\RoleController@destroy'))
+                                        <a class="btn btn-danger btn-table-top ids-submit" submit-type="DELETE" href="{{action('Admin\System\RoleController@destroy',['id'=>0])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>"><i class="fa fa-times-circle-o"></i> 删除</a>
+                                    @endif
                                 </div>
                                 <form action="{{action('Admin\System\RoleController@index')}}" method="get">
                                     <input type="hidden" name="order_field" value="{{$orderBy['order_field']}}">
@@ -187,10 +195,13 @@
                                                 <td class=" ">
                                                     <div class="table-cell">
                                                         <div class="btn-group">
-                                                            <a class="btn btn-xs btn-default" href="{{action('Admin\System\RoleController@show',['id'=>$systemRole->id])}}">详情</a>
-                                                            <a class="btn btn-xs btn-default" href="{{action('Admin\System\RoleController@edit',['id'=>$systemRole->id])}}">修改</a>
+                                                            @if(\App\Servers\PermissionServer::allowAction('Admin\System\RoleController@edit'))
+                                                                <a class="btn btn-xs btn-default" href="{{action('Admin\System\RoleController@edit',['id'=>$systemRole->id])}}">修改</a>
+                                                            @endif
                                                             @if($systemRole->id!=1)
-                                                            <a class="btn btn-xs btn-default id-submit" submit-type="DELETE" href="{{action('Admin\System\RoleController@destroy',['id'=>$systemRole->id])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>">删除</a>
+                                                                @if(\App\Servers\PermissionServer::allowAction('Admin\System\RoleController@disable'))
+                                                                    <a class="btn btn-xs btn-default id-submit" submit-type="DELETE" href="{{action('Admin\System\RoleController@destroy',['id'=>$systemRole->id])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>">删除</a>
+                                                                @endif
                                                             @endif
                                                         </div>
                                                     </div>

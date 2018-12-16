@@ -100,7 +100,7 @@
                                         排序
                                     </label>
                                     <div class="col-md-6 form-option-line">
-                                        <input class="form-control" type="text" name="sort" value="" placeholder="请输入排序">
+                                        <input class="form-control" type="text" name="sort" value="100" placeholder="请输入排序">
                                     </div>
                                     <div class="col-md-5 form-control-static form-option-line">
                                         <div class="help-block help-block-line">只能是数值</div>

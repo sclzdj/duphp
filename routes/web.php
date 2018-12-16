@@ -18,10 +18,9 @@ Route::get('/', function () {
 //后台
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     //这里面写需要登录的路由
-    Route::group(['middleware' => 'auth:admin'], function () {
+    Route::group(['middleware' => ['auth:admin', 'permission']], function () {
         //系统模块
-        Route::get('system/index/index', 'System\IndexController@index')
-            ->middleware('permission');
+        Route::get('system/index/index', 'System\IndexController@index');
         Route::resource('system/user', 'System\UserController');
         Route::patch('system/user/{id}/enable', 'System\UserController@enable');
         Route::patch('system/user/{id}/disable',
