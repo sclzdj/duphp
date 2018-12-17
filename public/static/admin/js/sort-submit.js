@@ -99,7 +99,7 @@ $(function () {
     });
 
     // 初始化节点拖拽
-    $('#node_list').nestable({maxDepth: 4}).on('change', function () {
+    $('#node_list').nestable({maxDepth: 4,group:1}).on('change', function () {
         $('#save').removeAttr("disabled").removeClass('btn-default disabled').addClass('btn-success');
     });
 

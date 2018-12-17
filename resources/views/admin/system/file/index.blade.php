@@ -25,10 +25,10 @@
                             <div class="col-sm-12">
                                 <div class="pull-left toolbar-btn-action">
                                     @if(\App\Servers\PermissionServer::allowAction('Admin\System\FileController@config'))
-                                        <a class="btn btn-primary btn-table-top" href="{{action('Admin\System\FileController@config')}}">上传配置</a>
+                                        <a class="btn btn-primary btn-table-top" href="{{action('Admin\System\FileController@config')}}"><i class="fa fa-fw fa-gear"></i>上传配置</a>
                                     @endif
                                     @if(\App\Servers\PermissionServer::allowAction('Admin\System\FileController@destroy'))
-                                        <a class="btn btn-danger btn-table-top ids-submit" submit-type="DELETE" href="{{action('Admin\System\FileController@destroy',['id'=>0])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>">删除</a>
+                                        <a class="btn btn-danger btn-table-top ids-submit" submit-type="DELETE" href="{{action('Admin\System\FileController@destroy',['id'=>0])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>"><i class="fa fa-times-circle-o"></i> 删除</a>
                                     @endif
                                 </div>
                                 <form action="{{action('Admin\System\FileController@index')}}" method="get">

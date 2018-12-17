@@ -2,6 +2,8 @@
 @section('pre_css')
     <link rel="stylesheet" href="/static/libs/select2/select2.min.css?v=20180327">
     <link rel="stylesheet" href="/static/libs/select2/select2-bootstrap.min.css?v=20180327">
+    <link rel="stylesheet" href="/static/admin/css/font-awesome.css?v=20180327">
+    <link rel="stylesheet" href="/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.css?v=20180327">
 @endsection
 @section('content')
     <div class="alert alert-info alert-dismissable">
@@ -60,28 +62,33 @@
 
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-action">
                                     <label class="col-md-1 control-label form-option-line">
-                                        <span class="form-option-require"></span>
                                         动作方法
                                     </label>
                                     <div class="col-md-6 form-option-line">
                                         <input class="form-control" type="text" name="action" value="" placeholder="请输入动作方法">
                                     </div>
                                     <div class="col-md-5 form-control-static form-option-line">
-                                        <div class="help-block help-block-line">3-100个字符，格式示例：Admin\Module\CtrlController@action</div>
+                                        <div class="help-block help-block-line">3-100个字符；二、三级节点一定要是<span class="text-danger">有效</span>并且<span class="text-danger">不需必带参数</span>的的动作方法；否则将报错</div>
+                                    </div>
+                                    <div class="col-md-11 col-md-offset-1 form-control-static form-option-line">
+                                        <div class="help-block help-block-line">格式示例：<span class="text-danger">Admin\Module\CtrlController@action</span>；模块无需填写，二级节点若有子节点可省略，三级及之后的节点必须填写</div>
                                     </div>
                                 </div>
 
-                                {{--<div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-relate_actions">--}}
-                                    {{--<label class="col-md-1 control-label form-option-line">--}}
-                                        {{--关联动作方法--}}
-                                    {{--</label>--}}
-                                    {{--<div class="col-md-6 form-option-line">--}}
-                                        {{--<textarea class="form-control" rows="7" name="relate_actions" placeholder="请输入关联动作方法，多个换行隔开"></textarea>--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-md-5 form-control-static form-option-line">--}}
-                                        {{--<div class="help-block help-block-line">3-1000个字符，多个换行隔开</div>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
+                                <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-action">
+                                    <label class="col-md-1 control-label form-option-line">
+                                        图标
+                                    </label>
+                                    <div class="col-md-6 form-option-line">
+                                        <div class="input-group js-icon-picke">
+                                            <input name="icon" placeholder="请选择图标" data-placement="bottomRight" data-input-search="true" class="form-control icp icp-auto" value="fab fa-twitter" type="text"/>
+                                            <span class="input-group-addon"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 form-control-static form-option-line">
+                                        <div class="help-block help-block-line">输入可查找图标，一般前三级节点都要选择，四级节点不用选择</div>
+                                    </div>
+                                </div>
 
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-status">
                                     <label class="col-md-1 control-label form-option-line">
@@ -128,9 +135,12 @@
 @section('javascript')
     <script src="/static/libs/select2/select2.full.min.js?v=20180327"></script>
     <script src="/static/libs/select2/i18n/zh-CN.js?v=20180327"></script>
+    <script src="/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.js?v=20180327"></script>
+    <script src="/static/admin/js/iconpicker.js?v=20180327"></script>
     <script>
         $(function () {
-            App.initHelpers(['select2'])
+            App.initHelpers(['select2']);
+
             $(document).on('click', '#create-submit', function () {
                 $('#create-form').find('.form-validate-msg').remove();//清空该表单的验证错误信息
                 var data = $('#create-form').serialize();//表单数据
@@ -142,7 +152,7 @@
                     data: data,
                     success: function (response) {
                         if (response.status_code >= 200 && response.status_code < 300) {
-                            Dolphin.jNotify(response.message, 'success',response.data.url);
+                            Dolphin.jNotify(response.message, 'success', response.data.url);
                         } else {
                             Dolphin.loading('hide');
                             Dolphin.notify(response.message, 'danger');

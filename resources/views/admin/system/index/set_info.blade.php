@@ -77,9 +77,6 @@
                                         <button class="btn btn-minw btn-primary ajax-post" type="button" id="create-submit">
                                             提交
                                         </button>
-                                        <button class="btn btn-default" type="button" onclick="javascript:history.back(-1);return false;">
-                                            返回
-                                        </button>
                                     </div>
                                 </div>
                             </form>

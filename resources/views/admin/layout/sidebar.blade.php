@@ -26,12 +26,12 @@
                                 <ul>
                                     @foreach($menu['_data'] as $m)
                                     <li>
-                                        <a class="@if(\App\Servers\NavigationServer::activeMenu($m['action'])) active @endif" href="{{action($m['action'])}}" target="_self"><i class="{{$m['icon']}}"></i>{{$m['name']}}</a>
+                                        <a class="@if(\App\Servers\NavigationServer::activeMenu($m['action'])) active @endif" href="@if($m['action']!=='') {{action($m['action'])}} @else javascript:void(0); @endif" target="_self"><i class="{{$m['icon']}}"></i>{{$m['name']}}</a>
                                     </li>
                                     @endforeach
                                 </ul>
                             @else
-                                <a class=" @if(\App\Servers\NavigationServer::activeMenu($menu['action'])) active @endif" href="{{action($menu['action'])}}" target="_self"><i class="{{$menu['icon']}}"></i><span class="sidebar-mini-hide">{{$menu['name']}}</span></a>
+                                <a class=" @if(\App\Servers\NavigationServer::activeMenu($menu['action'])) active @endif" href="@if($menu['action']!=='') {{action($menu['action'])}} @else javascript:void(0); @endif" target="_self"><i class="{{$menu['icon']}}"></i><span class="sidebar-mini-hide">{{$menu['name']}}</span></a>
                             @endif
                         </li>
                     @endforeach

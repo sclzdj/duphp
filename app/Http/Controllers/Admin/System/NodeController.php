@@ -69,7 +69,7 @@ class NodeController extends BaseController
                 return $this->response('本系统最高只支持4级节点', 400);
             }
 
-            if ($data['level'] < 4) {
+            if ($data['level'] == 3 || $data['level'] == 2) {
                 action($data['action']);
             }
 
@@ -81,6 +81,7 @@ class NodeController extends BaseController
             }
             $data['status'] = $data['status'] ?? 0;
             $data['sort'] = (int)$data['sort'];
+            $data['icon'] = 'fa ' . $data['icon'];
             $systemNode = SystemNode::create($data);
             $response = [
                 'url' => action('Admin\System\NodeController@index'),
@@ -162,12 +163,13 @@ class NodeController extends BaseController
 
                 return $this->response('本系统最高只支持4级节点', 400);
             }
-            if ($data['level'] < 4) {
+            if ($data['level'] == 3 || $data['level'] == 2) {
                 action($data['action']);
             }
             $data['pid'] = (int)$data['pid'];
             $data['status'] = $data['status'] ?? 0;
             $data['sort'] = (int)$data['sort'];
+            $data['icon'] = 'fa ' . $data['icon'];
             $child_ids = SystemNode::progenyNodes($id, '', 1);
             if ($systemNode->status != $data['status']) {
                 if ($data['status']) {

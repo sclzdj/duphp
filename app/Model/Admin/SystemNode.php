@@ -18,7 +18,7 @@ class SystemNode extends Model
         'name',
         'status',
         'action',
-        'relate_actions',
+        'icon',
         'level',
         'sort',
     ];
