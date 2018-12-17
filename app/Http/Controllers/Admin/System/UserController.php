@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\SystemUserRequest;
 use App\Model\Admin\SystemNode;
 use App\Model\Admin\SystemRole;
 use App\Model\Admin\SystemUser;
+use App\Servers\ArrServer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -140,13 +141,7 @@ class UserController extends BaseController
         \DB::beginTransaction();//开启事务
         try {
             $data = $systemUserRequest->all();
-            $data = array_map(function ($value) {
-                if ($value === null) {
-                    return '';
-                } else {
-                    return $value;
-                }
-            }, $data);
+            $data = ArrServer::null2strData($data);
             $data['password'] = bcrypt($data['password']);
             $data['remember_token'] = str_random(64);
             $data['status'] = $data['status'] ?? 0;
@@ -231,13 +226,7 @@ class UserController extends BaseController
         \DB::beginTransaction();//开启事务
         try {
             $data = $systemUserRequest->all();
-            $data = array_map(function ($value) {
-                if ($value === null) {
-                    return '';
-                } else {
-                    return $value;
-                }
-            }, $data);
+            $data = ArrServer::null2strData($data);
             if ($data['password'] !== '') {
                 $data['password'] = bcrypt($data['password']);
             } else {

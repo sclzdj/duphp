@@ -19,4 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 //后台
-Route::any('admin/system/file/upload', 'Admin\System\FileController@upload');
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
+    Route::any('system/file/upload', 'System\FileController@upload');
+});
+

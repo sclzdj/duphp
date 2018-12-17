@@ -104,6 +104,8 @@
     //上传全局配置
     var server_upload_image_url = "{{action('Admin\System\FileController@upload')}}";//上传地址
     var server_image_host = "";//图片显示前缀域名，上传成功后返回的是完整图片地址就留空
+    var server_upload_file_url = "{{action('Admin\System\FileController@upload')}}";//上传地址
+    var server_file_host = "";//文件显示前缀域名，上传成功后返回的是完整文件地址就留空
 </script>
 <!--自定义js-->
 <script src="/static/admin/js/custom.js?v=20180327"></script>

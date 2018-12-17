@@ -16,8 +16,13 @@ class CreateSystemFilesTable extends Migration
         Schema::create('system_files', function (Blueprint $table) {
             $table->engine = 'innodb';
             $table->increments('id');
-            $table->string('url',1000)->default('')->comment('文件地址');
-            $table->string('filesystem_driver')->default('')->comment('驱动');
+            $table->string('url', 1000)->index()->default('')->comment('文件链接');
+            $table->string('extension')->default('')->comment('后缀名');
+            $table->string('mimeType')->default('')->comment('mime类型');
+            $table->unsignedInteger('size')->default(0)->comment('大小');
+            $table->string('object')->default('')->comment('文件对象名');
+            $table->string('disk')->default('')->comment('磁盘');
+            $table->string('driver')->default('')->comment('驱动');
             $table->timestamps();
         });
         DB::statement("ALTER TABLE `system_files` COMMENT '后台:系统文件'"); // 表注释

@@ -60,7 +60,7 @@
                         <div class="form-group" id="login-username">
                             <label class="col-xs-12">账号</label>
                             <div class="col-xs-12">
-                                <input class="form-control" type="text" name="username" placeholder="请输入您的用户名">
+                                <input class="form-control" type="text" name="username" placeholder="请输入您的账号">
                             </div>
                         </div>
                         <div class="form-group" id="login-password">
@@ -72,12 +72,12 @@
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label class="css-input switch switch-sm switch-primary">
-                                    <input type="checkbox" id="login-remember-me" name="remember-me"><span></span> 7天内自动登录?
+                                    <input type="checkbox" id="login-remember-token"><span></span> 记住您的账号?
                                 </label>
                             </div>
                             <div class="col-xs-6">
                                 <div class="font-s13 text-right push-5-t">
-                                    <a href="">忘记密码?</a>
+                                    {{--<a href="">忘记密码?</a>--}}
                                 </div>
                             </div>
                         </div>
@@ -105,6 +105,7 @@
 <script src="/static/admin/js/core/bootstrap.min.js?v=20180327"></script>
 <script src="/static/admin/js/core/jquery.scrollLock.min.js?v=20180327"></script>
 <script src="/static/admin/js/core/jquery.placeholder.min.js?v=20180327"></script>
+<script src="/static/admin/js/core/js.cookie.min.js?v=20180327"></script>
 <script src="/static/admin/js/dolphin.js?v=20180327"></script>
 <script src="/static/libs/bootstrap-notify/bootstrap-notify.min.js?v=20180327"></script>
 <script src="/static/libs/js-xss/xss.min.js?v=20180327"></script>
@@ -126,6 +127,11 @@
 <!--页面js脚本-->
 <script>
     $(function () {
+        var remember = Cookies.get('username');
+        if (remember !== undefined) {
+            $('#login-form input[name="username"]').val(Cookies.get('username'));
+            $('#login-remember-token').prop('checked', true);
+        }
         $(document).on('click', '#login-submit', function () {
             $('#login-form').find('.form-validate-msg').remove();//清空该表单的验证错误信息
             var data = $('#login-form').serialize();//表单数据
@@ -137,6 +143,11 @@
                 data: data,
                 success: function (response) {
                     if (response.status_code >= 200 && response.status_code < 300) {
+                        if ($('#login-remember-token').is(':checked')) {
+                            Cookies.set('username', $('#login-form input[name="username"]').val(), {expires: 7, path: ''});
+                        } else {
+                            Cookies.remove('username', {path: ''});
+                        }
                         Dolphin.jNotify(response.message, 'success', response.data.url);
                     } else {
                         Dolphin.loading('hide');

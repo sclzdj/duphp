@@ -4,16 +4,28 @@
         <li>
             <div class="btn-group">
                 <button class="btn btn-default btn-image dropdown-toggle" data-toggle="dropdown" type="button">
-                    <img src="/static/admin/img/avatar.jpg" alt="用户头像">
+                    <img src="@if(auth('admin')->user()->avatar!=='') {{auth('admin')->user()->avatar}} @else /static/admin/img/avatar.jpg @endif" alt="用户头像">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li class="dropdown-header">@if(auth()->user()->nickname!=='') {{auth()->user()->nickname}} @else {{auth()->user()->username}} @endif
                         @if(auth()->user()->type==0) (超级管理员)@elseif(auth()->user()->type==1) (角色权限)@elseif(auth()->user()->type==2) (直赋权限)@endif</li>
                     <li>
-                        <a tabindex="-1" href="修改密码链接">
-                            <i class="si si-wrench pull-right"></i>修改密码
-                        </a>
+                        @if(\App\Servers\PermissionServer::allowAction('Admin\System\IndexController@config'))
+                            <a tabindex="-1" href="{{action('Admin\System\IndexController@config')}}">
+                                <i class="si si-settings pull-right"></i>系统配置
+                            </a>
+                        @endif
+                        @if(\App\Servers\PermissionServer::allowAction('Admin\System\IndexController@updatePassword'))
+                            <a tabindex="-1" href="{{action('Admin\System\IndexController@updatePassword')}}">
+                                <i class="si si-wrench pull-right"></i>修改密码
+                            </a>
+                        @endif
+                        @if(\App\Servers\PermissionServer::allowAction('Admin\System\IndexController@setInfo'))
+                            <a tabindex="-1" href="{{action('Admin\System\IndexController@setInfo')}}">
+                                <i class="si si-user pull-right"></i>资料设置
+                            </a>
+                        @endif
                     </li>
                     <li class="divider"></li>
                     <li>

@@ -277,7 +277,6 @@ class PermissionServer
         if (isset($GLOBALS['permission'][$node_status][$role_status][$type])) {
             return $GLOBALS['permission'][$node_status][$role_status][$type];
         }
-
         return $GLOBALS['permission'][$node_status][$role_status][$type] =
             self::allowNodes(0, $node_status, $role_status, $type);
 

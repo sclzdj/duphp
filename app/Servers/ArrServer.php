@@ -33,6 +33,62 @@ class ArrServer
     }
 
     /**
+     * @param array  $data
+     * @param string $key_field
+     * @param string $value_field
+     *
+     * @return array
+     */
+    public static function options($data = [], $key_field = 'id',
+        $value_field = 'name'
+    ) {
+        $options = [];
+        foreach ($data as $d) {
+            $options[$d[$key_field]] = $d[$value_field];
+        }
+
+        return $options;
+    }
+
+    /**
+     * 保留数组有效部分并排除数组无效部分，方便入库
+     *
+     * @param       $data
+     * @param array $retain
+     * @param array $except
+     *
+     * @return mixed
+     */
+    public static function inData($data, $retain = [], $except = [])
+    {
+        if ($retain || $except) {
+            foreach ($data as $k => $v) {
+                if ($retain && !in_array($k, $retain)) {
+                    unset($data[$k]);
+                }
+                if ($except && in_array($k, $except)) {
+                    unset($data[$k]);
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    public static function null2strData($data)
+    {
+        $data = array_map(function ($value) {
+            if ($value === null) {
+                return '';
+            } else {
+                return $value;
+            }
+        }, $data);
+
+        return $data;
+    }
+
+    /**
      * 递归解析数组
      *
      * @param array $data  数据

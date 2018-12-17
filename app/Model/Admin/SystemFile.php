@@ -8,9 +8,14 @@ class SystemFile extends Model
 {
     protected $fillable = [
         'url',
-        'filesystem_driver',
+        'disk',
+        'driver',
+        'object',
+        'extension',
+        'mimeType',
+        'size',
     ];
-    
+
     /**
      * The attributes that should be hidden for arrays.
      *

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\Admin\SystemRoleRequest;
 use App\Model\Admin\SystemNode;
 use App\Model\Admin\SystemRole;
+use App\Servers\ArrServer;
 use App\Servers\NavigationServer;
 use Illuminate\Http\Request;
 
@@ -125,13 +126,7 @@ class RoleController extends BaseController
         \DB::beginTransaction();//开启事务
         try {
             $data = $systemRoleRequest->all();
-            $data = array_map(function ($value) {
-                if ($value === null) {
-                    return '';
-                } else {
-                    return $value;
-                }
-            }, $data);
+            $data = ArrServer::null2strData($data);
             $data['status'] = $data['status'] ?? 0;
             $systemRole = SystemRole::create($data);
             foreach ($data['system_node_ids'] as $v) {
@@ -207,13 +202,7 @@ class RoleController extends BaseController
             if ($systemRole->id == 1) {
                 $data['name'] = $systemRole->name;
             }
-            $data = array_map(function ($value) {
-                if ($value === null) {
-                    return '';
-                } else {
-                    return $value;
-                }
-            }, $data);
+            $data = ArrServer::null2strData($data);
             $data['status'] = $data['status'] ?? 0;
             $systemRole->update($data);
             \DB::table('system_role_nodes')

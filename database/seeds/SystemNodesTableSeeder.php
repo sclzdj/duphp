@@ -72,6 +72,27 @@ class SystemNodesTableSeeder extends Seeder
                         'action' => 'Admin\System\IndexController@index',
                     ],
                     [
+                        'name' => '配置中心',
+                        'icon' => 'fa fa-fw fa-laptop',
+                        'children' => [
+                            [
+                                'name' => '系统配置',
+                                'icon' => 'fa fa-fw fa-laptop',
+                                'action' => 'Admin\System\IndexController@config',
+                            ],
+                            [
+                                'name' => '修改密码',
+                                'icon' => 'fa fa-fw fa-laptop',
+                                'action' => 'Admin\System\IndexController@updatePassword',
+                            ],
+                            [
+                                'name' => '资料设置',
+                                'icon' => 'fa fa-fw fa-laptop',
+                                'action' => 'Admin\System\IndexController@setInfo',
+                            ]
+                        ]
+                    ],
+                    [
                         'name' => '权限功能',
                         'icon' => 'fa fa-fw fa-laptop',
                         'children' => [
@@ -129,6 +150,27 @@ class SystemNodesTableSeeder extends Seeder
                                     ],
                                 ]
                             ],
+                        ]
+                    ],
+                    [
+                        'name' => '开发中心',
+                        'icon' => 'fa fa-fw fa-laptop',
+                        'children' => [
+                            [
+                                'name' => '文件管理',
+                                'icon' => 'fa fa-fw fa-laptop',
+                                'action' => 'Admin\System\FileController@index',
+                                'children' => [
+                                    [
+                                        'name' => '上传配置',
+                                        'action' => 'Admin\System\FileController@config',
+                                    ],
+                                    [
+                                        'name' => '删除',
+                                        'action' => 'Admin\System\FileController@destroy',
+                                    ],
+                                ]
+                            ],
                             [
                                 'name' => '节点管理',
                                 'icon' => 'fa fa-fw fa-laptop',
@@ -161,27 +203,6 @@ class SystemNodesTableSeeder extends Seeder
                                     [
                                         'name' => '删除',
                                         'action' => 'Admin\System\NodeController@destroy',
-                                    ],
-                                ]
-                            ],
-                        ]
-                    ],
-                    [
-                        'name' => '其它功能',
-                        'icon' => 'fa fa-fw fa-laptop',
-                        'children' => [
-                            [
-                                'name' => '文件管理',
-                                'icon' => 'fa fa-fw fa-laptop',
-                                'action' => 'Admin\System\FileController@index',
-                                'children' => [
-                                    [
-                                        'name' => '上传',
-                                        'action' => 'Admin\System\FileController@upload',
-                                    ],
-                                    [
-                                        'name' => '删除',
-                                        'action' => 'Admin\System\FileController@destroy',
                                     ],
                                 ]
                             ],

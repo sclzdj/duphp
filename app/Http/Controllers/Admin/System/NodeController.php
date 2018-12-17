@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\System;
 use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\Admin\SystemNodeRequest;
 use App\Model\Admin\SystemNode;
+use App\Servers\ArrServer;
 use Illuminate\Http\Request;
 
 class NodeController extends BaseController
@@ -54,13 +55,7 @@ class NodeController extends BaseController
         \DB::beginTransaction();//开启事务
         try {
             $data = $systemNodeRequest->all();
-            $data = array_map(function ($value) {
-                if ($value === null) {
-                    return '';
-                } else {
-                    return $value;
-                }
-            }, $data);
+            $data = ArrServer::null2strData($data);
             if ($data['pid'] > 0) {
                 $pSystemNode = SystemNode::find($data['pid']);
                 $data['level'] = $pSystemNode->level + 1;
@@ -150,13 +145,7 @@ class NodeController extends BaseController
         \DB::beginTransaction();//开启事务
         try {
             $data = $systemNodeRequest->all();
-            $data = array_map(function ($value) {
-                if ($value === null) {
-                    return '';
-                } else {
-                    return $value;
-                }
-            }, $data);
+            $data = ArrServer::null2strData($data);
             if ($data['pid'] == 2) {
                 \DB::rollback();//回滚事务
 
@@ -237,10 +226,10 @@ class NodeController extends BaseController
                 $run_ids[] = $id;
                 SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
                     ->delete();
-                //                    \DB::table('bs_personates')->where('bs_admin_id', $id)
-                //                        ->delete();
-                //                    \DB::table('bs_belongs')->where('bs_admin_id', $id)
-                //                        ->delete();
+                \DB::table('system_user_nodes')
+                    ->whereIn('system_node_id', $run_ids)->delete();
+                \DB::table('system_role_nodes')
+                    ->whereIn('system_node_id', $run_ids)->delete();
                 \DB::commit();//提交事务
 
                 return $this->response('删除成功', 200);

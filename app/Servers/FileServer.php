@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 class FileServer
 {
     public $seccess_path = null;//成功上传文件路径
-    
+
     /**
      * @param Request $request
      * @param string  $path 保存目录
@@ -23,18 +23,23 @@ class FileServer
      *
      * @return false|string
      */
-    public function upload($request, $path = 'public', $key = 'file')
+    public function upload($path = 'public', $file, $fileInfo = [])
     {
         if (config('filesystems.default') == 'local') {
             $path = $path . '/uploads/' . date('Ymd');
-            $path = $request->file($key)->store($path);
+            $path = $file->store($path);
             $this->seccess_path = $path;
             $url = asset(Storage::url($path));
-            SystemFile::create([
-                                   'url' => $url,
-                                   'filesystem_driver' => config('filesystems.default')
-                               ]);
-            
+            $create = [
+                'url' => $url,
+                'disk' => config('filesystems.default'),
+                'driver' => config('filesystems.disks.' .
+                                   config('filesystems.default') . '.driver'),
+                'object' => $path
+            ];
+            $create = array_merge($create, $fileInfo);
+            SystemFile::create($create);
+
             return $url;
         } else {
             return false;

@@ -54,6 +54,21 @@ class SystemUserRequest extends FormRequest
                 'system_node_ids' => 'required_if:type,2',
                 'status' => 'in:1',
             ];
+        } elseif ($actionName ==
+            'App\Http\Controllers\Admin\System\IndexController@setInfo' &&
+            $requestMethod == 'PUT'
+        ) {//资料设置
+            $rules = [
+                'password' => 'nullable|min:5|max:18|regex:/^[0-9a-zA-Z_!@#$%^&*]+$/',
+                'nickname' => 'required|min:2|max:10',
+            ];
+        } elseif ($actionName ==
+            'App\Http\Controllers\Admin\System\IndexController@updatePassword' &&
+            $requestMethod == 'PATCH'
+        ) {//资料设置
+            $rules = [
+                'password' => 'required|min:5|max:18|regex:/^[0-9a-zA-Z_!@#$%^&*]+$/',
+            ];
         } else {
             $rules = [];
         }

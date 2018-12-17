@@ -1,9 +1,4 @@
 $(function () {
-    //上传全局配置
-    var server_upload_file_url = "http://dt5.dj/index/upload";//上传地址
-    var server_file_host = "http://dt5.dj/";//文件显示前缀域名，上传成功后返回的是完整文件地址就留空
-
-
     // 文件上传初始化Web Uploader
     var uploader_file = [];
     for (var index = 0; index < $('.js-upload-file').length; index++) {
@@ -19,7 +14,7 @@ $(function () {
             // 只允许选择文件文件。
             accept: {
                 title: upload_type, //指定接受哪些类型的文件
-                extensions: 'gif,jpg,jpeg,bmp,png', //允许的文件后缀，不带点，多个用逗号分割
+                extensions: '', //允许的文件后缀，不带点，多个用逗号分割
                 mimeTypes: '' //文件mime类型
             },
             //附带参数
