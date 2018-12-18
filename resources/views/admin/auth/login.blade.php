@@ -66,7 +66,7 @@
                     <!-- END Login Title -->
                     <!-- Login Form -->
                     <form class="form-horizontal push-30-t signin-form" id="login-form">
-                        <div class="form-group row" id="login-username">
+                        <div class="form-group" id="login-username">
                             <label class="col-xs-12">账号</label>
                             <div class="col-xs-12">
                                 <input class="form-control" type="text" name="username" placeholder="请输入您的账号">
@@ -81,10 +81,10 @@
                         @if(\App\Model\Admin\SystemConfig::getVal('admin_login_captcha','admin'))
                             <div class="form-group" id="login-captcha">
                                 <label class="col-xs-12 " for="login-password">验证码</label>
-                                <div class="col-md-8 col-xs-7">
+                                <div class="col-xs-7">
                                     <input class="form-control" type="text" name="captcha" placeholder="请输入验证码">
                                 </div>
-                                <div class="col-md-4 col-xs-5">
+                                <div class="col-xs-5">
                                     <img src="{{captcha_src()}}" class="pull-right" id="captcha" style="cursor: pointer;height: 34px;" onclick="this.src='{{captcha_src()}}'+'?'+Math.random()" title="点击刷新" alt="captcha">
                                 </div>
                             </div>
@@ -187,7 +187,7 @@
                         $.each(response.errors, function (k, v) {
                             var validate_tips = '';
                             for (var i in v) {
-                                validate_tips += '<div class="col-md-12 form-validate-msg"><i class="fa fa-fw fa-warning text-warning"></i>' + v[i] + '</div>';
+                                validate_tips += '<div class="col-xs-12 form-validate-msg"><i class="fa fa-fw fa-warning text-warning"></i>' + v[i] + '</div>';
                                 validate_notify += '<li>' + v[i] + '</li>';
                             }
                             $('#login-' + k).append(validate_tips); // 页面表单项下方提示，错误验证信息
