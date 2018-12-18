@@ -46,7 +46,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::any('system/node/module/sort',
                    'System\NodeController@moduleSort');
         Route::get('system/file', 'System\FileController@index');
-        Route::any('system/file/config', 'System\FileController@config');
         Route::delete('system/file', 'System\FileController@destroy');
 
         //其他模块

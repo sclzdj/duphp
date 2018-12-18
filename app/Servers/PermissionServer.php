@@ -9,6 +9,7 @@
 namespace App\Servers;
 
 
+use App\Model\Admin\SystemConfig;
 use App\Model\Admin\SystemNode;
 use App\Model\Admin\SystemRole;
 use App\Model\Admin\SystemUser;
@@ -75,9 +76,23 @@ class PermissionServer
         $id = $id > 0 ?
             $id :
             auth($guard)->id();
+        if ($id != 1) {
+            $val = SystemConfig::getVal('basic_admin_run');
+            if ($val == 0) {
+                if ($type) {
+                    return ['status' => false, 'message' => '后台已关闭登录，只有站长能登录'];
+                } else {
+                    return false;
+                }
+            }
+        }
         $systemUser = SystemUser::find($id);
         if (!$systemUser) {
-            return false;
+            if ($type) {
+                return ['status' => false, 'message' => '账号未找到'];
+            } else {
+                return false;
+            }
         }
 
         if ($id == 1) {
@@ -277,6 +292,7 @@ class PermissionServer
         if (isset($GLOBALS['permission'][$node_status][$role_status][$type])) {
             return $GLOBALS['permission'][$node_status][$role_status][$type];
         }
+
         return $GLOBALS['permission'][$node_status][$role_status][$type] =
             self::allowNodes(0, $node_status, $role_status, $type);
 

@@ -545,7 +545,7 @@ var Dolphin = function () {
                 offset: 20,
                 spacing: 10,
                 z_index: 10800,
-                delay: 3000,
+                delay: 1000,
                 timer: 1000,
                 animate: {
                     enter: $enter,

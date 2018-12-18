@@ -3,12 +3,19 @@
 <html class="ie9 no-focus" lang="zh"> <![endif]-->
 <!--[if gt IE 9]><!-->
 <html class="no-focus" lang="zh"> <!--<![endif]-->
+@php
+    $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
+@endphp
 <head>
     <meta charset="utf-8">
     <title>
-        @yield('page_title','后台 | '.config('app.name'))
+        @php
+            $admin_name=\App\Model\Admin\SystemConfig::getVal('admin_name','admin');
+        @endphp
+        @yield('page_title','后台 | '.($admin_name!==''?$admin_name:config('app.name')))
     </title>
-    <meta name="description" content="DUPHP">
+    <meta name="keywords" content="{{\App\Model\Admin\SystemConfig::getVal('admin_keywords','admin')}}">
+    <meta name="description" content="{{\App\Model\Admin\SystemConfig::getVal('admin_describe','admin')}}">
     <meta name="author" content="Dujun">
     <meta name="robots" content="noindex, nofollow">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -16,31 +23,31 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Icons -->
     <!-- 下面的图标可以用自己的图标替换，它们被桌面和移动浏览器所使用 -->
-    <link rel="shortcut icon" href="/static/admin/img/favicons/favicon.ico">
-    <link rel="icon" type="image/png" href="/static/admin/img/favicons/favicon-16x16.png" sizes="16x16">
-    <link rel="icon" type="image/png" href="/static/admin/img/favicons/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="/static/admin/img/favicons/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/png" href="/static/admin/img/favicons/favicon-160x160.png" sizes="160x160">
-    <link rel="icon" type="image/png" href="/static/admin/img/favicons/favicon-192x192.png" sizes="192x192">
-    <link rel="apple-touch-icon" sizes="57x57" href="/static/admin/img/favicons/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/static/admin/img/favicons/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/static/admin/img/favicons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/static/admin/img/favicons/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/static/admin/img/favicons/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/static/admin/img/favicons/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/static/admin/img/favicons/apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/static/admin/img/favicons/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/admin/img/favicons/apple-touch-icon-180x180.png">
+    <link rel="shortcut icon" href="{{asset('/static/admin/img/favicons/favicon.ico'.'?'.$SFV)}}">
+    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon.ico'.'?'.$SFV)}}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
+    <link rel="apple-touch-icon" sizes="57x57" href="{{asset('/static/admin/img/favicons/apple-touch-icon-57x57.png'.'?'.$SFV)}}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{asset('/static/admin/img/favicons/apple-touch-icon-60x60.png'.'?'.$SFV)}}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{asset('/static/admin/img/favicons/apple-touch-icon-72x72.png'.'?'.$SFV)}}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('/static/admin/img/favicons/apple-touch-icon-76x76.png'.'?'.$SFV)}}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{asset('/static/admin/img/favicons/apple-touch-icon-114x114.png'.'?'.$SFV)}}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{asset('/static/admin/img/favicons/apple-touch-icon-120x120.png'.'?'.$SFV)}}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{asset('/static/admin/img/favicons/apple-touch-icon-144x144.png'.'?'.$SFV)}}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{asset('/static/admin/img/favicons/apple-touch-icon-152x152.png'.'?'.$SFV)}}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('/static/admin/img/favicons/apple-touch-icon-180x180.png'.'?'.$SFV)}}">
     <!-- END Icons -->
     <!-- Stylesheets -->
     <!--本页面专属顶部css-->
 @yield('pre_css')
 <!-- Bootstrap与ONEUI CSS框架 -->
-    <link rel="stylesheet" href="/static/admin/css/bootstrap.min.css?v=20180327">
-    <link rel="stylesheet" href="/static/admin/css/oneui.css?v=20180327">
-    <link rel="stylesheet" href="/static/admin/css/dolphin.css?v=20180327" id="css-main">
+    <link rel="stylesheet" href="{{asset('static/admin/css/bootstrap.min.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('static/admin/css/oneui.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('static/admin/css/dolphin.css').'?'.$SFV}}">
     <!--自定义css-->
-    <link rel="stylesheet" href="/static/admin/css/custom.css?v=20180327" type="text/css"/>
+    <link rel="stylesheet" href="{{asset('/static/admin/css/custom.css').'?'.$SFV}}">
     <!--本页面专属底部css-->
 @yield('css')
 <!-- END Stylesheets -->
@@ -79,18 +86,18 @@
 @include('admin.layout.apps-modal')
 <!-- END Apps Modal -->
 <!-- Page JS Plugins -->
-<script src="/static/admin/js/core/jquery.min.js?v=20180327"></script>
+<script src="{{asset('/static/admin/js/core/jquery.min.js').'?'.$SFV}}"></script>
 <!--vuejs引入和相关代码-->
 @yield('vuejs','')
-<script src="/static/admin/js/core/bootstrap.min.js?v=20180327"></script>
-<script src="/static/admin/js/core/jquery.slimscroll.min.js?v=20180327"></script>
-<script src="/static/admin/js/core/jquery.scrollLock.min.js?v=20180327"></script>
-<script src="/static/admin/js/core/jquery.placeholder.min.js?v=20180327"></script>
-<script src="/static/admin/js/app.js?v=20180327"></script>
-<script src="/static/admin/js/dolphin.js?v=20180327"></script>
-<script src="/static/libs/bootstrap-notify/bootstrap-notify.min.js?v=20180327"></script>
-<script src="/static/libs/js-xss/xss.min.js?v=20180327"></script>
-<script src="/static/libs/layer/layer.js?v=20180327"></script>
+<script src="{{asset('/static/admin/js/core/bootstrap.min.js').'?'.$SFV}}"></script>
+<script src="{{asset('/static/admin/js/core/jquery.slimscroll.min.js').'?'.$SFV}}"></script>
+<script src="{{asset('/static/admin/js/core/jquery.scrollLock.min.js').'?'.$SFV}}"></script>
+<script src="{{asset('/static/admin/js/core/jquery.placeholder.min.js').'?'.$SFV}}"></script>
+<script src="{{asset('/static/admin/js/app.js').'?'.$SFV}}"></script>
+<script src="{{asset('/static/admin/js/dolphin.js').'?'.$SFV}}"></script>
+<script src="{{asset('/static/libs/bootstrap-notify/bootstrap-notify.min.js').'?'.$SFV}}"></script>
+<script src="{{asset('/static/libs/js-xss/xss.min.js').'?'.$SFV}}"></script>
+<script src="{{asset('/static/libs/layer/layer.js').'?'.$SFV}}"></script>
 <!-- 程序启动 -->
 <script>
     jQuery(function () {
@@ -108,7 +115,7 @@
     var server_file_host = "";//文件显示前缀域名，上传成功后返回的是完整文件地址就留空
 </script>
 <!--自定义js-->
-<script src="/static/admin/js/custom.js?v=20180327"></script>
+<script src="{{asset('/static/admin/js/custom.js').'?'.$SFV}}"></script>
 <script>
     $(function () {
         $(document).on('click', '#admin-logout', function () {
@@ -139,6 +146,48 @@
                     }
                 }
             });
+        });
+        //侧栏开关
+        $(document).on('change', 'input.side-switch', function () {
+            var name = $(this).prop('name');
+            var checked = $(this).is(':checked');
+            if (checked) {
+                var value = 1;
+            } else {
+                var value = 0;
+            }
+            var _this = $(this);
+            Dolphin.loading('设置中');
+            $.ajax({
+                type: 'PUT',
+                url: '{{action('Admin\System\IndexController@config')}}',
+                data: {name: name, value: value},
+                dataType: 'JSON',
+                success: function (response) {
+                    Dolphin.loading('hide');
+                    if (response.status_code >= 200 && response.status_code < 300) {
+                        Dolphin.rNotify(response.message, 'success');
+                    } else {
+                        _this.prop('checked', !checked);
+                        Dolphin.notify(response.message, 'danger');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    _this.prop('checked', !checked);
+                    var response = JSON.parse(xhr.responseText);
+                    Dolphin.loading('hide');
+                    if (xhr.status == 419) { // csrf错误，错误码固定为419
+                        Dolphin.notify('请勿重复请求~', 'danger');
+                    } else {
+                        if (response.message) {
+                            Dolphin.notify(response.message, 'danger');
+                        } else {
+                            Dolphin.notify('服务器错误~', 'danger');
+                        }
+                    }
+                }
+            });
+            return false;
         });
     });
 </script>

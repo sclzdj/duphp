@@ -1,9 +1,12 @@
+@php
+    $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
+@endphp
 @extends('admin.layout.master')
 @section('pre_css')
-    <link rel="stylesheet" href="/static/libs/select2/select2.min.css?v=20180327">
-    <link rel="stylesheet" href="/static/libs/select2/select2-bootstrap.min.css?v=20180327">
-    <link rel="stylesheet" href="/static/admin/css/font-awesome.css?v=20180327">
-    <link rel="stylesheet" href="/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.css?v=20180327">
+    <link rel="stylesheet" href="{{asset('/static/libs/select2/select2.min.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/libs/select2/select2-bootstrap.min.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/admin/css/font-awesome.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.css').'?'.$SFV}}">
 @endsection
 @section('content')
     <div class="alert alert-info alert-dismissable">
@@ -133,10 +136,10 @@
     </div>
 @endsection
 @section('javascript')
-    <script src="/static/libs/select2/select2.full.min.js?v=20180327"></script>
-    <script src="/static/libs/select2/i18n/zh-CN.js?v=20180327"></script>
-    <script src="/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.js?v=20180327"></script>
-    <script src="/static/admin/js/iconpicker.js?v=20180327"></script>
+    <script src="{{asset('/static/libs/select2/select2.full.min.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/select2/i18n/zh-CN.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/iconpicker.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
             App.initHelpers(['select2']);

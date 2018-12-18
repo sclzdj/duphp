@@ -143,6 +143,7 @@ $(function () {
                 if (response.status_code >= 200 && response.status_code < 300) {
                     Dolphin.notify(response.message, 'success');
                 } else {
+                    _this.prop('checked', !checked);
                     Dolphin.notify(response.message, 'danger');
                 }
             },

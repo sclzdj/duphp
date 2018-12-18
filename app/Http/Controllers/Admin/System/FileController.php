@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\System;
 
 use App\Http\Controllers\Admin\BaseController;
+use App\Model\Admin\SystemConfig;
 use App\Model\Admin\SystemFile;
 use App\Servers\ArrServer;
 use App\Servers\FileServer;
@@ -16,7 +17,7 @@ class FileController extends BaseController
         $pageInfo = [
             'pageSize' => $request['pageSize'] !== null ?
                 $request['pageSize'] :
-                10,
+                SystemConfig::getVal('basic_page_size'),
             'page' => $request['page'] !== null ?
                 $request['page'] :
                 1
@@ -101,11 +102,6 @@ class FileController extends BaseController
                     compact('systemFiles', 'pageInfo', 'orderBy', 'filter'));
     }
 
-    public function config()
-    {
-
-    }
-
     public function destroy(Request $request)
     {
         $id = $request->id;
@@ -172,7 +168,7 @@ class FileController extends BaseController
             return $this->uploadResponse('没有存在的上传文件', 400);
         }
         if (!$request->file($key)->isValid()) {
-            return $this->uploadResponse('上传过程中出错', 400);
+            return $this->uploadResponse('上传过程中出错，请主要检查php.ini是否配置正确', 400);
         }
         $fileInfo = [];
         $fileInfo['extension'] = $request->file->extension();
@@ -184,6 +180,53 @@ class FileController extends BaseController
                                          number_format($fileInfo['iniSize'] /
                                                        1024 / 1024, 2, '.',
                                                        '') . 'M的文件', 400);
+        }
+        if (strpos($fileInfo['mimeType'], 'image/') !== false) {
+            $upload_image_limit_size =
+                SystemConfig::getVal('upload_image_limit_size', 'upload');
+            if ($upload_image_limit_size > 0 &&
+                $fileInfo['size'] > $upload_image_limit_size * 1000
+            ) {
+                return $this->uploadResponse('最大允许上传' .
+                                             $upload_image_limit_size . 'K的图片',
+                                             400);
+            }
+            $upload_image_allow_extension =
+                SystemConfig::getVal('upload_image_allow_extension', 'upload');
+            if ($upload_image_allow_extension !== '') {
+                $upload_image_allow_extension_arr =
+                    explode(',', $upload_image_allow_extension);
+                if (!in_array($fileInfo['extension'],
+                              $upload_image_allow_extension_arr)
+                ) {
+                    return $this->uploadResponse('只允许上传图片的后缀类型：' .
+                                                 $upload_image_allow_extension,
+                                                 400);
+                }
+            }
+        } else {
+            $upload_file_limit_size =
+                SystemConfig::getVal('upload_file_limit_size', 'upload');
+            if ($upload_file_limit_size > 0 &&
+                $fileInfo['size'] > $upload_file_limit_size * 1000
+            ) {
+                return $this->uploadResponse('最大允许上传' .
+                                             $upload_file_limit_size . 'K的文件',
+                                             400);
+            }
+            $upload_file_allow_extension =
+                SystemConfig::getVal('upload_file_allow_extension', 'upload');
+            if ($upload_file_allow_extension !== '') {
+                $upload_file_allow_extension_arr =
+                    explode(',', $upload_file_allow_extension);
+                if (!in_array($fileInfo['extension'],
+                              $upload_file_allow_extension_arr)
+                ) {
+                    return $this->uploadResponse('只允许上传文件的后缀类型：' .
+                                                 $upload_file_allow_extension,
+                                                 400);
+                }
+            }
         }
         \DB::beginTransaction();//开启事务
         $FileServer = new FileServer();

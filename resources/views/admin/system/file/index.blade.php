@@ -1,8 +1,11 @@
+@php
+    $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
+@endphp
 @extends('admin.layout.master')
 @section('pre_css')
-    <link rel="stylesheet" href="/static/libs/viewer/viewer.min.css?v=20180327">
-    <link rel="stylesheet" href="/static/libs/bootstrap3-editable/css/bootstrap-editable.css?v=20180327">
-    <link rel="stylesheet" href="/static/libs/bootstrap-datepicker/bootstrap-datepicker3.min.css?v=20180327">
+    <link rel="stylesheet" href="{{asset('/static/libs/viewer/viewer.min.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/libs/bootstrap3-editable/css/bootstrap-editable.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/libs/bootstrap-datepicker/bootstrap-datepicker3.min.css').'?'.$SFV}}">
 @endsection
 @section('content')
     <div class="row">
@@ -24,8 +27,8 @@
                         <div class="row data-table-toolbar">
                             <div class="col-sm-12">
                                 <div class="pull-left toolbar-btn-action">
-                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\FileController@config'))
-                                        <a class="btn btn-primary btn-table-top" href="{{action('Admin\System\FileController@config')}}"><i class="fa fa-fw fa-gear"></i>上传配置</a>
+                                    @if(\App\Servers\PermissionServer::allowAction('Admin\System\IndexController@config'))
+                                        <a class="btn btn-primary btn-table-top" href="{{action('Admin\System\IndexController@config',['type'=>'upload'])}}"><i class="fa fa-fw fa-gear"></i>上传配置</a>
                                     @endif
                                     @if(\App\Servers\PermissionServer::allowAction('Admin\System\FileController@destroy'))
                                         <a class="btn btn-danger btn-table-top ids-submit" submit-type="DELETE" href="{{action('Admin\System\FileController@destroy',['id'=>0])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>"><i class="fa fa-times-circle-o"></i> 删除</a>
@@ -234,9 +237,9 @@
                                                                 </div>
                                                             @else
                                                                 @if(file_exists('./static/admin/img/files/'.$systemFile->extension.'.png'))
-                                                                    <img title="{{$systemFile->url}}" class="image" src="/static/admin/img/files/{{$systemFile->extension}}.png">
+                                                                    <img title="{{$systemFile->url}}" class="image" src="{{asset('/static/admin/img/files/'.$systemFile->extension.'.png').'?'.$SFV}}">
                                                                 @else
-                                                                    <img title="{{$systemFile->url}}" class="image" src="/static/admin/img/files/file.png">
+                                                                    <img title="{{$systemFile->url}}" class="image" src="{{asset('/static/admin/img/files/file.png').'?'.$SFV}}">
                                                                 @endif
                                                             @endif
                                                         @endif
@@ -316,7 +319,7 @@
                                                     <div class="table-cell">
                                                         <div class="btn-group">
                                                             <a class="btn btn-xs btn-default" target="_blank" href="{{$systemFile->url}}">下载</a>
-                                                        @if(\App\Servers\PermissionServer::allowAction('Admin\System\FileController@destroy'))
+                                                            @if(\App\Servers\PermissionServer::allowAction('Admin\System\FileController@destroy'))
                                                                 <a class="btn btn-xs btn-default id-submit" submit-type="DELETE" href="{{action('Admin\System\FileController@destroy',['id'=>$systemFile->id])}}" confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>">删除</a>
                                                             @endif
                                                         </div>
@@ -366,12 +369,12 @@
     </div>
 @endsection
 @section('javascript')
-    <script src="/static/libs/viewer/viewer.min.js?v=20180327"></script>
-    <script src="/static/libs/bootstrap3-editable/js/bootstrap-editable.js?v=20180327"></script>
-    <script src="/static/admin/js/table-init.js?v=20180327"></script>
-    <script src="/static/admin/js/table-submit.js?v=20180327"></script>
-    <script src="/static/libs/bootstrap-datepicker/bootstrap-datepicker.min.js?v=20180327"></script>
-    <script src="/static/libs/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js?v=20180327"></script>
+    <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/bootstrap3-editable/js/bootstrap-editable.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/table-init.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/table-submit.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/bootstrap-datepicker/bootstrap-datepicker.min.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
             App.initHelpers(["datepicker"]);

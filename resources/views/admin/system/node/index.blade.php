@@ -1,6 +1,9 @@
+@php
+    $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
+@endphp
 @extends('admin.layout.master')
 @section('pre_css')
-    <link rel="stylesheet" href="/static/libs/jquery-nestable/jquery.nestable.css?v=20180327" type="text/css"/>
+    <link rel="stylesheet" href="{{asset('/static/libs/jquery-nestable/jquery.nestable.css').'?'.$SFV}}" type="text/css"/>
 @endsection
 @section('content')
     <div class="alert alert-info alert-dismissable">
@@ -78,10 +81,10 @@
     </div>
 @endsection
 @section('javascript')
-    <script src="/static/libs/jstree/jstree.min.js?v=20180327"></script>
-    <script src="/static/libs/jquery-nestable/jquery.nestable.js?v=20180327"></script>
-    <script src="/static/admin/js/sort-submit.js?v=20180327"></script>
-    <script src="/static/libs/jquery-ui/jquery-ui.min.js?v=20180327"></script>
+    <script src="{{asset('/static/libs/jstree/jstree.min.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/jquery-nestable/jquery.nestable.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/sort-submit.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/jquery-ui/jquery-ui.min.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
 

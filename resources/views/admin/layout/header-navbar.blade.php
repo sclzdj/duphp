@@ -4,7 +4,7 @@
         <li>
             <div class="btn-group">
                 <button class="btn btn-default btn-image dropdown-toggle" data-toggle="dropdown" type="button">
-                    <img src="@if(auth('admin')->user()->avatar!=='') {{auth('admin')->user()->avatar}} @else /static/admin/img/avatar.jpg @endif" alt="用户头像">
+                    <img src="@if(auth('admin')->user()->avatar!=='') {{auth('admin')->user()->avatar}} @else {{asset('/static/admin/img/avatar.jpg').'?'.$SFV}} @endif" alt="用户头像">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
@@ -36,11 +36,16 @@
                 </ul>
             </div>
         </li>
-        <li>
-            <a class="btn btn-default" href="前台链接" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="打开前台">
-                <i class="fa fa-external-link-square"></i>
-            </a>
-        </li>
+        @php
+            $indexUrl=\App\Model\Admin\SystemConfig::indexUrl();
+        @endphp
+        @if($indexUrl)
+            <li>
+                <a class="btn btn-default" href="{{$indexUrl}}" target="_blank" data-toggle="tooltip" data-placement="bottom" data-original-title="打开前台">
+                    <i class="fa fa-external-link-square"></i>
+                </a>
+            </li>
+        @endif
         <li>
             <!-- Layout API, functionality initialized in App() -> uiLayoutApi() -->
             <button class="btn btn-default" data-toggle="layout" data-action="side_overlay_toggle" title="侧边栏" type="button">

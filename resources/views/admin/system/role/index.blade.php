@@ -1,7 +1,10 @@
+@php
+    $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
+@endphp
 @extends('admin.layout.master')
 @section('pre_css')
-    <link rel="stylesheet" href="/static/libs/bootstrap3-editable/css/bootstrap-editable.css?v=20180327">
-    <link rel="stylesheet" href="/static/libs/bootstrap-datepicker/bootstrap-datepicker3.min.css?v=20180327">
+    <link rel="stylesheet" href="{{asset('/static/libs/bootstrap3-editable/css/bootstrap-editable.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/libs/bootstrap-datepicker/bootstrap-datepicker3.min.css').'?'.$SFV}}">
 @endsection
 @section('content')
     <div class="row">
@@ -250,11 +253,11 @@
     </div>
 @endsection
 @section('javascript')
-    <script src="/static/libs/bootstrap3-editable/js/bootstrap-editable.js?v=20180327"></script>
-    <script src="/static/admin/js/table-init.js?v=20180327"></script>
-    <script src="/static/admin/js/table-submit.js?v=20180327"></script>
-    <script src="/static/libs/bootstrap-datepicker/bootstrap-datepicker.min.js?v=20180327"></script>
-    <script src="/static/libs/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js?v=20180327"></script>
+    <script src="{{asset('/static/libs/bootstrap3-editable/js/bootstrap-editable.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/table-init.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/table-submit.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/bootstrap-datepicker/bootstrap-datepicker.min.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
             App.initHelpers(["datepicker"]);

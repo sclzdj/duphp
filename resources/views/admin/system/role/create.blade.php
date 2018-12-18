@@ -1,3 +1,6 @@
+@php
+    $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
+@endphp
 @extends('admin.layout.master')
 @section('content')
     <div class="row">
@@ -111,12 +114,12 @@
     </div>
 @endsection
 @section('javascript')
-    <script src="/static/admin/js/change-node.js?v=20180327"></script>
+    <script src="{{asset('/static/admin/js/change-node.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
             $(document).on('click', '#create-submit', function () {
                 $('#create-form').find('.form-validate-msg').remove();//清空该表单的验证错误信息
-                var data = $('#create-form').serialize();//表单数据
+                console.log(data);return false;
                 Dolphin.loading('提交中...');
                 $.ajax({
                     type: 'POST',
@@ -125,7 +128,7 @@
                     data: data,
                     success: function (response) {
                         if (response.status_code >= 200 && response.status_code < 300) {
-                            Dolphin.jNotify(response.message, 'success',response.data.url);
+                            Dolphin.jNotify(response.message, 'success', response.data.url);
                         } else {
                             Dolphin.loading('hide');
                             Dolphin.notify(response.message, 'danger');

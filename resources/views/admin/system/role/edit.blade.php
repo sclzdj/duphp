@@ -1,3 +1,6 @@
+@php
+    $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
+@endphp
 @extends('admin.layout.master')
 @section('content')
     <div class="row">
@@ -110,7 +113,7 @@
     </div>
 @endsection
 @section('javascript')
-    <script src="/static/admin/js/change-node.js?v=20180327"></script>
+    <script src="{{asset('/static/admin/js/change-node.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
             $(document).on('click', '#create-submit', function () {

@@ -1,7 +1,10 @@
+@php
+    $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
+@endphp
 @extends('admin.layout.master')
 @section('pre_css')
-    <link rel="stylesheet" href="/static/libs/viewer/viewer.min.css?v=20180327">
-    <link rel="stylesheet" href="/static/libs/webuploader/webuploader.css?v=20180327">
+    <link rel="stylesheet" href="{{asset('/static/libs/viewer/viewer.min.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/libs/webuploader/webuploader.css').'?'.$SFV}}">
 @endsection
 @section('content')
     <div class="row">
@@ -197,7 +200,7 @@
     </div>
 @endsection
 @section('vuejs')
-    <script src="/static/libs/vue/vue.min.js?v=20180327"></script>
+    <script src="{{asset('/static/libs/vue/vue.min.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
             new Vue({
@@ -212,10 +215,10 @@
     </script>
 @endsection
 @section('javascript')
-    <script src="/static/libs/viewer/viewer.min.js?v=20180327"></script>
-    <script src="/static/libs/webuploader/webuploader.min.js?v=20180327"></script>
-    <script src="/static/admin/js/webuploader-image.js?v=20180327"></script>
-    <script src="/static/admin/js/change-node.js?v=20180327"></script>
+    <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/webuploader-image.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/change-node.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
             $(document).on('click', '#create-submit', function () {

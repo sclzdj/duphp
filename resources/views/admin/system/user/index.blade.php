@@ -1,8 +1,11 @@
+@php
+    $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
+@endphp
 @extends('admin.layout.master')
 @section('pre_css')
-    <link rel="stylesheet" href="/static/libs/viewer/viewer.min.css?v=20180327">
-    <link rel="stylesheet" href="/static/libs/bootstrap3-editable/css/bootstrap-editable.css?v=20180327">
-    <link rel="stylesheet" href="/static/libs/bootstrap-datepicker/bootstrap-datepicker3.min.css?v=20180327">
+    <link rel="stylesheet" href="{{asset('/static/libs/viewer/viewer.min.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/libs/bootstrap3-editable/css/bootstrap-editable.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/libs/bootstrap-datepicker/bootstrap-datepicker3.min.css').'?'.$SFV}}">
 @endsection
 @section('content')
     <div class="row">
@@ -220,7 +223,7 @@
                                                 <td class=" ">
                                                     <div class="table-cell">
                                                         <div class="js-gallery">
-                                                            <img class="image" data-original="{{$systemUser->avatar!==''?$systemUser->avatar:'/static/admin/img/none.png'}}" src="{{$systemUser->avatar!==''?$systemUser->avatar:'/static/admin/img/none.png'}}">
+                                                            <img class="image" data-original="{{$systemUser->avatar!==''?$systemUser->avatar:asset('/static/admin/img/none.png'.'?'.$SFV)}}" src="{{$systemUser->avatar!==''?$systemUser->avatar:asset('/static/admin/img/none.png'.'?'.$SFV)}}">
                                                         </div>
                                                     </div>
                                                 </td>
@@ -308,12 +311,12 @@
     </div>
 @endsection
 @section('javascript')
-    <script src="/static/libs/viewer/viewer.min.js?v=20180327"></script>
-    <script src="/static/libs/bootstrap3-editable/js/bootstrap-editable.js?v=20180327"></script>
-    <script src="/static/admin/js/table-init.js?v=20180327"></script>
-    <script src="/static/admin/js/table-submit.js?v=20180327"></script>
-    <script src="/static/libs/bootstrap-datepicker/bootstrap-datepicker.min.js?v=20180327"></script>
-    <script src="/static/libs/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js?v=20180327"></script>
+    <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/bootstrap3-editable/js/bootstrap-editable.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/table-init.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/table-submit.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/bootstrap-datepicker/bootstrap-datepicker.min.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
             App.initHelpers(["datepicker"]);

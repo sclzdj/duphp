@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Model\Admin\SystemConfig;
 use App\Servers\NavigationServer;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -47,6 +48,7 @@ class LoginController extends Controller
             if (!$homeUrl) {
                 $homeUrl = '/admin';
             }
+
             return $homeUrl;
         }
     }
@@ -85,13 +87,20 @@ class LoginController extends Controller
 
     protected function validateLogin(Request $request)
     {
-        $this->validate($request, [
+        $rules = [
             $this->username() => 'required',
             'password' => 'required',
-        ], [
-                            $this->username() . '.required' => '账号必须填写',
-                            'password.required' => '密码必须填写',
-                        ]);//加验证中文提示
+        ];
+        $message = [
+            $this->username() . '.required' => '账号必须填写',
+            'password.required' => '密码必须填写',
+        ];
+        if (SystemConfig::getVal('admin_login_captcha', 'admin')) {
+            $rules['captcha'] = 'required|captcha';
+            $message['captcha.required'] = '验证码必须填写';
+            $message['captcha.captcha'] = '验证码错误';
+        }
+        $this->validate($request, $rules, $message);//加验证中文提示
     }
 
 

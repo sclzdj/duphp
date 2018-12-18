@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\System;
 
 use App\Http\Controllers\Admin\BaseController;
 use App\Http\Requests\Admin\SystemRoleRequest;
+use App\Model\Admin\SystemConfig;
 use App\Model\Admin\SystemNode;
 use App\Model\Admin\SystemRole;
 use App\Servers\ArrServer;
@@ -22,7 +23,7 @@ class RoleController extends BaseController
         $pageInfo = [
             'pageSize' => $request['pageSize'] !== null ?
                 $request['pageSize'] :
-                10,
+                SystemConfig::getVal('basic_page_size'),
             'page' => $request['page'] !== null ?
                 $request['page'] :
                 1
