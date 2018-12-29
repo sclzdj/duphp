@@ -61,7 +61,7 @@ class SystemConfig extends Model
         $val = $systemConfig ?
             $systemConfig->value :
             null;
-        if (strpos($val, 'http://') !== false ||
+        if (!$val || strpos($val, 'http://') !== false ||
             strpos($val, 'https://') !== false
         ) {
             return $val;

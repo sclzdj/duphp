@@ -83,7 +83,7 @@
 @section('javascript')
     <script src="{{asset('/static/libs/jstree/jstree.min.js').'?'.$SFV}}"></script>
     <script src="{{asset('/static/libs/jquery-nestable/jquery.nestable.js').'?'.$SFV}}"></script>
-    <script src="{{asset('/static/admin/js/sort-submit.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/node-sort-submit.js').'?'.$SFV}}"></script>
     <script src="{{asset('/static/libs/jquery-ui/jquery-ui.min.js').'?'.$SFV}}"></script>
     <script>
         $(function () {

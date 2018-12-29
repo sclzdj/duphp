@@ -26,35 +26,40 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     //这里面写需要登录的路由
     Route::group(['middleware' => ['auth:admin', 'permission']], function () {
         //系统模块
-        Route::get('system/index/index', 'System\IndexController@index');
-        Route::any('system/index/config', 'System\IndexController@config');
-        Route::any('system/index/updatePassword', 'System\IndexController@updatePassword');
-        Route::any('system/index/setInfo', 'System\IndexController@setInfo');
-        Route::resource('system/user', 'System\UserController');
+        Route::get('system/index/index', 'System\IndexController@index');//系统首页
+        Route::any('system/index/config',
+                   'System\IndexController@config');//系统配置
+        Route::any('system/index/updatePassword',
+                   'System\IndexController@updatePassword');//修改密码
+        Route::any('system/index/setInfo',
+                   'System\IndexController@setInfo');//资料设置
+        Route::resource('system/user', 'System\UserController');//账号管理
         Route::patch('system/user/{id}/enable', 'System\UserController@enable');
         Route::patch('system/user/{id}/disable',
                      'System\UserController@disable');
-        Route::resource('system/role', 'System\RoleController');
+        Route::resource('system/role', 'System\RoleController');//角色管理
         Route::patch('system/role/{id}/enable', 'System\RoleController@enable');
         Route::patch('system/role/{id}/disable',
                      'System\RoleController@disable');
-        Route::resource('system/node', 'System\NodeController');
+        Route::resource('system/node', 'System\NodeController');//节点管理
         Route::patch('system/node/{id}/enable', 'System\NodeController@enable');
         Route::patch('system/node/{id}/disable',
                      'System\NodeController@disable');
         Route::post('system/node/sort', 'System\NodeController@sort');
         Route::any('system/node/module/sort',
                    'System\NodeController@moduleSort');
-        Route::get('system/file', 'System\FileController@index');
+        Route::get('system/file', 'System\FileController@index');//文件管理
         Route::delete('system/file', 'System\FileController@destroy');
+        Route::get('system/area', 'System\AreaController@index');//地区管理
+        Route::post('system/area/sort', 'System\AreaController@sort');
 
         //其他模块
 
     });
     //这下面写不需要登录的路由
-    Route::get('login', 'Auth\LoginController@showLoginForm');
+    Route::get('login', 'Auth\LoginController@showLoginForm');//账号登录
     Route::post('login', 'Auth\LoginController@login');
-    Route::post('logout', 'Auth\LoginController@logout');
+    Route::post('logout', 'Auth\LoginController@logout');//账号退出
 });
 
 Auth::routes();

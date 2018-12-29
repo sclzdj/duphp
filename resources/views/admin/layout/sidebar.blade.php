@@ -27,7 +27,7 @@
                 <ul class="nav-main" id="nav-236">
                     @foreach(\App\Servers\NavigationServer::menus() as $menu)
                         <li class="du-menu-status">
-                            @if($menu['_data'])
+                            @if($menu['action']==='' && $menu['_data'])
                                 <a class="nav-submenu @if(\App\Servers\NavigationServer::activeMenu($menu['action'])) active @endif" data-toggle="nav-submenu" href="javascript:void(0);"><i class="{{$menu['icon']}}"></i><span class="sidebar-mini-hide">{{$menu['name']}}</span></a>
                                 <ul>
                                     @foreach($menu['_data'] as $m)

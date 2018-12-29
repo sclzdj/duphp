@@ -153,6 +153,17 @@ class SystemNodesTableSeeder extends Seeder
                         ]
                     ],
                     [
+                        'name' => '地区管理',
+                        'icon' => 'fa fa-fw fa-laptop',
+                        'action' => 'Admin\System\AreaController@index',
+                        'children' => [
+                            [
+                                'name' => '排序',
+                                'action' => 'Admin\System\AreaController@sort',
+                            ],
+                        ]
+                    ],
+                    [
                         'name' => '开发中心',
                         'icon' => 'fa fa-fw fa-laptop',
                         'children' => [
