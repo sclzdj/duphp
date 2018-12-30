@@ -26,6 +26,7 @@ class CreateSystemConfigsTable extends Migration
             $table->unsignedTinyInteger('required')->default(0)
                 ->comment('是否必需');
         });
+        DB::statement("ALTER TABLE `system_configs` COMMENT '后台:系统配置'"); // 表注释
     }
 
     /**

@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SystemRolesTableSeeder::class);
         $this->call(SystemNodesTableSeeder::class);
         $this->call(SystemConfigsTableSeeder::class);
+        $this->call(SystemAreasTableSeeder::class);
     }
 }

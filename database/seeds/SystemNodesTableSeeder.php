@@ -173,10 +173,6 @@ class SystemNodesTableSeeder extends Seeder
                                 'action' => 'Admin\System\FileController@index',
                                 'children' => [
                                     [
-                                        'name' => '上传配置',
-                                        'action' => 'Admin\System\FileController@config',
-                                    ],
-                                    [
                                         'name' => '删除',
                                         'action' => 'Admin\System\FileController@destroy',
                                     ],

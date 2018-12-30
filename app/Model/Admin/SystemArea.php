@@ -31,6 +31,36 @@ class SystemArea extends Model
     protected $hidden = [];
 
     /**
+     * 完全填充数据
+     */
+    public static function fillAll()
+    {
+        self::_fillAll();
+    }
+
+    public static function _fillAll()
+    {
+        $file_name = asset('/data/sql/system_areas.sql');
+        $DB_HOST = getenv('DB_HOST');
+        $DB_DATABASE = getenv('DB_DATABASE'); //从配置文件中获取数据库信息
+        $DB_USERNAME = getenv('DB_USERNAME');
+        $DB_PASSWORD = getenv('DB_PASSWORD');
+        set_time_limit(0); //设置超时时间为0，表示一直执行。当php在safe mode模式下无效，此时可能会导致导入超时，此时需要分段导入
+        $fp = @fopen($file_name, "r") or die("不能打开SQL文件 $file_name");//打开文件
+        @$conf = mysqli_connect($DB_HOST, $DB_USERNAME, $DB_PASSWORD,
+                                $DB_DATABASE) or die("不能连接数据库 $DB_HOST");//连接数据库
+        mysqli_query($conf, "SHOW tables");
+        // 导入数据库的MySQL命令
+        $_sql = file_get_contents($file_name);
+        $_arr = explode(';', $_sql);
+        foreach ($_arr as $_value) {
+            mysqli_query($conf, "SET NAMES 'utf8'");
+            mysqli_query($conf, $_value . ';');
+        }
+    }
+
+
+    /**
      * 查找某地区的所有后代地区
      *
      * @param int    $pid    地区id
@@ -252,7 +282,8 @@ class SystemArea extends Model
             $innerHtml .= '<div class="dd3-content"> <span class="dd3-level">' .
                 $v['level'] . '级地区</span>' .
                 '<span data-toggle="tooltip" data-original-title="简称：' .
-                $v['short_name'] . '" style="cursor:default;">' . $v['name'] . '</span>';
+                $v['short_name'] . '" style="cursor:default;">' . $v['name'] .
+                '</span>';
             $innerHtml .= '<div class="action">';
             if ($v['level'] < 4) {
                 $innerHtml .= '<a href="' .
