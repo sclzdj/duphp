@@ -164,8 +164,13 @@ class FileController extends BaseController
      */
     public function upload(Request $request, $path = 'public', $key = 'file')
     {
+        $filename = $request->instance()->post('filename', '');
+        $filename = ltrim(str_replace('\\', '/', $filename), '/');
+        if ($filename === '') {
+            $filename = date("Ymd/").time().mt_rand(10000, 99999);
+        }
         if (!$request->hasFile($key)) {
-            return $this->uploadResponse('没有存在的上传文件', 400);
+            return $this->uploadResponse('没有选择上传文件', 400);
         }
         if (!$request->file($key)->isValid()) {
             return $this->uploadResponse('上传过程中出错，请主要检查php.ini是否配置正确', 400);
@@ -228,6 +233,9 @@ class FileController extends BaseController
                 }
             }
         }
+        if($fileInfo['extension']!==''){
+            $filename .= '.'.$fileInfo['extension'];
+        }
         \DB::beginTransaction();//开启事务
         $FileServer = new FileServer();
         try {
@@ -235,7 +243,7 @@ class FileController extends BaseController
                 return $this->response([]);
             }
 
-            $url = $FileServer->upload($path, $request->file($key), $fileInfo);
+            $url = $FileServer->upload($filename,$path, $request->file($key), $fileInfo);
             if ($url !== false) {
                 \DB::commit();//提交事务
 
@@ -247,8 +255,8 @@ class FileController extends BaseController
             }
         } catch (\Exception $e) {
             \DB::rollback();//回滚事务
-            if ($FileServer->seccess_path) {
-                Storage::delete($FileServer->seccess_path);
+            if ($FileServer->object) {
+                Storage::delete($FileServer->object);
             }
 
             return $this->eResponse($e->getMessage(), $e->getCode());

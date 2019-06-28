@@ -9,36 +9,38 @@
 namespace App\Servers;
 
 use App\Model\Admin\SystemFile;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class FileServer
 {
-    public $seccess_path = null;//成功上传文件路径
+    public $object = null;//成功上传的文件
 
     /**
-     * @param Request $request
+     * @param string $filename 保存的文件名
      * @param string  $path 保存目录
      * @param string  $key  表单名称
      *
      * @return false|string
      */
-    public function upload($path = 'public', $file, $fileInfo = [])
+    public function upload($filename,$path = 'public/uploads', $file, $fileInfo = [])
     {
         if (config('filesystems.default') == 'local') {
-            $path = $path . '/uploads/' . date('Ymd');
-            $path = $file->store($path);
-            $this->seccess_path = $path;
-            $url = asset(Storage::url($path));
-            $create = [
+            $object = $file->storeAs($path,$filename);
+            $this->object = $object;
+            $url = asset(Storage::url($object));
+            $systemFile = SystemFile::where(['url' => $url])->first();
+            if (!$systemFile) {
+                $systemFile = SystemFile::create();
+            }
+            $update = [
                 'url' => $url,
                 'disk' => config('filesystems.default'),
                 'driver' => config('filesystems.disks.' .
                                    config('filesystems.default') . '.driver'),
-                'object' => $path
+                'object' => $object
             ];
-            $create = array_merge($create, $fileInfo);
-            SystemFile::create($create);
+            $update = array_merge($update, $fileInfo);
+            $systemFile->update($update);
 
             return $url;
         } else {

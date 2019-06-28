@@ -1,4 +1,13 @@
 $(function () {
+    //先预设一个文件名，然后每个上传器的文件名为filename_uploader_image+index
+    var now_uploader_image = new Date();
+    var moth_uploader_image=String(now_uploader_image.getMonth()+1);
+    for(var len = moth_uploader_image.length; len < 2; len = moth_uploader_image.length) {
+        moth_uploader_image = "0" + moth_uploader_image;
+    }
+    var date_uploader_image = String(now_uploader_image.getFullYear())+moth_uploader_image+String(now_uploader_image.getDate());
+    var time_uploader_image=String(now_uploader_image.getTime());
+    var filename_uploader_image=date_uploader_image+'/'+time_uploader_image+String(Math.floor(Math.random()*10000));
     // 图片上传初始化Web Uploader
     var uploader_image = [];
     for (var index = 0; index < $('.js-upload-image').length; index++) {
@@ -18,7 +27,9 @@ $(function () {
                 mimeTypes: 'image/*' //文件mime类型
             },
             //附带参数
-            formData: {},
+            formData: {
+                'filename':filename_uploader_image+index
+            },
             auto: true, // 选完文件后，是否自动上传
             fileVal: 'file', //设置文件上传域的name
             method: 'POST', //文件上传方式
@@ -104,7 +115,7 @@ $(function () {
             } else {
                 $('#' + file.id).addClass('upload-state-done');
                 //图片查看器赋值
-                $('#' + file.id).find('img').attr('data-original', server_image_host + response.data.url);
+                $('#' + file.id).find('img').attr('data-original', server_image_host + response.data.url+'?'+Math.random());
                 //viewer更新加载
                 $('.gallery-list,.uploader-list').each(function () {
                     $(this).viewer('update');

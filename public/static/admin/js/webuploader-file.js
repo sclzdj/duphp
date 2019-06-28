@@ -1,4 +1,13 @@
 $(function () {
+    //先预设一个文件名，然后每个上传器的文件名为filename_uploader_image+index
+    var now_uploader_file = new Date();
+    var moth_uploader_file=String(now_uploader_file.getMonth()+1);
+    for(var len = moth_uploader_file.length; len < 2; len = moth_uploader_file.length) {
+        moth_uploader_file = "0" + moth_uploader_file;
+    }
+    var date_uploader_file = String(now_uploader_file.getFullYear())+moth_uploader_file+String(now_uploader_file.getDate());
+    var time_uploader_file=String(now_uploader_file.getTime());
+    var filename_uploader_file=date_uploader_file+'/'+time_uploader_file+String(Math.floor(Math.random()*10000));
     // 文件上传初始化Web Uploader
     var uploader_file = [];
     for (var index = 0; index < $('.js-upload-file').length; index++) {
@@ -18,7 +27,9 @@ $(function () {
                 mimeTypes: '' //文件mime类型
             },
             //附带参数
-            formData: {},
+            formData: {
+                'filename':filename_uploader_file+index
+            },
             auto: true, // 选完文件后，是否自动上传
             fileVal: 'file', //设置文件上传域的name
             method: 'POST', //文件上传方式
@@ -86,10 +97,10 @@ $(function () {
                 $('#' + file.id).addClass('upload-state-done');
                 if (this.upload_type == 'files') {
                     //将上传的文件地址赋值给隐藏输入框，并添加元素
-                    $('#' + file.id).append('<input type="hidden" name="' + this.inputName + '[]" value="' + server_file_host + response.data.path + '">');
+                    $('#' + file.id).append('<input type="hidden" name="' + this.inputName + '[]" value="' + server_file_host + response.data.url + '">');
                 } else {
                     //将上传的文件地址赋值给隐藏输入框
-                    $('#' + file.id).parent().parent().find('input[type="hidden"]').val(server_file_host + response.data.path);
+                    $('#' + file.id).parent().parent().find('input[type="hidden"]').val(server_file_host + response.data.url);
                 }
                 //成功提示
                 var $li = $('#' + file.id),
