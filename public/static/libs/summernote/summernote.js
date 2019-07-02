@@ -1561,7 +1561,7 @@
     this.options = options;
 
     /**
-     * create layout and initialize modules and other resources
+     * create layouts and initialize modules and other resources
      */
     this.initialize = function () {
       this.layoutInfo = ui.createLayout($note, options);
@@ -1571,7 +1571,7 @@
     };
 
     /**
-     * destroy modules and other resources and remove layout
+     * destroy modules and other resources and remove layouts
      */
     this.destroy = function () {
       this._destroy();

@@ -1864,7 +1864,7 @@
         
         /**
          * 调整编辑器的尺寸和布局
-         * Resize editor layout
+         * Resize editor layouts
          * 
          * @param   {Number|String} [width=null]  编辑器宽度值
          * @param   {Number|String} [height=null] 编辑器高度值

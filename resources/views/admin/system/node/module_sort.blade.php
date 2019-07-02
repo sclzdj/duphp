@@ -1,7 +1,7 @@
 @php
     $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
 @endphp
-@extends('admin.layout.master')
+@extends('admin.layouts.master')
 @section('pre_css')
     <link href="{{asset('/static/libs/jquery-nestable/jquery.nestable.css').'?'.$SFV}}" type="text/css">
 @endsection

@@ -56,18 +56,18 @@
 <!-- Page Container -->
 <div id="page-container" class="sidebar-l sidebar-o side-scroll header-navbar-fixed ">
     <!-- Side Overlay-->
-@include('admin.layout.side-overlay')
+@include('admin.layouts.side-overlay')
 <!-- END Side Overlay -->
     <!-- Sidebar -->
-@include('admin.layout.sidebar')
+@include('admin.layouts.sidebar')
 <!-- END Sidebar -->
     <!-- Header -->
-@include('admin.layout.header-navbar')
+@include('admin.layouts.header-navbar')
 <!-- END Header -->
     <!-- Main Container -->
     <main id="main-container">
         <!-- Page Header -->
-    @include('admin.layout.location-navbar')
+    @include('admin.layouts.location-navbar')
     <!-- END Page Header -->
         <!-- Page Content -->
         <div class="content" id="app">
@@ -77,13 +77,13 @@
     </main>
     <!-- END Main Container -->
     <!-- Footer -->
-@include('admin.layout.page-footer')
+@include('admin.layouts.page-footer')
 <!-- END Footer -->
 </div>
 <!-- END Page Container -->
 <!-- Apps Modal -->
 <!-- Opens from the button in the header -->
-@include('admin.layout.apps-modal')
+@include('admin.layouts.apps-modal')
 <!-- END Apps Modal -->
 <!-- Page JS Plugins -->
 <script src="{{asset('/static/admin/js/core/jquery.min.js').'?'.$SFV}}"></script>
@@ -166,7 +166,7 @@
                 success: function (response) {
                     Dolphin.loading('hide');
                     if (response.status_code >= 200 && response.status_code < 300) {
-                        Dolphin.rNotify(response.message, 'success');
+                        Dolphin.lNotify(response.message, 'success');
                     } else {
                         _this.prop('checked', !checked);
                         Dolphin.notify(response.message, 'danger');

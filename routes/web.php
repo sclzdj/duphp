@@ -18,6 +18,7 @@
 /**后台**/
 //重置路由跳回自己的首页
 Route::get('/', 'Admin\Auth\LoginController@showLoginForm');
+Route::get('image_storage', 'Admin\System\FileController@image');
 //正式定义后台路由
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     //重置路由跳回自己的首页

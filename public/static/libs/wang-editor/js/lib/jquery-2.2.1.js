@@ -5694,7 +5694,7 @@ var documentElement = document.documentElement;
 		"padding:0;margin-top:1px;position:absolute";
 	container.appendChild( div );
 
-	// Executing both pixelPosition & boxSizingReliable tests require only one layout
+	// Executing both pixelPosition & boxSizingReliable tests require only one layouts
 	// so they're executed at the same time to save the second computation.
 	function computeStyleTests() {
 		div.style.cssText =

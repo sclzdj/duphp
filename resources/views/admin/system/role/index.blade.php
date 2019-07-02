@@ -1,7 +1,7 @@
 @php
     $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
 @endphp
-@extends('admin.layout.master')
+@extends('admin.layouts.master')
 @section('pre_css')
     <link rel="stylesheet" href="{{asset('/static/libs/bootstrap3-editable/css/bootstrap-editable.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('/static/libs/bootstrap-datepicker/bootstrap-datepicker3.min.css').'?'.$SFV}}">

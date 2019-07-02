@@ -1,7 +1,7 @@
 @php
     $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
 @endphp
-@extends('admin.layout.master')
+@extends('admin.layouts.master')
 @section('pre_css')
     <link rel="stylesheet" href="{{asset('/static/libs/viewer/viewer.min.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('/static/libs/webuploader/webuploader.css').'?'.$SFV}}">
@@ -16,7 +16,8 @@
                             <button type="button" class="page-reload"><i class="si si-refresh"></i></button>
                         </li>
                         <li>
-                            <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"><i class="si si-size-fullscreen"></i></button>
+                            <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"><i
+                                        class="si si-size-fullscreen"></i></button>
                         </li>
                     </ul>
                     <h3 class="block-title">资料设置</h3>
@@ -32,7 +33,8 @@
                                         密码
                                     </label>
                                     <div class="col-md-6 form-option-line">
-                                        <input class="form-control" type="password" name="password" value="" placeholder="请输入密码">
+                                        <input class="form-control" type="password" name="password" value=""
+                                               placeholder="请输入密码">
                                     </div>
                                     <div class="col-md-5 form-control-static form-option-line">
                                         <div class="help-block help-block-line">留空则不修改，5-18个字符，不包含中文，只支持部分特殊字符</div>
@@ -45,7 +47,8 @@
                                         昵称
                                     </label>
                                     <div class="col-md-6 form-option-line">
-                                        <input class="form-control" type="text" name="nickname" value="{{$systemUser->nickname}}" placeholder="请输入昵称">
+                                        <input class="form-control" type="text" name="nickname"
+                                               value="{{$systemUser->nickname}}" placeholder="请输入昵称">
                                     </div>
                                     <div class="col-md-5 form-control-static form-option-line">
                                         <div class="help-block help-block-line">2-10个字符</div>
@@ -61,8 +64,11 @@
                                             <input type="hidden" name="avatar" value="{{$systemUser->avatar}}">
                                             <div class="uploader-list">
                                                 @if($systemUser->avatar!=='')
-                                                    <div class="file-item js-gallery thumbnail upload-state-done" style="margin:0;margin-right: 10px; margin-bottom: 5px;">
-                                                        <img src="{{$systemUser->avatar}}" data-original="{{$systemUser->avatar}}" width="100" height="100">
+                                                    <div class="file-item js-gallery thumbnail upload-state-done"
+                                                         style="margin:0;margin-right: 10px; margin-bottom: 5px;">
+                                                        <img src="{{$systemUser->avatar===''?'':$systemUser->avatar.'&type=2'}}"
+                                                             data-original="{{$systemUser->avatar.'&type=1'}}" width="100"
+                                                             height="100">
                                                         <div class="info">{{$systemUser->avatar}}</div>
                                                         <i class="fa fa-times-circle remove-picture"></i>
                                                     </div>
@@ -77,7 +83,8 @@
 
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-username">
                                     <div class="col-md-offset-2 col-md-9">
-                                        <button class="btn btn-minw btn-primary ajax-post" type="button" id="create-submit">
+                                        <button class="btn btn-minw btn-primary ajax-post" type="button"
+                                                id="create-submit">
                                             提交
                                         </button>
                                     </div>
@@ -93,6 +100,10 @@
 @section('javascript')
     <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
     <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
+    <script>
+        //设置图片上传的场景
+        var set_scene_uploader_image = ['set_admin_avatar'];
+    </script>
     <script src="{{asset('/static/admin/js/webuploader-image.js').'?'.$SFV}}"></script>
     <script>
         $(function () {

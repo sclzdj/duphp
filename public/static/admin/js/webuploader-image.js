@@ -1,16 +1,23 @@
 $(function () {
     //先预设一个文件名，然后每个上传器的文件名为filename_uploader_image+index
     var now_uploader_image = new Date();
-    var moth_uploader_image=String(now_uploader_image.getMonth()+1);
-    for(var len = moth_uploader_image.length; len < 2; len = moth_uploader_image.length) {
+    var moth_uploader_image = String(now_uploader_image.getMonth() + 1);
+    for (var len = moth_uploader_image.length; len < 2; len = moth_uploader_image.length) {
         moth_uploader_image = "0" + moth_uploader_image;
     }
-    var date_uploader_image = String(now_uploader_image.getFullYear())+moth_uploader_image+String(now_uploader_image.getDate());
-    var time_uploader_image=String(now_uploader_image.getTime());
-    var filename_uploader_image=date_uploader_image+'/'+time_uploader_image+String(Math.floor(Math.random()*10000));
+    var day_uploader_image = String(now_uploader_image.getDate());
+    for (var len = day_uploader_image.length; len < 2; len = day_uploader_image.length) {
+        day_uploader_image = "0" + day_uploader_image;
+    }
+    var date_uploader_image = String(now_uploader_image.getFullYear()) + moth_uploader_image + day_uploader_image;
+    var time_uploader_image = String(now_uploader_image.getTime());
+    var filename_uploader_image = date_uploader_image + '/' + time_uploader_image + String(Math.floor(Math.random() * 10000));
+    //先预设一个场景数组
+    var scene_uploader_image = set_scene_uploader_image === undefined ? [] : set_scene_uploader_image;
     // 图片上传初始化Web Uploader
     var uploader_image = [];
     for (var index = 0; index < $('.js-upload-image').length; index++) {
+        scene_uploader_image[index] = scene_uploader_image[index] === undefined ? '' : scene_uploader_image[index];
         var upload_type = $('.js-upload-image:eq(' + index + ')').attr('upload-type');
         uploader_image[index] = WebUploader.create({
             swf: './static/libs/webuploader/Uploader.swf',// swf文件路径
@@ -28,7 +35,9 @@ $(function () {
             },
             //附带参数
             formData: {
-                'filename':filename_uploader_image+index
+                'upload_type': upload_type,
+                'filename': filename_uploader_image + index,
+                'scene': scene_uploader_image[index]
             },
             auto: true, // 选完文件后，是否自动上传
             fileVal: 'file', //设置文件上传域的name
@@ -55,8 +64,8 @@ $(function () {
         // 当有文件添加进来的时候
         uploader_image[index].on('fileQueued', function (file) {
             var $li = $(
-                '<div id="' + file.id + '" class="file-item js-gallery thumbnail" style="margin:0;margin-right: 10px; margin-bottom: 5px;">' +
-                '<img>' +
+                '<div id="' + file.id + '" class="file-item js-gallery thumbnail" style="margin:0;margin-right: 10px; margin-bottom: 5px;min-width:50px;min-height: 50px;">' +
+                '<img width="100" height="100">' +
                 '<div class="info">' + file.name + '</div>' +
                 '</div>'
                 ),
@@ -77,7 +86,7 @@ $(function () {
                 thumbnailHeight = 100;
             uploader_image[this.index].makeThumb(file, function (error, src) {
                 if (error) {
-                    $img.replaceWith('<span>不能预览</span>');
+                    $img.replaceWith('<span class="none-view">不能预览</span>');
                     return;
                 }
                 $img.prop('src', src);
@@ -115,7 +124,17 @@ $(function () {
             } else {
                 $('#' + file.id).addClass('upload-state-done');
                 //图片查看器赋值
-                $('#' + file.id).find('img').attr('data-original', server_image_host + response.data.url+'?'+Math.random());
+                if ($('#' + file.id).find('img').length == 0) {
+                    $('#' + file.id).find('span.none-view').remove();
+                    $('#' + file.id).prepend('<img width="100" height="100">');
+                }
+                if (scene_uploader_image[this.index] != 'set_admin_logo' && scene_uploader_image[this.index] != 'set_admin_logo_text' && scene_uploader_image[this.index] != 'set_upload_image_watermark') {
+                    $('#' + file.id).find('img').prop('src', server_image_host + response.data.url + '&type=2&' + Math.random());
+                    $('#' + file.id).find('img').attr('data-original', server_image_host + response.data.url + '&type=1&' + Math.random());
+                } else {
+                    $('#' + file.id).find('img').prop('src', server_image_host + response.data.url + '?' + Math.random());
+                    $('#' + file.id).find('img').attr('data-original', server_image_host + response.data.url + '?' + Math.random());
+                }
                 //viewer更新加载
                 $('.gallery-list,.uploader-list').each(function () {
                     $(this).viewer('update');

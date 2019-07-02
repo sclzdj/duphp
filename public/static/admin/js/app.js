@@ -14,7 +14,7 @@ var App = function () {
      *
      * BASE UI FUNCTIONALITY
      *
-     * Functions which handle vital UI functionality such as main navigation and layout
+     * Functions which handle vital UI functionality such as main navigation and layouts
      * They are auto initialized in every page
      *
      *********************************************************************************************
@@ -88,8 +88,8 @@ var App = function () {
             });
         }
 
-        // Call layout API on button click
-        jQuery('[data-toggle="layout"]').on('click', function () {
+        // Call layouts API on button click
+        jQuery('[data-toggle="layouts"]').on('click', function () {
             var $btn = jQuery(this);
 
             uiLayoutApi($btn.data('action'));

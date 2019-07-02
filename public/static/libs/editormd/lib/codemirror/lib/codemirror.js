@@ -5917,7 +5917,7 @@
     return from && {from: from, to: to};
   };
 
-  // Signals that the marker's widget changed, and surrounding layout
+  // Signals that the marker's widget changed, and surrounding layouts
   // should be recomputed.
   TextMarker.prototype.changed = function() {
     var pos = this.find(-1, true), widget = this, cm = this.doc.cm;

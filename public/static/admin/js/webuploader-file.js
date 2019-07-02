@@ -1,16 +1,23 @@
 $(function () {
     //先预设一个文件名，然后每个上传器的文件名为filename_uploader_image+index
     var now_uploader_file = new Date();
-    var moth_uploader_file=String(now_uploader_file.getMonth()+1);
-    for(var len = moth_uploader_file.length; len < 2; len = moth_uploader_file.length) {
+    var moth_uploader_file = String(now_uploader_file.getMonth() + 1);
+    for (var len = moth_uploader_file.length; len < 2; len = moth_uploader_file.length) {
         moth_uploader_file = "0" + moth_uploader_file;
     }
-    var date_uploader_file = String(now_uploader_file.getFullYear())+moth_uploader_file+String(now_uploader_file.getDate());
-    var time_uploader_file=String(now_uploader_file.getTime());
-    var filename_uploader_file=date_uploader_file+'/'+time_uploader_file+String(Math.floor(Math.random()*10000));
+    var day_uploader_file =String(now_uploader_file.getDate());
+    for (var len = day_uploader_file.length; len < 2; len = day_uploader_file.length) {
+        day_uploader_file = "0" + day_uploader_file;
+    }
+    var date_uploader_file = String(now_uploader_file.getFullYear()) + moth_uploader_file + day_uploader_file;
+    var time_uploader_file = String(now_uploader_file.getTime());
+    var filename_uploader_file = date_uploader_file + '/' + time_uploader_file + String(Math.floor(Math.random() * 10000));
+    //先预设一个场景数组
+    var scene_uploader_file = set_scene_uploader_file === undefined ? [] : set_scene_uploader_file;
     // 文件上传初始化Web Uploader
     var uploader_file = [];
     for (var index = 0; index < $('.js-upload-file').length; index++) {
+        scene_uploader_file[index] = scene_uploader_file[index] === undefined ? '' : scene_uploader_file[index];
         var upload_type = $('.js-upload-file:eq(' + index + ')').attr('upload-type');
         uploader_file[index] = WebUploader.create({
             swf: './static/libs/webuploader/Uploader.swf',// swf文件路径
@@ -28,7 +35,9 @@ $(function () {
             },
             //附带参数
             formData: {
-                'filename':filename_uploader_file+index
+                'upload_type': upload_type,
+                'filename': filename_uploader_file + index,
+                'scene': scene_uploader_file[index]
             },
             auto: true, // 选完文件后，是否自动上传
             fileVal: 'file', //设置文件上传域的name

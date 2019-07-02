@@ -17,6 +17,12 @@ class IndexController extends BaseController
         return view('/admin/system/index/index');
     }
 
+    /**
+     * ***添加图片这种配置时，要注意webuploader-image.js和文件管理模板页面的修改
+     * @param \App\Http\Requests\Admin\SystemConfigRequest $systemConfigRequest
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
     public function config(SystemConfigRequest $systemConfigRequest)
     {
         $type = $systemConfigRequest->type ?:

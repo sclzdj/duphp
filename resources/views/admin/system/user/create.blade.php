@@ -1,7 +1,7 @@
 @php
     $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
 @endphp
-@extends('admin.layout.master')
+@extends('admin.layouts.master')
 @section('pre_css')
     <link rel="stylesheet" href="{{asset('/static/libs/viewer/viewer.min.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('/static/libs/webuploader/webuploader.css').'?'.$SFV}}">
@@ -217,6 +217,10 @@
 @section('javascript')
     <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
     <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
+    <script>
+        //设置图片上传的场景
+        var set_scene_uploader_image = ['set_admin_avatar'];
+    </script>
     <script src="{{asset('/static/admin/js/webuploader-image.js').'?'.$SFV}}"></script>
     <script src="{{asset('/static/admin/js/change-node.js').'?'.$SFV}}"></script>
     <script>

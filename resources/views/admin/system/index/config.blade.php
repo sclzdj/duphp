@@ -1,7 +1,7 @@
 @php
     $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
 @endphp
-@extends('admin.layout.master')
+@extends('admin.layouts.master')
 @section('pre_css')
     @if(in_array('select2',$genres))
         <link rel="stylesheet" href="{{asset('/static/libs/select2/select2.min.css').'?'.$SFV}}">
@@ -15,15 +15,18 @@
             <link rel="stylesheet" href="{{asset('/static/libs/viewer/viewer.min.css').'?'.$SFV}}">
         @endif
     @elseif(in_array('date',$genres))
-        <link rel="stylesheet" href="{{asset('/static/libs/bootstrap-datepicker/bootstrap-datepicker3.min.css').'?'.$SFV}}">
+        <link rel="stylesheet"
+              href="{{asset('/static/libs/bootstrap-datepicker/bootstrap-datepicker3.min.css').'?'.$SFV}}">
     @elseif(in_array('datetime',$genres))
-        <link rel="stylesheet" href="{{asset('/static/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css').'?'.$SFV}}">
+        <link rel="stylesheet"
+              href="{{asset('/static/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css').'?'.$SFV}}">
     @elseif(in_array('ueditor',$genres))
     @elseif(in_array('tags',$genres))
         <link rel="stylesheet" href="{{asset('/static/libs/jquery-tags-input/jquery.tagsinput.css').'?'.$SFV}}">
     @elseif(in_array('icon',$genres))
         <link rel="stylesheet" href="{{asset('/static/admin/css/font-awesome.css').'?'.$SFV}}">
-        <link rel="stylesheet" href="{{asset('/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.css').'?'.$SFV}}">
+        <link rel="stylesheet"
+              href="{{asset('/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.css').'?'.$SFV}}">
     @endif
 @endsection
 @section('content')
@@ -39,16 +42,20 @@
                     <li class="pull-right">
                         <ul class="block-options push-10-t push-10-r">
                             <li>
-                                <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"><i class="si si-size-fullscreen"></i></button>
+                                <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"><i
+                                            class="si si-size-fullscreen"></i></button>
                             </li>
                             <li>
-                                <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i class="si si-refresh"></i></button>
+                                <button type="button" data-toggle="block-option" data-action="refresh_toggle"
+                                        data-action-mode="demo"><i class="si si-refresh"></i></button>
                             </li>
                             <li>
-                                <button type="button" data-toggle="block-option" data-action="content_toggle"><i class="si si-arrow-up"></i></button>
+                                <button type="button" data-toggle="block-option" data-action="content_toggle"><i
+                                            class="si si-arrow-up"></i></button>
                             </li>
                             <li>
-                                <button type="button" data-toggle="block-option" data-action="close"><i class="si si-close"></i></button>
+                                <button type="button" data-toggle="block-option" data-action="close"><i
+                                            class="si si-close"></i></button>
                             </li>
                         </ul>
                     </li>
@@ -58,7 +65,8 @@
                         <div class="block-content">
                             <form class="form-horizontal form-builder row" id="config-form">
                                 @foreach($systemConfigs as $systemConfig)
-                                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="config-{{$systemConfig['name']}}">
+                                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                                         id="config-{{$systemConfig['name']}}">
                                         <label class="col-md-1 control-label form-option-line">
                                             @if($systemConfig['required'])
                                                 <span class="form-option-require"></span>
@@ -67,7 +75,8 @@
                                         </label>
                                         @if($systemConfig['genre']=='static')
                                             <div class="col-md-6 form-option-line">
-                                                <input type="hidden" name="{{$systemConfig['name']}}" value="{{$systemConfig['value']}}">
+                                                <input type="hidden" name="{{$systemConfig['name']}}"
+                                                       value="{{$systemConfig['value']}}">
                                                 <div class="form-control-static">{{$systemConfig['value']}}</div>
                                             </div>
                                             <div class="col-md-5 form-control-static form-option-line">
@@ -75,14 +84,18 @@
                                             </div>
                                         @elseif($systemConfig['genre']=='text')
                                             <div class="col-md-6 form-option-line">
-                                                <input class="form-control" type="text" name="{{$systemConfig['name']}}" value="{{$systemConfig['value']}}" placeholder="请输入{{$systemConfig['title']}}">
+                                                <input class="form-control" type="text" name="{{$systemConfig['name']}}"
+                                                       value="{{$systemConfig['value']}}"
+                                                       placeholder="请输入{{$systemConfig['title']}}">
                                             </div>
                                             <div class="col-md-5 form-control-static form-option-line">
                                                 <div class="help-block help-block-line">{{$systemConfig['tips']}}</div>
                                             </div>
                                         @elseif($systemConfig['genre']=='textarea')
                                             <div class="col-md-6 form-option-line">
-                                                <textarea class="form-control" rows="7" name="{{$systemConfig['name']}}" placeholder="请输入{{$systemConfig['title']}}" name="{{$systemConfig['name']}}">{{$systemConfig['value']}}</textarea>
+                                                <textarea class="form-control" rows="7" name="{{$systemConfig['name']}}"
+                                                          placeholder="请输入{{$systemConfig['title']}}"
+                                                          name="{{$systemConfig['name']}}">{{$systemConfig['value']}}</textarea>
                                             </div>
                                             <div class="col-md-5 form-control-static form-option-line">
                                                 <div class="help-block help-block-line">{{$systemConfig['tips']}}</div>
@@ -91,7 +104,9 @@
                                             <div class="col-md-11 form-option-line">
                                                 @foreach(json_decode($systemConfig['options'],true) as $k=>$v)
                                                     <label class="css-input css-radio css-radio-primary css-radio-sm push-10-r">
-                                                        <input type="radio" name="{{$systemConfig['name']}}" value="{{$k}}" @if($systemConfig['value']==$k) checked @endif>
+                                                        <input type="radio" name="{{$systemConfig['name']}}"
+                                                               value="{{$k}}"
+                                                               @if($systemConfig['value']==$k) checked @endif>
                                                         <span></span> {{$v}}
                                                     </label>
                                                 @endforeach
@@ -101,7 +116,9 @@
                                             <div class="col-md-11 form-option-line">
                                                 @foreach(json_decode($systemConfig['options'],true) as $k=>$v)
                                                     <label class="css-input css-checkbox css-checkbox-primary css-checkbox-sm css-checkbox-rounded">
-                                                        <input type="checkbox" name="{{$systemConfig['name']}}" value="{{$k}}" @if(in_array($k,explode(',',$systemConfig['value']))) checked @endif>
+                                                        <input type="checkbox" name="{{$systemConfig['name']}}"
+                                                               value="{{$k}}"
+                                                               @if(in_array($k,explode(',',$systemConfig['value']))) checked @endif>
                                                         <span></span> {{$v}}
                                                     </label>
                                                 @endforeach
@@ -112,7 +129,8 @@
                                                 <select class="form-control" name="{{$systemConfig['name']}}">
                                                     <option value="">请选择：</option>
                                                     @foreach(json_decode($systemConfig['options'],true) as $k=>$v)
-                                                        <option value="{{$k}}" @if($systemConfig['value']==$k) selected @endif>{{$v}}</option>
+                                                        <option value="{{$k}}"
+                                                                @if($systemConfig['value']==$k) selected @endif>{{$v}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -121,17 +139,21 @@
                                             </div>
                                         @elseif($systemConfig['genre']=='switch')
                                             <div class="col-md-11 form-option-line">
-                                                <label class="css-input switch switch-sm switch-primary switch-rounded " title="开启/关闭">
-                                                    <input type="checkbox" name="{{$systemConfig['name']}}" value="1" @if($systemConfig['value']) checked @endif><span></span>
+                                                <label class="css-input switch switch-sm switch-primary switch-rounded "
+                                                       title="开启/关闭">
+                                                    <input type="checkbox" name="{{$systemConfig['name']}}" value="1"
+                                                           @if($systemConfig['value']) checked @endif><span></span>
                                                 </label>
                                                 <span class="form-control-static form-option-line help-line">{{$systemConfig['tips']}}</span>
                                             </div>
                                         @elseif($systemConfig['genre']=='select2')
                                             <div class="col-md-6 form-option-line">
-                                                <select class="js-select2 form-control select-linkage select2-hidden-accessible" name="{{$systemConfig['name']}}" aria-hidden="true">
+                                                <select class="js-select2 form-control select-linkage select2-hidden-accessible"
+                                                        name="{{$systemConfig['name']}}" aria-hidden="true">
                                                     <option value="">请选择</option>
                                                     @foreach(json_decode($systemConfig['options'],true) as $k=>$v)
-                                                        <option value="{{$k}}" @if($systemConfig['value']==$k) selected @endif>{{$v}}</option>
+                                                        <option value="{{$k}}"
+                                                                @if($systemConfig['value']==$k) selected @endif>{{$v}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -141,11 +163,15 @@
                                         @elseif($systemConfig['genre']=='image')
                                             <div class="col-md-11 form-option-line">
                                                 <div class="webuploader-box js-upload-image" upload-type="image">
-                                                    <input type="hidden" name="{{$systemConfig['name']}}" value="{{$systemConfig['value']}}">
+                                                    <input type="hidden" name="{{$systemConfig['name']}}"
+                                                           value="{{$systemConfig['value']}}">
                                                     <div class="uploader-list">
                                                         @if($systemConfig['value']!=='')
-                                                            <div class="file-item js-gallery thumbnail upload-state-done" style="margin:0;margin-right: 10px; margin-bottom: 5px;">
-                                                                <img src="{{$systemConfig['value']}}" data-original="{{$systemConfig['value']}}" width="100" height="100">
+                                                            <div class="file-item js-gallery thumbnail upload-state-done"
+                                                                 style="margin:0;margin-right: 10px; margin-bottom: 5px;">
+                                                                <img src="{{$systemConfig['value']}}"
+                                                                     data-original="{{$systemConfig['value']}}"
+                                                                     width="100" height="100">
                                                                 <div class="info">{{$systemConfig['value']}}</div>
                                                                 <i class="fa fa-times-circle remove-picture"></i>
                                                             </div>
@@ -158,12 +184,15 @@
                                             </div>
                                         @elseif($systemConfig['genre']=='images')
                                             <div class="col-md-11 form-option-line">
-                                                <div class="webuploader-box js-upload-image" upload-type="images" input-name="{{$systemConfig['name']}}">
+                                                <div class="webuploader-box js-upload-image" upload-type="images"
+                                                     input-name="{{$systemConfig['name']}}">
                                                     <div class="uploader-list ui-sortable">
                                                         @foreach(explode(',',$systemConfig['value']) as $v)
-                                                            <div class="file-item js-gallery thumbnail upload-state-done" style="margin:0;margin-right: 10px; margin-bottom: 5px;">
+                                                            <div class="file-item js-gallery thumbnail upload-state-done"
+                                                                 style="margin:0;margin-right: 10px; margin-bottom: 5px;">
                                                                 <img src="{{$v}}" data-original="{{$v}}">
-                                                                <input type="hidden" name="{{$systemConfig['name']}}[]" value="{{$v}}" width="100" height="100">
+                                                                <input type="hidden" name="{{$systemConfig['name']}}[]"
+                                                                       value="{{$v}}" width="100" height="100">
                                                                 <i class="fa fa-times-circle remove-picture"></i>
                                                                 <i class="fa fa-fw fa-arrows move-picture"></i>
                                                             </div>
@@ -177,14 +206,18 @@
                                         @elseif($systemConfig['genre']=='file')
                                             <div class="col-md-11 form-option-line">
                                                 <div class="webuploader-box js-upload-file" upload-type="file">
-                                                    <input type="hidden" name="{{$systemConfig['name']}}" value="{{$systemConfig['value']}}">
+                                                    <input type="hidden" name="{{$systemConfig['name']}}"
+                                                           value="{{$systemConfig['value']}}">
                                                     <div class="uploader-list">
-                                                        <li class="list-group-item file-item upload-state-done" style="word-wrap: break-word;">
+                                                        <li class="list-group-item file-item upload-state-done"
+                                                            style="word-wrap: break-word;">
                                                             <span class="pull-right file-state"></span>
                                                             <i class="fa fa-file"></i>{{$systemConfig['value']}}&nbsp;&nbsp;
                                                             <span class="file-btns">
-                                                                [<a href="javascript:void(0);" class="remove-file">删除</a>]&nbsp;
-                                                                [<a href="{{$systemConfig['value']}}" target="_blank" class="text-success">下载</a>]
+                                                                [<a href="javascript:void(0);"
+                                                                    class="remove-file">删除</a>]&nbsp;
+                                                                [<a href="{{$systemConfig['value']}}" target="_blank"
+                                                                    class="text-success">下载</a>]
                                                             </span>
                                                         </li>
                                                     </div>
@@ -194,18 +227,23 @@
                                             </div>
                                         @elseif($systemConfig['genre']=='files')
                                             <div class="col-md-11 form-option-line">
-                                                <div class="webuploader-box js-upload-file" upload-type="files" input-name="{{$systemConfig['name']}}">
+                                                <div class="webuploader-box js-upload-file" upload-type="files"
+                                                     input-name="{{$systemConfig['name']}}">
                                                     <div class="uploader-list ui-sortable">
                                                         @foreach(explode(',',$systemConfig['value']) as $v)
-                                                            <li class="list-group-item file-item upload-state-done" style="word-wrap: break-word;">
+                                                            <li class="list-group-item file-item upload-state-done"
+                                                                style="word-wrap: break-word;">
                                                                 <span class="pull-right file-state"></span>
                                                                 <i class="fa fa-file"></i>{{$v}}&nbsp;&nbsp;
                                                                 <span class="file-btns">
-                                                                [<a href="javascript:void(0);" class="remove-file">删除</a>]&nbsp;
+                                                                [<a href="javascript:void(0);"
+                                                                    class="remove-file">删除</a>]&nbsp;
                                                                 [<a href="{{$v}}" target="_blank" class="text-success">下载</a>]
                                                             </span>
-                                                                <input type="hidden" name="{{$systemConfig['name']}}[]" value="{{$v}}">
-                                                                <i class="fa fa-fw fa-arrows move-file" style="display: none;"></i>
+                                                                <input type="hidden" name="{{$systemConfig['name']}}[]"
+                                                                       value="{{$v}}">
+                                                                <i class="fa fa-fw fa-arrows move-file"
+                                                                   style="display: none;"></i>
                                                             </li>
                                                         @endforeach
                                                     </div>
@@ -215,28 +253,40 @@
                                             </div>
                                         @elseif($systemConfig['genre']=='date')
                                             <div class="col-md-6 form-option-line">
-                                                <input class="js-datepicker form-control form-datepicker" autocomplete="off" type="text" name="{{$systemConfig['name']}}" value="{{$systemConfig['value']}}" data-date-format="yyyy-mm-dd" placeholder="请选择或者输入日期，输入格式：yyyy-mm-dd">
+                                                <input class="js-datepicker form-control form-datepicker"
+                                                       autocomplete="off" type="text" name="{{$systemConfig['name']}}"
+                                                       value="{{$systemConfig['value']}}" data-date-format="yyyy-mm-dd"
+                                                       placeholder="请选择或者输入日期，输入格式：yyyy-mm-dd">
                                             </div>
                                             <div class="col-md-5 form-control-static form-option-line">
                                                 <div class="help-block help-block-line">{{$systemConfig['tips']}}</div>
                                             </div>
                                         @elseif($systemConfig['genre']=='datetime')
                                             <div class="col-md-6 form-option-line">
-                                                <input class="js-datetimepicker form-control form-datetimepicker" autocomplete="off" type="text" name="{{$systemConfig['name']}}" value="{{$systemConfig['value']}}" placeholder="请选择或者输入日期时间，输入格式：YYYY-MM-DD HH:mm" data-side-by-side="true" data-locale="zh-cn" data-format="YYYY-MM-DD HH:mm">
+                                                <input class="js-datetimepicker form-control form-datetimepicker"
+                                                       autocomplete="off" type="text" name="{{$systemConfig['name']}}"
+                                                       value="{{$systemConfig['value']}}"
+                                                       placeholder="请选择或者输入日期时间，输入格式：YYYY-MM-DD HH:mm"
+                                                       data-side-by-side="true" data-locale="zh-cn"
+                                                       data-format="YYYY-MM-DD HH:mm">
                                             </div>
                                             <div class="col-md-5 form-control-static form-option-line">
                                                 <div class="help-block help-block-line">{{$systemConfig['tips']}}</div>
                                             </div>
                                         @elseif($systemConfig['genre']=='ueditor')
                                             <div class="col-md-9 form-option-line">
-                                                <script class="js-ueditor" name="{{$systemConfig['name']}}" type="text/plain">{{$systemConfig['value']}}</script>
+                                                <script class="js-ueditor" name="{{$systemConfig['name']}}"
+                                                        type="text/plain">{{$systemConfig['value']}}</script>
                                             </div>
                                             <div class="col-md-11 col-md-offset-1 form-validate-msg form-option-line">
                                                 <span class="form-control-static help-line">{{$systemConfig['tips']}}</span>
                                             </div>
                                         @elseif($systemConfig['genre']=='tags')
                                             <div class="col-md-6 form-option-line">
-                                                <input class="form-control tags-input" type="text" name="{{$systemConfig['name']}}" value="{{$systemConfig['value']}}" placeholder="请输入{{$systemConfig['title']}}">
+                                                <input class="form-control tags-input" type="text"
+                                                       name="{{$systemConfig['name']}}"
+                                                       value="{{$systemConfig['value']}}"
+                                                       placeholder="请输入{{$systemConfig['title']}}">
                                             </div>
                                             <div class="col-md-5 form-control-static form-option-line">
                                                 <div class="help-block help-block-line">{{$systemConfig['tips']}}</div>
@@ -244,7 +294,11 @@
                                         @elseif($systemConfig['genre']=='icon')
                                             <div class="col-md-6 form-option-line">
                                                 <div class="input-group js-icon-picke">
-                                                    <input name="{{$systemConfig['name']}}" placeholder="请选择图标" data-placement="bottomRight" data-input-search="true" class="form-control icp icp-auto" value="{{str_replace('fa ','',$systemConfig['value'])}}" type="text"/>
+                                                    <input name="{{$systemConfig['name']}}" placeholder="请选择图标"
+                                                           data-placement="bottomRight" data-input-search="true"
+                                                           class="form-control icp icp-auto"
+                                                           value="{{str_replace('fa ','',$systemConfig['value'])}}"
+                                                           type="text"/>
                                                     <span class="input-group-addon"></span>
                                                 </div>
                                             </div>
@@ -257,7 +311,8 @@
 
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="config-name">
                                     <div class="col-md-offset-2 col-md-9">
-                                        <button class="btn btn-minw btn-primary ajax-post" type="button" id="config-submit">
+                                        <button class="btn btn-minw btn-primary ajax-post" type="button"
+                                                id="config-submit">
                                             保存
                                         </button>
                                     </div>
@@ -287,8 +342,34 @@
         <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
         @if(in_array('image',$genres) || in_array('images',$genres))
             <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
+            @if($type=='admin')
+                <script>
+                    var set_scene_uploader_image = ['set_admin_logo', 'set_admin_logo_text'];
+                </script>
+            @elseif($type=='upload')
+                <script>
+                    var set_scene_uploader_image = ['set_upload_image_watermark'];
+                </script>
+            @else
+                <script>
+                    var set_scene_uploader_image = [];
+                </script>
+            @endif
             <script src="{{asset('/static/admin/js/webuploader-image.js').'?'.$SFV}}"></script>
         @else
+            @if($type=='admin')
+                <script>
+                    var set_scene_uploader_file = [];
+                </script>
+            @elseif($type=='upload')
+                <script>
+                    var set_scene_uploader_file = [];
+                </script>
+            @else
+                <script>
+                    var set_scene_uploader_file = [];
+                </script>
+            @endif
             <script src="{{asset('/static/admin/js/webuploader-file.js').'?'.$SFV}}"></script>
         @endif
     @elseif(in_array('date',$genres))
