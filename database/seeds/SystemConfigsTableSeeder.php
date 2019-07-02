@@ -197,7 +197,7 @@ class SystemConfigsTableSeeder extends Seeder {
             'value'    => '',
             'type'     => 'upload',
             'genre'    => 'image',
-            'tips'     => '宽高最佳尺寸为60px及以下，超过100px，系统会自动等比例压缩水印至100px；上传的图片宽高需不小于2(w+10)px、2(h+10)px才会生成水印，w和h为水印宽高。',
+            'tips'     => '宽高最佳尺寸为60px及以下，超过100px，系统会自动等比例压缩水印至100px；水印图片最好是带透明色的png图片；上传的图片宽高需不小于2(w+10)px、2(h+10)px才会生成水印，w和h为水印宽高。',
             'options'  => '',
             'required' => 0,
           ],
