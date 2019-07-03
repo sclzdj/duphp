@@ -278,7 +278,7 @@ class SystemNode extends Model
                 '" data-id="' . $v['id'] .
                 '"><div class="dd-handle dd3-handle">拖拽</div>';
             $innerHtml .= '<div class="dd3-content"> <span class="dd3-level" data-toggle="tooltip" data-original-title="' .
-                $v['level'] . '级节点">' . $v['level'] . '</span><i class="' .
+                $v['level'] . '级节点">' . $v['level'] . '</span><i style="margin-left: 3px;margin-right: 3px;" class="' .
                 $v['icon'] . '"></i>' . $v['name'];
             if ($v['action'] !== '') {
                 $innerHtml .= '<span class="link"><i class="fa fa-link"></i>' .

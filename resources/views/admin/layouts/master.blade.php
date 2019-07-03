@@ -16,33 +16,25 @@
     </title>
     <meta name="keywords" content="{{\App\Model\Admin\SystemConfig::getVal('admin_keywords','admin')}}">
     <meta name="description" content="{{\App\Model\Admin\SystemConfig::getVal('admin_describe','admin')}}">
-    <meta name="author" content="Dujun">
+    <meta name="author" content="DuJun">
     <meta name="robots" content="noindex, nofollow">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Icons -->
     <!-- 下面的图标可以用自己的图标替换，它们被桌面和移动浏览器所使用 -->
-    <link rel="shortcut icon" href="{{asset('/static/admin/img/favicons/favicon.ico'.'?'.$SFV)}}">
-    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon.ico'.'?'.$SFV)}}" sizes="16x16">
-    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
-    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
-    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
-    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
-    <link rel="apple-touch-icon" sizes="57x57" href="{{asset('/static/admin/img/favicons/apple-touch-icon-57x57.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="60x60" href="{{asset('/static/admin/img/favicons/apple-touch-icon-60x60.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{asset('/static/admin/img/favicons/apple-touch-icon-72x72.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('/static/admin/img/favicons/apple-touch-icon-76x76.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{asset('/static/admin/img/favicons/apple-touch-icon-114x114.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="120x120" href="{{asset('/static/admin/img/favicons/apple-touch-icon-120x120.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="144x144" href="{{asset('/static/admin/img/favicons/apple-touch-icon-144x144.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{{asset('/static/admin/img/favicons/apple-touch-icon-152x152.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('/static/admin/img/favicons/apple-touch-icon-180x180.png'.'?'.$SFV)}}">
+    @php
+        $admin_logo=\App\Model\Admin\SystemConfig::getVal('admin_logo','admin');
+    @endphp
+    <link rel="shortcut icon" type="image/png" href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
+    <link rel="icon" type="image/png" href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
+    <link rel="apple-touch-icon" type="image/png" href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
     <!-- END Icons -->
     <!-- Stylesheets -->
     <!--本页面专属顶部css-->
 @yield('pre_css')
 <!-- Bootstrap与ONEUI CSS框架 -->
+    <link rel="stylesheet" href="{{asset('/static/admin/css/font-awesome.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('static/admin/css/bootstrap.min.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('static/admin/css/oneui.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('static/admin/css/dolphin.css').'?'.$SFV}}">
@@ -102,6 +94,9 @@
 <script>
     jQuery(function () {
         App.initHelpers(['appear', 'slimscroll', 'magnific-popup', 'table-tools']);
+        $(document).on('click', '[data-toggle="layout"]', function () {
+            App.layout($(this).attr('data-action'));
+        });
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

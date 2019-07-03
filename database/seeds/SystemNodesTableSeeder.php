@@ -64,41 +64,41 @@ class SystemNodesTableSeeder extends Seeder
         $systemNodes = [
             [
                 'name' => '系统',
-                'icon' => 'fa fa-fw fa-laptop',
+                'icon' => 'fa fas fa-assistive-listening-systems',
                 'children' => [
                     [
                         'name' => '系统首页',
-                        'icon' => 'fa fa-fw fa-laptop',
+                        'icon' => 'fa fas fa-home',
                         'action' => 'Admin\System\IndexController@index',
                     ],
                     [
                         'name' => '配置中心',
-                        'icon' => 'fa fa-fw fa-laptop',
+                        'icon' => 'fa fas fa-cogs',
                         'children' => [
                             [
                                 'name' => '系统配置',
-                                'icon' => 'fa fa-fw fa-laptop',
+                                'icon' => 'fa fas fa-cog',
                                 'action' => 'Admin\System\IndexController@config',
                             ],
                             [
                                 'name' => '修改密码',
-                                'icon' => 'fa fa-fw fa-laptop',
+                                'icon' => 'fa fas fa-key',
                                 'action' => 'Admin\System\IndexController@updatePassword',
                             ],
                             [
                                 'name' => '资料设置',
-                                'icon' => 'fa fa-fw fa-laptop',
+                                'icon' => 'fa fas fa-info-circle',
                                 'action' => 'Admin\System\IndexController@setInfo',
                             ]
                         ]
                     ],
                     [
                         'name' => '权限功能',
-                        'icon' => 'fa fa-fw fa-laptop',
+                        'icon' => 'fa fas fa-sitemap',
                         'children' => [
                             [
                                 'name' => '账号管理',
-                                'icon' => 'fa fa-fw fa-laptop',
+                                'icon' => 'fa fas fa-user',
                                 'action' => 'Admin\System\UserController@index',
                                 'children' => [
                                     [
@@ -125,7 +125,7 @@ class SystemNodesTableSeeder extends Seeder
                             ],
                             [
                                 'name' => '角色管理',
-                                'icon' => 'fa fa-fw fa-laptop',
+                                'icon' => 'fa fas fa-users',
                                 'action' => 'Admin\System\RoleController@index',
                                 'children' => [
                                     [
@@ -154,7 +154,7 @@ class SystemNodesTableSeeder extends Seeder
                     ],
                     [
                         'name' => '地区管理',
-                        'icon' => 'fa fa-fw fa-laptop',
+                        'icon' => 'fa fas fa-chart-area',
                         'action' => 'Admin\System\AreaController@index',
                         'children' => [
                             [
@@ -165,11 +165,11 @@ class SystemNodesTableSeeder extends Seeder
                     ],
                     [
                         'name' => '开发中心',
-                        'icon' => 'fa fa-fw fa-laptop',
+                        'icon' => 'fa fas fa-code',
                         'children' => [
                             [
                                 'name' => '文件管理',
-                                'icon' => 'fa fa-fw fa-laptop',
+                                'icon' => 'fa fas fa-file',
                                 'action' => 'Admin\System\FileController@index',
                                 'children' => [
                                     [
@@ -180,7 +180,7 @@ class SystemNodesTableSeeder extends Seeder
                             ],
                             [
                                 'name' => '节点管理',
-                                'icon' => 'fa fa-fw fa-laptop',
+                                'icon' => 'fa fas fa-bullseye',
                                 'action' => 'Admin\System\NodeController@index',
                                 'children' => [
                                     [
@@ -219,15 +219,15 @@ class SystemNodesTableSeeder extends Seeder
             ],
             [
                 'name' => '微信',
-                'icon' => 'fa fa-fw fa-laptop',
+                'icon' => 'fa fas fa-comment-alt',
                 'children' => [
                     [
                         'name' => '公众号板块',
-                        'icon' => 'fa fa-fw fa-laptop',
+                        'icon' => 'fa fab fa-glide-g',
                     ],
                     [
                         'name' => '小程序板块',
-                        'icon' => 'fa fa-fw fa-laptop',
+                        'icon' => 'fa fab fa-xing',
                     ]
                 ]
             ],

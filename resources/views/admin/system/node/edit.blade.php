@@ -5,7 +5,6 @@
 @section('pre_css')
     <link rel="stylesheet" href="{{asset('/static/libs/select2/select2.min.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('/static/libs/select2/select2-bootstrap.min.css').'?'.$SFV}}">
-    <link rel="stylesheet" href="{{asset('/static/admin/css/font-awesome.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.css').'?'.$SFV}}">
 @endsection
 @section('content')
@@ -84,12 +83,12 @@
                                     </label>
                                     <div class="col-md-6 form-option-line">
                                         <div class="input-group js-icon-picke">
-                                            <input name="icon" placeholder="请选择图标" data-placement="bottomRight" data-input-search="true" class="form-control icp icp-auto" value="{{str_replace('fa ','',$systemNode['icon'])}}" type="text"/>
+                                            <input name="icon" placeholder="请选择图标" autocomplete="off" class="form-control icp icp-auto" value="{{str_replace('fa ','',$systemNode['icon'])}}" type="text"/>
                                             <span class="input-group-addon"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-5 form-control-static form-option-line">
-                                        <div class="help-block help-block-line">输入可查找图标，一般前三级节点都要选择，四级节点不用选择</div>
+                                        <div class="help-block help-block-line">一般前三级节点都要选择，四级节点不用选择</div>
                                     </div>
                                 </div>
 

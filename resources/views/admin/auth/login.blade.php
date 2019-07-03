@@ -23,24 +23,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Icons -->
     <!-- 下面的图标可以用自己的图标替换，它们被桌面和移动浏览器所使用 -->
-    <link rel="shortcut icon" href="{{asset('/static/admin/img/favicons/favicon.ico'.'?'.$SFV)}}">
-    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon.ico'.'?'.$SFV)}}" sizes="16x16">
-    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
-    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
-    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
-    <link rel="icon" type="image/png" href="{{asset('/static/admin/img/favicons/favicon-16x16.png'.'?'.$SFV)}}" sizes="16x16">
-    <link rel="apple-touch-icon" sizes="57x57" href="{{asset('/static/admin/img/favicons/apple-touch-icon-57x57.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="60x60" href="{{asset('/static/admin/img/favicons/apple-touch-icon-60x60.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{asset('/static/admin/img/favicons/apple-touch-icon-72x72.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('/static/admin/img/favicons/apple-touch-icon-76x76.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{asset('/static/admin/img/favicons/apple-touch-icon-114x114.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="120x120" href="{{asset('/static/admin/img/favicons/apple-touch-icon-120x120.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="144x144" href="{{asset('/static/admin/img/favicons/apple-touch-icon-144x144.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{{asset('/static/admin/img/favicons/apple-touch-icon-152x152.png'.'?'.$SFV)}}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('/static/admin/img/favicons/apple-touch-icon-180x180.png'.'?'.$SFV)}}">
+    @php
+        $admin_logo=\App\Model\Admin\SystemConfig::getVal('admin_logo','admin');
+    @endphp
+    <link rel="shortcut icon" type="image/png" href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
+    <link rel="icon" type="image/png" href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
+    <link rel="apple-touch-icon" type="image/png" href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
     <!-- END Icons -->
     <!-- Stylesheets -->
     <!-- Bootstrap与ONEUI CSS框架  Page JS Plugins CSS  -->
+    <link rel="stylesheet" href="{{asset('/static/admin/css/font-awesome.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('/static/admin/css/bootstrap.min.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('/static/admin/css/oneui.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('/static/admin/css/dolphin.css').'?'.$SFV}}">
@@ -60,8 +52,11 @@
                 <div class="push-30-t push-50 animated fadeIn">
                     <!-- Login Title -->
                     <div class="text-center">
-                        <img src="{{asset('/static/admin/img/logo-signin.png').'?'.$SFV}}" alt="{{($admin_name!==''?$admin_name:config('app.name'))}}管理系统" style="max-width: 350px;">
-                        <p class="text-muted push-15-t">{{($admin_name!==''?$admin_name:config('app.name'))}}管理系统</p>
+                        @php
+                            $admin_logo_signin=\App\Model\Admin\SystemConfig::getVal('admin_logo_signin','admin');
+                        @endphp
+                        <img src="{{$admin_logo_signin!==''?$admin_logo_signin:asset('/static/admin/img/logo-signin.png').'?'.$SFV}}" alt="{{($admin_name!==''?$admin_name:config('app.name'))}}后台管理系统" style="max-width: 100%;max-height: 150px;">
+                        <p class="text-muted push-15-t"><span style="color: #5d90d2;">{{($admin_name!==''?$admin_name:config('app.name'))}}</span>后台管理系统</p>
                     </div>
                     <!-- END Login Title -->
                     <!-- Login Form -->

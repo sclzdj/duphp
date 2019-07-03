@@ -7,7 +7,6 @@ $factory->define(\App\Model\Admin\SystemUser::class, function (Faker $faker) {
         'username' => str_random(mt_rand(2, 10)),
         'password' => bcrypt('admin888'),
         'nickname' => str_random(mt_rand(2, 10)),
-//        'avatar' => config('app.url').'/static/admin/img/avatar.jpg',
         'type' => 0,
         'status' => mt_rand(0, 1),
         'remember_token' => str_random(64),

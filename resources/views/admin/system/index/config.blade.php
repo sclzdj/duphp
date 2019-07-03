@@ -24,7 +24,6 @@
     @elseif(in_array('tags',$genres))
         <link rel="stylesheet" href="{{asset('/static/libs/jquery-tags-input/jquery.tagsinput.css').'?'.$SFV}}">
     @elseif(in_array('icon',$genres))
-        <link rel="stylesheet" href="{{asset('/static/admin/css/font-awesome.css').'?'.$SFV}}">
         <link rel="stylesheet"
               href="{{asset('/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.css').'?'.$SFV}}">
     @endif
@@ -42,20 +41,11 @@
                     <li class="pull-right">
                         <ul class="block-options push-10-t push-10-r">
                             <li>
+                                <button type="button" class="page-reload"><i class="si si-refresh"></i></button>
+                            </li>
+                            <li>
                                 <button type="button" data-toggle="block-option" data-action="fullscreen_toggle"><i
                                             class="si si-size-fullscreen"></i></button>
-                            </li>
-                            <li>
-                                <button type="button" data-toggle="block-option" data-action="refresh_toggle"
-                                        data-action-mode="demo"><i class="si si-refresh"></i></button>
-                            </li>
-                            <li>
-                                <button type="button" data-toggle="block-option" data-action="content_toggle"><i
-                                            class="si si-arrow-up"></i></button>
-                            </li>
-                            <li>
-                                <button type="button" data-toggle="block-option" data-action="close"><i
-                                            class="si si-close"></i></button>
                             </li>
                         </ul>
                     </li>
@@ -344,7 +334,7 @@
             <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
             @if($type=='admin')
                 <script>
-                    var set_scene_uploader_image = ['set_admin_logo', 'set_admin_logo_text'];
+                    var set_scene_uploader_image = ['set_admin_logo', 'set_admin_logo_text', 'set_admin_logo_signin'];
                 </script>
             @elseif($type=='upload')
                 <script>

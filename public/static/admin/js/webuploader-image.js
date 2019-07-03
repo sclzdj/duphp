@@ -128,7 +128,7 @@ $(function () {
                     $('#' + file.id).find('span.none-view').remove();
                     $('#' + file.id).prepend('<img width="100" height="100">');
                 }
-                if (scene_uploader_image[this.index] != 'set_admin_logo' && scene_uploader_image[this.index] != 'set_admin_logo_text' && scene_uploader_image[this.index] != 'set_upload_image_watermark') {
+                if (scene_uploader_image[this.index] != 'set_admin_logo' && scene_uploader_image[this.index] != 'set_admin_logo_text' && scene_uploader_image[this.index] != 'set_admin_logo_signin' && scene_uploader_image[this.index] != 'set_upload_image_watermark') {
                     $('#' + file.id).find('img').prop('src', server_image_host + response.data.url + '&type=2&' + Math.random());
                     $('#' + file.id).find('img').attr('data-original', server_image_host + response.data.url + '&type=1&' + Math.random());
                 } else {

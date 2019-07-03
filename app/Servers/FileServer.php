@@ -86,6 +86,8 @@ class FileServer {
                     $url = asset(Storage::url($object));//原始文件
                 } elseif ($fileInfo['scene'] == 'set_admin_logo_text') {
                     $url = asset(Storage::url($object));//原始文件
+                } elseif ($fileInfo['scene'] == 'set_admin_logo_signin') {
+                    $url = asset(Storage::url($object));//原始文件
                 } elseif ($fileInfo['scene'] == 'set_upload_image_watermark') {
                     $url = asset(Storage::url($object));//原始文件
                     $img = Image::make($file);
@@ -99,12 +101,12 @@ class FileServer {
                 } else {
                     $gbImg = Image::make($file);
                     //生成水印
-                    $upload_image_watermark_on = SystemConfig::where(['type' => 'upload', 'name' => 'upload_image_watermark_on'])->value('value');//水印开关
-                    $upload_image_watermark_pic = SystemConfig::where(['type' => 'upload', 'name' => 'upload_image_watermark_pic'])->value('value');//水印图片
+                    $upload_image_watermark_on = SystemConfig::getVal('upload_image_watermark_on','upload');//水印开关
+                    $upload_image_watermark_pic = SystemConfig::getVal('upload_image_watermark_pic','upload');//水印图片
                     if ($upload_image_watermark_pic === '') {
                         $upload_image_watermark_pic = 'static/admin/img/watermark.png';
                     }
-                    $upload_image_watermark_position = SystemConfig::where(['type' => 'upload', 'name' => 'upload_image_watermark_position'])->value('value');//水印位置
+                    $upload_image_watermark_position = SystemConfig::getVal('upload_image_watermark_position','upload');//水印位置
                     $upload_image_watermark_position = $upload_image_watermark_position === '' ? 'bottom-right' : $upload_image_watermark_position;
                     $img = Image::make($file);
                     $marginX = 5;
@@ -120,8 +122,8 @@ class FileServer {
                         $img->save($newpath.'/'.$save_watermark_filename);
                     }
                     //生成缩略图
-                    $upload_image_thumb_on = SystemConfig::where(['type' => 'upload', 'name' => 'upload_image_thumb_on'])->value('value');//水印开关
-                    $upload_image_thumb_size = SystemConfig::where(['type' => 'upload', 'name' => 'upload_image_thumb_size'])->value('value');//水印图片
+                    $upload_image_thumb_on = SystemConfig::getVal('upload_image_thumb_on','upload');//水印开关
+                    $upload_image_thumb_size = SystemConfig::getVal('upload_image_thumb_size','upload');//水印图片
                     if ($upload_image_thumb_size !== '') {
                         $upload_image_thumb_size = explode('*', $upload_image_thumb_size);
                     } else {

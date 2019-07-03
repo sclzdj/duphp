@@ -308,7 +308,7 @@
                                                         @if($systemFile->url!=='')
                                                             @if(strpos($systemFile->mimeType,'image/')!==false)
                                                                 <div class="js-gallery">
-                                                                    @if($systemFile->scene != 'set_admin_logo' && $systemFile->scene != 'set_admin_logo_text' && $systemFile->scene != 'set_upload_image_watermark')
+                                                                    @if(!in_array($systemFile->scene,['set_admin_logo','set_admin_logo_text','set_admin_logo_signin','set_upload_image_watermark']))
                                                                         <img title="{{$systemFile->url.'&type=1'}}"
                                                                              class="image"
                                                                              data-original="{{$systemFile->url.'&type=1'}}"
@@ -414,8 +414,13 @@
                                                         <div class="btn-group">
                                                             @if($systemFile->url!=='')
                                                                 @if($systemFile->driver=='local' && strpos($systemFile->mimeType,'image/')!==false)
+                                                                    @if($systemFile->extension!=='')
                                                                     <a class="btn btn-xs btn-default" target="_blank"
-                                                                       href="{{config('app.url').'/storage/uploads/'.$systemFile->filename.'.'.$systemFile->extension}}">下载</a>
+                                                                       href="{{asset('storage/uploads/'.$systemFile->filename.'.'.$systemFile->extension)}}">下载</a>
+                                                                    @else
+                                                                        <a class="btn btn-xs btn-default" target="_blank"
+                                                                           href="{{asset('storage/uploads/'.$systemFile->filename)}}">下载</a>
+                                                                    @endif
                                                                 @else
                                                                     <a class="btn btn-xs btn-default" target="_blank"
                                                                        href="{{$systemFile->url}}">下载</a>

@@ -8,24 +8,24 @@ use App\Model\Admin\SystemNode;
 use App\Servers\ArrServer;
 use Illuminate\Http\Request;
 
-class NodeController extends BaseController
-{
+class NodeController extends BaseController {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $pid = $request['pid'] !== null ?
-            $request['pid'] :
-            0;
+          $request['pid'] :
+          0;
         $modules = SystemNode::modules();
         $max_level = max(0, (int)$request->max_level);
         $grMaxHtml = SystemNode::grMaxHtml($pid, '', $max_level);
 
         return view('/admin/system/node/index',
-                    compact('grMaxHtml', 'modules', 'pid', 'max_level'));
+          compact('grMaxHtml', 'modules', 'pid', 'max_level')
+        );
     }
 
     /**
@@ -33,11 +33,10 @@ class NodeController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
+    public function create(Request $request) {
         $pid = $request['pid'] !== null ?
-            $request['pid'] :
-            0;
+          $request['pid'] :
+          0;
         $treeNodes = SystemNode::treeNodes();
 
         return view('/admin/system/node/create', compact('treeNodes', 'pid'));
@@ -50,8 +49,7 @@ class NodeController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(SystemNodeRequest $systemNodeRequest)
-    {
+    public function store(SystemNodeRequest $systemNodeRequest) {
         \DB::beginTransaction();//开启事务
         try {
             $data = $systemNodeRequest->all();
@@ -68,8 +66,7 @@ class NodeController extends BaseController
 
                 return $this->response('本系统最高只支持4级节点', 400);
             }
-
-            if ($data['level'] == 3 || $data['level'] == 2) {
+            if ($data['level'] == 3 || ($data['level'] == 2 && $data['action'] !== '')) {
                 action($data['action']);
             }
 
@@ -81,11 +78,11 @@ class NodeController extends BaseController
             }
             $data['status'] = $data['status'] ?? 0;
             $data['sort'] = (int)$data['sort'];
-            $data['icon'] = 'fa ' . $data['icon'];
+            $data['icon'] = 'fa '.$data['icon'];
             $systemNode = SystemNode::create($data);
             $response = [
-                'url' => action('Admin\System\NodeController@index'),
-                'id' => $systemNode->id
+              'url' => action('Admin\System\NodeController@index'),
+              'id'  => $systemNode->id,
             ];
             \DB::commit();//提交事务
 
@@ -105,8 +102,7 @@ class NodeController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 
@@ -117,8 +113,7 @@ class NodeController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         $systemNode = SystemNode::find($id);
         if (!$systemNode || $systemNode->id <= 2) {
             abort(403, '参数无效');
@@ -126,7 +121,8 @@ class NodeController extends BaseController
         $treeNodes = SystemNode::treeNodes(0, '', $systemNode);
 
         return view('/admin/system/node/edit',
-                    compact('systemNode', 'treeNodes'));
+          compact('systemNode', 'treeNodes')
+        );
     }
 
     /**
@@ -137,8 +133,7 @@ class NodeController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(SystemNodeRequest $systemNodeRequest, $id)
-    {
+    public function update(SystemNodeRequest $systemNodeRequest, $id) {
         $systemNode = SystemNode::find($id);
         if (!$systemNode || $systemNode->id <= 2) {
             return $this->response('参数无效', 403);
@@ -163,13 +158,13 @@ class NodeController extends BaseController
 
                 return $this->response('本系统最高只支持4级节点', 400);
             }
-            if ($data['level'] == 3 || $data['level'] == 2) {
+            if ($data['level'] == 3 || ($data['level'] == 2 && $data['action'] !== '')) {
                 action($data['action']);
             }
             $data['pid'] = (int)$data['pid'];
             $data['status'] = $data['status'] ?? 0;
             $data['sort'] = (int)$data['sort'];
-            $data['icon'] = 'fa ' . $data['icon'];
+            $data['icon'] = 'fa '.$data['icon'];
             $child_ids = SystemNode::progenyNodes($id, '', 1);
             if ($systemNode->status != $data['status']) {
                 if ($data['status']) {
@@ -180,7 +175,7 @@ class NodeController extends BaseController
                     $run_ids[] = $id;
                 }
                 SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
-                    ->update(['status' => $data['status']]);
+                          ->update(['status' => $data['status']]);
             }
             if ($systemNode->level != $data['level']) {
                 foreach ($child_ids as $v) {
@@ -191,15 +186,16 @@ class NodeController extends BaseController
                         return $this->response('本系统最高只支持4级节点', 400);
                     }
                     $cSystemNode->update([
-                                             'level' => $data['level'] -
-                                                 $systemNode->level +
-                                                 $cSystemNode->level
-                                         ]);
+                      'level' => $data['level'] -
+                        $systemNode->level +
+                        $cSystemNode->level,
+                    ]
+                    );
                 }
             }
             $systemNode->update($data);
             $response = [
-                'url' => action('Admin\System\NodeController@index')
+              'url' => action('Admin\System\NodeController@index'),
             ];
             \DB::commit();//提交事务
 
@@ -219,19 +215,18 @@ class NodeController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         \DB::beginTransaction();//开启事务
         try {
             if ($id > 2) {
                 $run_ids = SystemNode::progenyNodes($id, '', 1);
                 $run_ids[] = $id;
                 SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
-                    ->delete();
+                          ->delete();
                 \DB::table('system_user_nodes')
-                    ->whereIn('system_node_id', $run_ids)->delete();
+                   ->whereIn('system_node_id', $run_ids)->delete();
                 \DB::table('system_role_nodes')
-                    ->whereIn('system_node_id', $run_ids)->delete();
+                   ->whereIn('system_node_id', $run_ids)->delete();
                 \DB::commit();//提交事务
 
                 return $this->response('删除成功', 200);
@@ -253,17 +248,16 @@ class NodeController extends BaseController
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function enable($id)
-    {
+    public function enable($id) {
         \DB::beginTransaction();//开启事务
         try {
             if ($id > 2) {
                 $run_ids = SystemNode::elderNodes($id, 1);
                 $run_ids =
-                    array_merge($run_ids, SystemNode::progenyNodes($id, '', 1));
+                  array_merge($run_ids, SystemNode::progenyNodes($id, '', 1));
                 $run_ids[] = $id;
                 SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
-                    ->update(['status' => '1']);
+                          ->update(['status' => '1']);
                 \DB::commit();//提交事务
 
                 return $this->response('启用成功', 200);
@@ -285,15 +279,14 @@ class NodeController extends BaseController
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function disable($id)
-    {
+    public function disable($id) {
         \DB::beginTransaction();//开启事务
         try {
             if ($id > 2) {
                 $run_ids = SystemNode::progenyNodes($id, '', 1);
                 $run_ids[] = $id;
                 SystemNode::where('id', '>', '2')->whereIn('id', $run_ids)
-                    ->update(['status' => '0']);
+                          ->update(['status' => '0']);
                 \DB::commit();//提交事务
 
                 return $this->response('禁用成功', 200);
@@ -314,15 +307,14 @@ class NodeController extends BaseController
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function sort(Request $request)
-    {
+    public function sort(Request $request) {
         \DB::beginTransaction();//开启事务
         try {
             $data = $request->sort_list;
             $pid = $request->pid;
             $level = $pid > 0 ?
-                2 :
-                1;
+              2 :
+              1;
             if ($data) {
                 $data = SystemNode::parseNodes($data, $pid, $level);
                 foreach ($data as $d) {
@@ -367,8 +359,7 @@ class NodeController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function moduleSort(Request $request)
-    {
+    public function moduleSort(Request $request) {
         if ($request->method() == 'POST') {
             \DB::beginTransaction();//开启事务
             try {

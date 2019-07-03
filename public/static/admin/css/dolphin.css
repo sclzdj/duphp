@@ -24,8 +24,14 @@ h6,
 }
 
 /* 后台logo */
+.logo{
+    max-width: 40px;
+}
+.logo-text{
+    max-width: 160px;
+}
 .logo, .logo-text {
-    max-height: 34px;
+    max-height: 40px;
 }
 
 .dolphin-header {

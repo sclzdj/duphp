@@ -18,7 +18,12 @@ class IndexController extends BaseController
     }
 
     /**
-     * ***添加图片这种配置时，要注意webuploader-image.js和文件管理模板页面的修改
+     * ***添加图片这种配置时，如果不需要生成水印和缩略图，则必须要注意修改四个地方的修改，都是添加新增的场景值
+     * 1、图片上传js文件static/admin/js/webuploader-image.js
+     * 2、文件管理模板页面admin/system/file/index.blade.php
+     * 3、当前操作方法的模板页面admin/system/index/config.blade.php
+     * 4、文件服务类Servers/FileServer.php
+     *
      * @param \App\Http\Requests\Admin\SystemConfigRequest $systemConfigRequest
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View

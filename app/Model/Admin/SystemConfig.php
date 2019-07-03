@@ -55,18 +55,14 @@ class SystemConfig extends Model
      */
     public static function indexUrl()
     {
-        $systemConfig = SystemConfig::where('type', 'basic')
-            ->where('name', 'basic_index_url')->first();
+        $basic_index_url = SystemConfig::getVal('basic_index_url','basic');;
 
-        $val = $systemConfig ?
-            $systemConfig->value :
-            null;
-        if (!$val || strpos($val, 'http://') !== false ||
-            strpos($val, 'https://') !== false
+        if (!$basic_index_url || strpos($basic_index_url, 'http://') !== false ||
+            strpos($basic_index_url, 'https://') !== false
         ) {
-            return $val;
+            return $basic_index_url;
         } else {
-            return action($val);
+            return action($basic_index_url);
         }
     }
 }
