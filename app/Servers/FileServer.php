@@ -15,13 +15,25 @@ use Intervention\Image\Facades\Image;
 
 class FileServer {
 
-    public $save_filename = null;
+    public $objects = null;
 
-    public $save_watermark_filename = null;
-
-    public $save_thumb_filename = null;
-
-    public $save_watermark_thumb_filename = null;
+    /**
+     * 删除文件存储系统的文件
+     *
+     * @param $objects 文件对象名集合，可为单个
+     */
+    public function delete($objects) {
+        if (config('filesystems.default') == 'local') {
+            if ($objects) {
+                $objects = is_array($objects) ? $objects : explode('|', $objects);
+                foreach ($objects as $object) {
+                    if ($object) {
+                        Storage::delete($object);
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * @param string $filetype 上传类型，file，image
@@ -33,7 +45,6 @@ class FileServer {
      */
     public function upload($filetype, $filename, $path = '', $file, $fileInfo = []) {
         if (config('filesystems.default') == 'local') {
-            //先删除原来的缩略图和水印图
             if ($fileInfo['extension'] !== '') {
                 $save_filename = $filename.'.'.$fileInfo['extension'];
                 if ($filetype == 'image') {
@@ -49,34 +60,16 @@ class FileServer {
                     $save_watermark_thumb_filename = $filename.'_watermark_thumb';
                 }
             }
-            $this->save_filename = $save_filename;
-            if ($filetype == 'image') {
-                $this->save_watermark_filename = $save_watermark_filename;
-                $this->save_thumb_filename = $save_thumb_filename;
-                $this->save_watermark_thumb_filename = $save_watermark_thumb_filename;
-            }
             $systemFile = SystemFile::where(['filename' => $filename])->first();
             if (!$systemFile) {
                 $systemFile = SystemFile::create();
             } else {
-                if ($systemFile->extension !== '') {
-                    Storage::delete('public/'.$path.'/'.$filename.'.'.$systemFile->extension);
-                } else {
-                    Storage::delete('public/'.$path.'/'.$filename);
-                }
-                if (strpos($systemFile->mimeType, 'image/') !== false) {
-                    if ($systemFile->extension !== '') {
-                        Storage::delete('public/'.$path.'/'.$filename.'_watermark.'.$systemFile->extension);
-                        Storage::delete('public/'.$path.'/'.$filename.'_thumb.'.$systemFile->extension);
-                        Storage::delete('public/'.$path.'/'.$filename.'_watermark_thumb.'.$systemFile->extension);
-                    } else {
-                        Storage::delete('public/'.$path.'/'.$filename.'_watermark');
-                        Storage::delete('public/'.$path.'/'.$filename.'_thumb');
-                        Storage::delete('public/'.$path.'/'.$filename.'_watermark_thumb');
-                    }
-                }
+                //先删除原来的缩略图和水印图
+                $this->delete($systemFile->objects);
             }
             $object = $file->storeAs('public/'.$path, $save_filename);
+            $objects = [];
+            $objects[] = $object;
             if ($filetype == 'image') {
                 if (!is_dir('storage')) {
                     return false;
@@ -101,12 +94,12 @@ class FileServer {
                 } else {
                     $gbImg = Image::make($file);
                     //生成水印
-                    $upload_image_watermark_on = SystemConfig::getVal('upload_image_watermark_on','upload');//水印开关
-                    $upload_image_watermark_pic = SystemConfig::getVal('upload_image_watermark_pic','upload');//水印图片
+                    $upload_image_watermark_on = SystemConfig::getVal('upload_image_watermark_on', 'upload');//水印开关
+                    $upload_image_watermark_pic = SystemConfig::getVal('upload_image_watermark_pic', 'upload');//水印图片
                     if ($upload_image_watermark_pic === '') {
                         $upload_image_watermark_pic = 'static/admin/img/watermark.png';
                     }
-                    $upload_image_watermark_position = SystemConfig::getVal('upload_image_watermark_position','upload');//水印位置
+                    $upload_image_watermark_position = SystemConfig::getVal('upload_image_watermark_position', 'upload');//水印位置
                     $upload_image_watermark_position = $upload_image_watermark_position === '' ? 'bottom-right' : $upload_image_watermark_position;
                     $img = Image::make($file);
                     $marginX = 5;
@@ -121,9 +114,10 @@ class FileServer {
                     } else {
                         $img->save($newpath.'/'.$save_watermark_filename);
                     }
+                    $objects[] = 'public/'.$path.'/'.$save_watermark_filename;
                     //生成缩略图
-                    $upload_image_thumb_on = SystemConfig::getVal('upload_image_thumb_on','upload');//水印开关
-                    $upload_image_thumb_size = SystemConfig::getVal('upload_image_thumb_size','upload');//水印图片
+                    $upload_image_thumb_on = SystemConfig::getVal('upload_image_thumb_on', 'upload');//水印开关
+                    $upload_image_thumb_size = SystemConfig::getVal('upload_image_thumb_size', 'upload');//水印图片
                     if ($upload_image_thumb_size !== '') {
                         $upload_image_thumb_size = explode('*', $upload_image_thumb_size);
                     } else {
@@ -145,20 +139,25 @@ class FileServer {
                     } else {
                         $img->save($newpath.'/'.$save_thumb_filename);
                     }
+                    $objects[] = 'public/'.$path.'/'.$save_thumb_filename;
                     $gbImg->save($newpath.'/'.$save_watermark_thumb_filename);
+                    $objects[] = 'public/'.$path.'/'.$save_watermark_thumb_filename;
                     $url = asset('image_storage?filename='.urlencode('storage/'.$path.'/'.$filename).'&extension='.$fileInfo['extension']);
                 }
             } else {
                 $url = asset(Storage::url($object));//原始文件
             }
+            $this->objects = $objects;
             $update = [
-              'url'      => $url,
-              'disk'     => config('filesystems.default'),
-              'driver'   => config('filesystems.disks.'.
+              'url'          => $url,
+              'original_url' => asset(Storage::url($object)),
+              'disk'         => config('filesystems.default'),
+              'driver'       => config('filesystems.disks.'.
                 config('filesystems.default').'.driver'
               ),
-              'object'   => $object,
-              'filename' => $filename,
+              'object'       => $object,
+              'objects'      => implode('|', $objects),
+              'filename'     => $filename,
             ];
             $update = array_merge($update, $fileInfo);
             $systemFile->update($update);

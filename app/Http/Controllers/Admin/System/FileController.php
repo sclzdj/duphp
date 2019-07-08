@@ -114,43 +114,30 @@ class FileController extends BaseController {
         \DB::beginTransaction();//开启事务
         try {
             if ($id > 0) {
-                $systemFile = SystemFile::find($id);
-                SystemFile::where('id', $id)->delete();
-                /**
-                 * 此处应该执行一个钩子，检测该文件有没有其它地方在使用
-                 *
-                 *
-                 *
-                 *
-                 */
-                if ($systemFile->driver == 'local') {
-                    Storage::disk($systemFile->disk)
-                           ->delete($systemFile->object);
-                }
+                $result = SystemFile::delFileAndRow($id);
                 \DB::commit();//提交事务
+                if ($result) {
+                    return $this->response('<div>有关联数据，不能删除！关联数据：<li>表:'.$result['table'].'，字段:'.$result['field'].'，关联记录:'.$result['id_str'].'</li></div>', 400);
+                }
 
                 return $this->response('删除成功', 200);
             } else {
                 $ids = is_array($request->ids) ?
                   $request->ids :
                   explode(',', $request->ids);
-                $systemFiles = SystemFile::whereIn('id', $ids)->get();
-                /**
-                 * 此处应该执行一个钩子，检测该文件有没有其它地方在使用
-                 * 需要返回可以删除的ids
-                 *
-                 *
-                 */
-                SystemFile::whereIn('id', $ids)->delete();
-                foreach ($systemFiles as $systemFile) {
-                    if ($systemFile->driver == 'local') {
-                        Storage::disk($systemFile->disk)
-                               ->delete($systemFile->object);
-                    }
-                }
+                $result = SystemFile::delFileAndRow($ids);
                 \DB::commit();//提交事务
+                if ($result) {
+                    $message = '<div><span style="color: #c54736;">以下记录有关联数据，不能删除</span>，其它已批量删除成功！<div><span style="color: #c54736;">有关联数据记录：</span>';
+                    foreach ($result as $r) {
+                        $message .= '<li style="color: #c54736;">记录:'.$r['id'].'，表'.$r['table'].'，字段:'.$r['field'].'，关联记录:'.$r['id_str'].'</li>';
+                    }
+                    $message .= '</div>';
+                } else {
+                    $message = '批量删除成功';
+                }
 
-                return $this->response('批量删除成功', 200);
+                return $this->response($message, 200);
             }
         } catch (\Exception $e) {
             \DB::rollback();//回滚事务
@@ -173,6 +160,10 @@ class FileController extends BaseController {
         $filename = (string)$request->instance()->post('filename', '');
         $scene = (string)$request->instance()->post('scene', '');
         $filename = ltrim(str_replace('\\', '/', $filename), '/');
+        $upload_scenes = config('custom.upload_scenes');
+        if (!isset($upload_scenes[$scene])) {
+            return $this->uploadResponse('该场景值没有被配置预设，无效', 400);
+        }
         if ($filename === '' || in_array($upload_type, ['images', 'files'])) {
             $filename = date("Ymd/").time().mt_rand(10000, 99999);
         }
@@ -267,35 +258,13 @@ class FileController extends BaseController {
                 return $this->uploadResponse('上传成功', 201, ['url' => $url]);
             } else {
                 \DB::rollback();//回滚事务
-                if ($FileServer->save_filename) {
-                    Storage::delete($FileServer->save_filename);
-                }
-                if ($FileServer->save_watermark_filename) {
-                    Storage::delete($FileServer->save_watermark_filename);
-                }
-                if ($FileServer->save_thumb_filename) {
-                    Storage::delete($FileServer->save_thumb_filename);
-                }
-                if ($FileServer->save_watermark_thumb_filename) {
-                    Storage::delete($FileServer->save_watermark_thumb_filename);
-                }
+                $FileServer->delete($FileServer->objects);
 
                 return $this->uploadResponse('上传失败', 400);
             }
         } catch (\Exception $e) {
             \DB::rollback();//回滚事务
-            if ($FileServer->save_filename) {
-                Storage::delete($FileServer->save_filename);
-            }
-            if ($FileServer->save_watermark_filename) {
-                Storage::delete($FileServer->save_watermark_filename);
-            }
-            if ($FileServer->save_thumb_filename) {
-                Storage::delete($FileServer->save_thumb_filename);
-            }
-            if ($FileServer->save_watermark_thumb_filename) {
-                Storage::delete($FileServer->save_watermark_thumb_filename);
-            }
+            $FileServer->delete($FileServer->objects);
 
             return $this->eResponse($e->getMessage(), $e->getCode());
         }
@@ -304,6 +273,7 @@ class FileController extends BaseController {
 
     /**
      * 图片显示专属方法
+     *
      * @param \Illuminate\Http\Request $request
      */
     public function image(Request $request) {

@@ -17,8 +17,10 @@ class CreateSystemFilesTable extends Migration
             $table->engine = 'innodb';
             $table->increments('id');
             $table->string('url', 1000)->index()->default('')->comment('文件链接');
+            $table->string('original_url', 1000)->index()->default('')->comment('原始文件链接');
             $table->string('filename', 1000)->index()->default('')->comment('文件名，不含后缀');
             $table->string('object', 1000)->index()->default('')->comment('文件对象名，含后缀');
+            $table->string('objects', 4000)->default('')->comment('文件对象名集合，含后缀');
             $table->string('extension')->default('')->comment('后缀名');
             $table->string('mimeType')->default('')->comment('mime类型');
             $table->unsignedInteger('size')->default(0)->comment('大小');

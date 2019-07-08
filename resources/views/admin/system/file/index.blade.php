@@ -412,25 +412,15 @@
                                                 <td class=" ">
                                                     <div class="table-cell">
                                                         <div class="btn-group">
-                                                            @if($systemFile->url!=='')
-                                                                @if($systemFile->driver=='local' && strpos($systemFile->mimeType,'image/')!==false)
-                                                                    @if($systemFile->extension!=='')
-                                                                    <a class="btn btn-xs btn-default" target="_blank"
-                                                                       href="{{asset('storage/uploads/'.$systemFile->filename.'.'.$systemFile->extension)}}">下载</a>
-                                                                    @else
-                                                                        <a class="btn btn-xs btn-default" target="_blank"
-                                                                           href="{{asset('storage/uploads/'.$systemFile->filename)}}">下载</a>
-                                                                    @endif
-                                                                @else
-                                                                    <a class="btn btn-xs btn-default" target="_blank"
-                                                                       href="{{$systemFile->url}}">下载</a>
-                                                                @endif
+                                                            @if($systemFile->original_url!=='')
+                                                                <a class="btn btn-xs btn-default" target="_blank"
+                                                                   href="{{$systemFile->original_url}}">下载</a>
                                                             @endif
                                                             @if(\App\Servers\PermissionServer::allowAction('Admin\System\FileController@destroy'))
                                                                 <a class="btn btn-xs btn-default id-submit"
                                                                    submit-type="DELETE"
                                                                    href="{{action('Admin\System\FileController@destroy',['id'=>$systemFile->id])}}"
-                                                                   confirm="<div class='text-center'>删除操作会将其关联数据<b class='text-danger'>全部删除，且不可恢复</b>；确定要删除吗？</div>">删除</a>
+                                                                   confirm="<div class='text-center'><b class='text-danger'>删除数据时若其有关联数据将不会进行删除</b>；是否继续？</div>">删除</a>
                                                             @endif
                                                         </div>
                                                     </div>
