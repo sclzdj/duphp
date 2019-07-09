@@ -124,6 +124,12 @@ class FileServer {
                     if ($upload_editor_catch_image_watermark_on == 1 && $watermark_status) {
                         $img->insert($upload_image_watermark_pic, $upload_image_watermark_position, $marginX, $marginY)->save($newpath.'/'.$save_filename);
                     } else {
+                        $arrTmp = explode('/', $newpath.'/'.$save_filename);
+                        array_pop($arrTmp);
+                        $newDir = implode('/', $arrTmp);
+                        if (!is_dir($newDir)) {
+                            mkdir($newDir, 0777, true);
+                        }
                         $img->save($newpath.'/'.$save_filename);
                     }
                     $url = asset(Storage::url($object));//原始文件

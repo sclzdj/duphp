@@ -7,7 +7,6 @@ use App\Model\Admin\SystemConfig;
 use App\Model\Admin\SystemFile;
 use App\Servers\FileServer;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
 
 class FileController extends BaseController {
 
@@ -198,7 +197,7 @@ class FileController extends BaseController {
             return $this->uploadResponse('上传过程中出错，请主要检查php.ini是否配置正确', 400);
         }
         $fileInfo = [];
-        $fileInfo['extension'] = $request->file->extension();
+        $fileInfo['extension'] = $request->file->clientExtension()!==''?$request->file->clientExtension():$request->file->extension();
         $fileInfo['mimeType'] = $request->file->getMimeType();
         $fileInfo['size'] = $request->file->getClientSize();
         $fileInfo['iniSize'] = $request->file->getMaxFilesize();
@@ -369,8 +368,8 @@ class FileController extends BaseController {
                 if (request()->method() == 'OPTIONS') {
                     return $this->response([]);
                 }
-
                 $url = $FileServer->upload('image', date("Ymd/").time().mt_rand(10000, 99999), $path, $img['source'], $img['fileInfo']);
+
                 if ($url !== false) {
                     \DB::commit();//提交事务
                     $list[] = [

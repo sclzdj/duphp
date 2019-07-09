@@ -16,7 +16,7 @@ class CreateSystemDemosTable extends Migration {
             $table->engine = 'innodb';
             $table->increments('id');
             $table->string('name')->unique()->default('')->comment('标识');
-            $table->text('value')->comment('值');
+            $table->longText('value')->comment('值');
             //            $table->string('demo_text_1')->default('')->comment('输入框_1');
             //            $table->string('demo_text_2')->default('')->comment('输入框_2');
             //            $table->string('demo_textarea_1',1000)->default('')->comment('文本域_1');

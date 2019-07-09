@@ -18,7 +18,7 @@ class CreateSystemConfigsTable extends Migration
             $table->increments('id');
             $table->string('name')->unique()->default('')->comment('标识');
             $table->string('title')->index()->default('')->comment('名称');
-            $table->text('value')->comment('值');
+            $table->longText('value')->comment('值');
             $table->string('type')->default('basic')->comment('分类');
             $table->string('genre')->default('text')->comment('输入样式');
             $table->string('tips')->default('')->comment('提示信息');

@@ -64,7 +64,7 @@ class SystemFile extends Model {
                 } else {
                     $result = [
                       'table'  => $upload_scenes[$systemFile->scene]['table'],
-                      'field'  => $upload_scenes[$systemFile->scene]['field'],
+                      'field'  => implode('|',array_keys($upload_scenes[$systemFile->scene]['where'])),
                       'id_str' => $id_str,
                     ];
                 }
@@ -90,7 +90,7 @@ class SystemFile extends Model {
                         $result[] = [
                           'id'     => $systemFile->id,
                           'table'  => $upload_scenes[$systemFile->scene]['table'],
-                          'field'  => $upload_scenes[$systemFile->scene]['field'],
+                          'field'  => implode('|',array_keys($upload_scenes[$systemFile->scene]['where'])),
                           'id_str' => $id_str,
                         ];
                     }
