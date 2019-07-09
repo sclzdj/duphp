@@ -308,7 +308,7 @@
                                                         @if($systemFile->url!=='')
                                                             @if(strpos($systemFile->mimeType,'image/')!==false)
                                                                 <div class="js-gallery">
-                                                                    @if(!in_array($systemFile->scene,['set_admin_logo','set_admin_logo_text','set_admin_logo_signin','set_upload_image_watermark','ueditor_upload','ueditor_catch_upload']))
+                                                                    @if(!in_array($systemFile->scene,['set_admin_avatar','set_admin_logo','set_admin_logo_text','set_admin_logo_signin','set_upload_image_watermark','ueditor_upload','ueditor_catch_upload']))
                                                                         <img title="{{$systemFile->url.'&type=1'}}"
                                                                              class="image"
                                                                              data-original="{{$systemFile->url.'&type=1'}}"

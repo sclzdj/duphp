@@ -93,7 +93,9 @@ class FileServer {
                 $water = Image::make($upload_image_watermark_pic);
                 $bwWidth = 2 * ($water->width() + $marginX * 2);
                 $bwHeight = 2 * ($water->height() + $marginY * 2);
-                if ($fileInfo['scene'] == 'set_admin_logo') {
+                if ($fileInfo['scene'] == 'set_admin_avatar') {
+                    $url = asset(Storage::url($object));//原始文件
+                } elseif ($fileInfo['scene'] == 'set_admin_logo') {
                     $url = asset(Storage::url($object));//原始文件
                 } elseif ($fileInfo['scene'] == 'set_admin_logo_text') {
                     $url = asset(Storage::url($object));//原始文件
