@@ -44,14 +44,23 @@ class SystemFile extends Model {
     static public function delFileAndRow($ids) {
         $upload_scenes = config('custom.upload_scenes');
         $result = [];
+        $objects = [];
         if (is_numeric($ids)) {
             $systemFile = self::where('id', $ids)->first();
             if (isset($upload_scenes[$systemFile->scene])) {
-                $where = "`{$upload_scenes[$systemFile->scene]['field']}` {$upload_scenes[$systemFile->scene]['type']} '{$systemFile->url}'";
+                $where = [];
+                foreach ($upload_scenes[$systemFile->scene]['where'] as $k => $v) {
+                    if($v=='like'){
+                        $where[] = "`{$k}` {$v} '%{$systemFile->url}%'";
+                    }else{
+                        $where[] = "`{$k}` {$v} '{$systemFile->url}'";
+                    }
+                }
+                $where = implode(' OR ', $where);
                 $id_str = \DB::table($upload_scenes[$systemFile->scene]['table'])->selectRaw('GROUP_CONCAT(`id`) AS `id_str`')->whereRaw($where)->first()->id_str;
                 if (!$id_str) {
-                    (new FileServer())->delete($systemFile->objects);
                     $systemFile->delete();
+                    $objects[] = $systemFile->objects;
                 } else {
                     $result = [
                       'table'  => $upload_scenes[$systemFile->scene]['table'],
@@ -64,11 +73,19 @@ class SystemFile extends Model {
             $systemFiles = self::whereIn('id', is_array($ids) ? $ids : explode(',', $ids))->get();
             foreach ($systemFiles as $systemFile) {
                 if (isset($upload_scenes[$systemFile->scene])) {
-                    $where = "`{$upload_scenes[$systemFile->scene]['field']}` {$upload_scenes[$systemFile->scene]['type']} '{$systemFile->url}'";
+                    $where = [];
+                    foreach ($upload_scenes[$systemFile->scene]['where'] as $k => $v) {
+                        if($v=='like'){
+                            $where[] = "`{$k}` {$v} '%{$systemFile->url}%'";
+                        }else{
+                            $where[] = "`{$k}` {$v} '{$systemFile->url}'";
+                        }
+                    }
+                    $where = implode(' OR ', $where);
                     $id_str = \DB::table($upload_scenes[$systemFile->scene]['table'])->selectRaw('GROUP_CONCAT(`id`) AS `id_str`')->whereRaw($where)->first()->id_str;
                     if (!$id_str) {
-                        (new FileServer())->delete($systemFile->objects);
                         $systemFile->delete();
+                        $objects[] = $systemFile->objects;
                     } else {
                         $result[] = [
                           'id'     => $systemFile->id,
@@ -79,6 +96,10 @@ class SystemFile extends Model {
                     }
                 }
             }
+        }
+        $FileServer = new FileServer();
+        foreach ($objects as $object) {
+            $FileServer->delete($object);
         }
 
         return $result;

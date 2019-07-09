@@ -53,6 +53,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::delete('system/file', 'System\FileController@destroy');
         Route::get('system/area', 'System\AreaController@index');//地区管理
         Route::post('system/area/sort', 'System\AreaController@sort');
+        Route::get('system/demo', 'System\DemoController@ueditor');//demo管理
+        Route::post('system/demo', 'System\DemoController@ueditorSave');
 
         //其他模块
 

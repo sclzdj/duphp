@@ -6,7 +6,11 @@
     @if(in_array('select2',$genres))
         <link rel="stylesheet" href="{{asset('/static/libs/select2/select2.min.css').'?'.$SFV}}">
         <link rel="stylesheet" href="{{asset('/static/libs/select2/select2-bootstrap.min.css').'?'.$SFV}}">
-    @elseif(in_array('image',$genres) || in_array('images',$genres) || in_array('file',$genres) || in_array('files',$genres))
+    @endif
+    @if(in_array('tags',$genres))
+        <link rel="stylesheet" href="{{asset('/static/libs/jquery-tags-input/jquery.tagsinput.css').'?'.$SFV}}">
+    @endif
+    @if(in_array('image',$genres) || in_array('images',$genres) || in_array('file',$genres) || in_array('files',$genres))
         @if(in_array('images',$genres) || in_array('files',$genres))
             <link rel="stylesheet" href="{{asset('/static/libs/jquery-nestable/jquery.nestable.css').'?'.$SFV}}">
         @endif
@@ -14,16 +18,18 @@
         @if(in_array('image',$genres) || in_array('images',$genres))
             <link rel="stylesheet" href="{{asset('/static/libs/viewer/viewer.min.css').'?'.$SFV}}">
         @endif
-    @elseif(in_array('date',$genres))
+    @endif
+    @if(in_array('date',$genres))
         <link rel="stylesheet"
               href="{{asset('/static/libs/bootstrap-datepicker/bootstrap-datepicker3.min.css').'?'.$SFV}}">
-    @elseif(in_array('datetime',$genres))
+    @endif
+    @if(in_array('datetime',$genres))
         <link rel="stylesheet"
               href="{{asset('/static/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css').'?'.$SFV}}">
-    @elseif(in_array('ueditor',$genres))
-    @elseif(in_array('tags',$genres))
-        <link rel="stylesheet" href="{{asset('/static/libs/jquery-tags-input/jquery.tagsinput.css').'?'.$SFV}}">
-    @elseif(in_array('icon',$genres))
+    @endif
+    @if(in_array('ueditor',$genres))
+    @endif
+    @if(in_array('icon',$genres))
         <link rel="stylesheet"
               href="{{asset('/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.css').'?'.$SFV}}">
     @endif
@@ -324,45 +330,51 @@
                 App.initHelpers('select2');
             });
         </script>
-    @elseif(in_array('image',$genres) || in_array('images',$genres) || in_array('file',$genres) || in_array('files',$genres))
-        @if(in_array('images',$genres) || in_array('files',$genres))
-            <script src="{{asset('/static/libs/jquery-nestable/jquery.nestable.js').'?'.$SFV}}"></script>
-            <script src="{{asset('/static/libs/jquery-ui/jquery-ui.min.js').'?'.$SFV}}"></script>
-        @endif
-        <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
-        @if(in_array('image',$genres) || in_array('images',$genres))
-            <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
-            @if($type=='admin')
-                <script>
-                    var set_scene_uploader_image = ['set_admin_logo', 'set_admin_logo_text', 'set_admin_logo_signin'];
-                </script>
-            @elseif($type=='upload')
-                <script>
-                    var set_scene_uploader_image = ['set_upload_image_watermark'];
-                </script>
-            @else
-                <script>
-                    var set_scene_uploader_image = [];
-                </script>
+    @endif
+    @if(in_array('tags',$genres))
+        <script src="{{asset('/static/libs/jquery-tags-input/jquery.tagsinput.js').'?'.$SFV}}"></script>
+        <script src="{{asset('/static/admin/js/tags-input.js').'?'.$SFV}}"></script>
+        @if(in_array('image',$genres) || in_array('images',$genres) || in_array('file',$genres) || in_array('files',$genres))
+            @if(in_array('images',$genres) || in_array('files',$genres))
+                <script src="{{asset('/static/libs/jquery-nestable/jquery.nestable.js').'?'.$SFV}}"></script>
+                <script src="{{asset('/static/libs/jquery-ui/jquery-ui.min.js').'?'.$SFV}}"></script>
             @endif
-            <script src="{{asset('/static/admin/js/webuploader-image.js').'?'.$SFV}}"></script>
-        @else
-            @if($type=='admin')
-                <script>
-                    var set_scene_uploader_file = [];
-                </script>
-            @elseif($type=='upload')
-                <script>
-                    var set_scene_uploader_file = [];
-                </script>
+            <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
+            @if(in_array('image',$genres) || in_array('images',$genres))
+                <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
+                @if($type=='admin')
+                    <script>
+                        var set_scene_uploader_image = ['set_admin_logo', 'set_admin_logo_text', 'set_admin_logo_signin'];
+                    </script>
+                @elseif($type=='upload')
+                    <script>
+                        var set_scene_uploader_image = ['set_upload_image_watermark'];
+                    </script>
+                @else
+                    <script>
+                        var set_scene_uploader_image = [];
+                    </script>
+                @endif
+                <script src="{{asset('/static/admin/js/webuploader-image.js').'?'.$SFV}}"></script>
             @else
-                <script>
-                    var set_scene_uploader_file = [];
-                </script>
+                @if($type=='admin')
+                    <script>
+                        var set_scene_uploader_file = [];
+                    </script>
+                @elseif($type=='upload')
+                    <script>
+                        var set_scene_uploader_file = [];
+                    </script>
+                @else
+                    <script>
+                        var set_scene_uploader_file = [];
+                    </script>
+                @endif
+                <script src="{{asset('/static/admin/js/webuploader-file.js').'?'.$SFV}}"></script>
             @endif
-            <script src="{{asset('/static/admin/js/webuploader-file.js').'?'.$SFV}}"></script>
         @endif
-    @elseif(in_array('date',$genres))
+    @endif
+    @if(in_array('date',$genres))
         <script src="{{asset('/static/libs/bootstrap-datepicker/bootstrap-datepicker.min.js').'?'.$SFV}}"></script>
         <script src="{{asset('/static/libs/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js').'?'.$SFV}}"></script>
         <script>
@@ -370,7 +382,8 @@
                 App.initHelpers('datepicker');
             });
         </script>
-    @elseif(in_array('datetime',$genres))
+    @endif
+    @if(in_array('datetime',$genres))
         <script src="{{asset('/static/libs/bootstrap-datetimepicker/moment.min.js').'?'.$SFV}}"></script>
         <script src="{{asset('/static/libs/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js').'?'.$SFV}}"></script>
         <script src="{{asset('/static/libs/bootstrap-datetimepicker/locale/zh-cn.js').'?'.$SFV}}"></script>
@@ -379,15 +392,14 @@
                 App.initHelpers('datetimepicker');
             });
         </script>
-    @elseif(in_array('ueditor',$genres))
-        <script src=".{{asset('/static/libs/ueditor/ueditor.config.js').'?'.$SFV}}"></script>
-        <script src=".{{asset('/static/libs/ueditor/ueditor.all.min.js').'?'.$SFV}}"></script>
-        <script src=".{{asset('/static/libs/ueditor/lang/zh-cn/zh-cn.js').'?'.$SFV}}"></script>
-        <script src=".{{asset('/static/admin/js/ueditor-handle.js').'?'.$SFV}}"></script>
-    @elseif(in_array('tags',$genres))
-        <script src="{{asset('/static/libs/jquery-tags-input/jquery.tagsinput.js').'?'.$SFV}}"></script>
-        <script src="{{asset('/static/admin/js/tags-input.js').'?'.$SFV}}"></script>
-    @elseif(in_array('icon',$genres))
+    @endif
+    @if(in_array('ueditor',$genres))
+        <script src="{{asset('/static/libs/ueditor/ueditor.config.js').'?'.$SFV}}"></script>
+        <script src="{{asset('/static/libs/ueditor/ueditor.all.min.js').'?'.$SFV}}"></script>
+        <script src="{{asset('/static/libs/ueditor/lang/zh-cn/zh-cn.js').'?'.$SFV}}"></script>
+        <script src="{{asset('/static/admin/js/ueditor-handle.js').'?'.$SFV}}"></script>
+    @endif
+    @if(in_array('icon',$genres))
         <script src="{{asset('/static/libs/fontawesome-iconpicker/fontawesome-iconpicker.js').'?'.$SFV}}"></script>
         <script src="{{asset('/static/admin/js/iconpicker.js').'?'.$SFV}}"></script>
     @endif

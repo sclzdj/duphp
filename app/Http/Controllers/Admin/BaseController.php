@@ -26,6 +26,7 @@ class BaseController extends Controller
                                 ], $status_code, $headers, $options);
     }
 
+
     /**
      * 主要针对前端webuploader插件不能识别http错误码
      *
