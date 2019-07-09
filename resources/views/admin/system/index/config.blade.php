@@ -334,44 +334,44 @@
     @if(in_array('tags',$genres))
         <script src="{{asset('/static/libs/jquery-tags-input/jquery.tagsinput.js').'?'.$SFV}}"></script>
         <script src="{{asset('/static/admin/js/tags-input.js').'?'.$SFV}}"></script>
-        @if(in_array('image',$genres) || in_array('images',$genres) || in_array('file',$genres) || in_array('files',$genres))
-            @if(in_array('images',$genres) || in_array('files',$genres))
-                <script src="{{asset('/static/libs/jquery-nestable/jquery.nestable.js').'?'.$SFV}}"></script>
-                <script src="{{asset('/static/libs/jquery-ui/jquery-ui.min.js').'?'.$SFV}}"></script>
-            @endif
-            <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
-            @if(in_array('image',$genres) || in_array('images',$genres))
-                <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
-                @if($type=='admin')
-                    <script>
-                        var set_scene_uploader_image = ['set_admin_logo', 'set_admin_logo_text', 'set_admin_logo_signin'];
-                    </script>
-                @elseif($type=='upload')
-                    <script>
-                        var set_scene_uploader_image = ['set_upload_image_watermark'];
-                    </script>
-                @else
-                    <script>
-                        var set_scene_uploader_image = [];
-                    </script>
-                @endif
-                <script src="{{asset('/static/admin/js/webuploader-image.js').'?'.$SFV}}"></script>
+    @endif
+    @if(in_array('image',$genres) || in_array('images',$genres) || in_array('file',$genres) || in_array('files',$genres))
+        @if(in_array('images',$genres) || in_array('files',$genres))
+            <script src="{{asset('/static/libs/jquery-nestable/jquery.nestable.js').'?'.$SFV}}"></script>
+            <script src="{{asset('/static/libs/jquery-ui/jquery-ui.min.js').'?'.$SFV}}"></script>
+        @endif
+        <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
+        @if(in_array('image',$genres) || in_array('images',$genres))
+            <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
+            @if($type=='admin')
+                <script>
+                    var set_scene_uploader_image = ['set_admin_logo', 'set_admin_logo_text', 'set_admin_logo_signin'];
+                </script>
+            @elseif($type=='upload')
+                <script>
+                    var set_scene_uploader_image = ['set_upload_image_watermark'];
+                </script>
             @else
-                @if($type=='admin')
-                    <script>
-                        var set_scene_uploader_file = [];
-                    </script>
-                @elseif($type=='upload')
-                    <script>
-                        var set_scene_uploader_file = [];
-                    </script>
-                @else
-                    <script>
-                        var set_scene_uploader_file = [];
-                    </script>
-                @endif
-                <script src="{{asset('/static/admin/js/webuploader-file.js').'?'.$SFV}}"></script>
+                <script>
+                    var set_scene_uploader_image = [];
+                </script>
             @endif
+            <script src="{{asset('/static/admin/js/webuploader-image.js').'?'.$SFV}}"></script>
+        @else
+            @if($type=='admin')
+                <script>
+                    var set_scene_uploader_file = [];
+                </script>
+            @elseif($type=='upload')
+                <script>
+                    var set_scene_uploader_file = [];
+                </script>
+            @else
+                <script>
+                    var set_scene_uploader_file = [];
+                </script>
+            @endif
+            <script src="{{asset('/static/admin/js/webuploader-file.js').'?'.$SFV}}"></script>
         @endif
     @endif
     @if(in_array('date',$genres))
