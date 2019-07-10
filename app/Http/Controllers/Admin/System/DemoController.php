@@ -47,4 +47,156 @@ class DemoController extends BaseController {
             return $this->eResponse($e->getMessage(), $e->getCode());
         }
     }
+    public function webuploaderImage() {
+        $webuploader_image1=(string)SystemDemo::where('name','demo_webuploader_image_1')->value('value');
+        $webuploader_image2=(string)SystemDemo::where('name','demo_webuploader_image_2')->value('value');
+        return view('/admin/system/demo/webuploader-image',compact('webuploader_image1','webuploader_image2'));
+    }
+    public function webuploaderImageSave(Request $request) {
+        \DB::beginTransaction();//开启事务
+        try {
+            $data = $request->all();
+            $data = ArrServer::null2strData($data);
+            if(isset($data['demo_webuploader_image_1'])){
+                $webuploader_image1=SystemDemo::where('name','demo_webuploader_image_1')->first();
+                if(!$webuploader_image1){
+                    SystemDemo::create(['name'=>'demo_webuploader_image_1','value'=>$data['demo_webuploader_image_1']]);
+                }else{
+                    $webuploader_image1->value=$data['demo_webuploader_image_1'];
+                    $webuploader_image1->save();
+                }
+            }
+            if(isset($data['demo_webuploader_image_2'])){
+                $webuploader_image2=SystemDemo::where('name','demo_webuploader_image_2')->first();
+                if(!$webuploader_image2){
+                    SystemDemo::create(['name'=>'demo_webuploader_image_2','value'=>$data['demo_webuploader_image_2']]);
+                }else{
+                    $webuploader_image2->value=$data['demo_webuploader_image_2'];
+                    $webuploader_image2->save();
+                }
+            }
+            \DB::commit();//提交事务
+
+            return $this->response('保存成功', 200);
+
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
+    public function webuploaderFile() {
+        $webuploader_file1=(string)SystemDemo::where('name','demo_webuploader_file_1')->value('value');
+        $webuploader_file2=(string)SystemDemo::where('name','demo_webuploader_file_2')->value('value');
+        return view('/admin/system/demo/webuploader-file',compact('webuploader_file1','webuploader_file2'));
+    }
+    public function webuploaderFileSave(Request $request) {
+        \DB::beginTransaction();//开启事务
+        try {
+            $data = $request->all();
+            $data = ArrServer::null2strData($data);
+            if(isset($data['demo_webuploader_file_1'])){
+                $ueditor1=SystemDemo::where('name','demo_webuploader_file_1')->first();
+                if(!$ueditor1){
+                    SystemDemo::create(['name'=>'demo_webuploader_file_1','value'=>$data['demo_webuploader_file_1']]);
+                }else{
+                    $ueditor1->value=$data['demo_webuploader_file_1'];
+                    $ueditor1->save();
+                }
+            }
+            if(isset($data['demo_webuploader_file_2'])){
+                $ueditor2=SystemDemo::where('name','demo_webuploader_file_2')->first();
+                if(!$ueditor2){
+                    SystemDemo::create(['name'=>'demo_webuploader_file_2','value'=>$data['demo_webuploader_file_2']]);
+                }else{
+                    $ueditor2->value=$data['demo_webuploader_file_2'];
+                    $ueditor2->save();
+                }
+            }
+            \DB::commit();//提交事务
+
+            return $this->response('保存成功', 200);
+
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
+    public function webuploaderImages() {
+        $webuploader_images1=(string)SystemDemo::where('name','demo_webuploader_images_1')->value('value');
+        $webuploader_images2=(string)SystemDemo::where('name','demo_webuploader_images_2')->value('value');
+        return view('/admin/system/demo/webuploader-images',compact('webuploader_images1','webuploader_images2'));
+    }
+    public function webuploaderImagesSave(Request $request) {
+        \DB::beginTransaction();//开启事务
+        try {
+            $data = $request->all();
+            $data = ArrServer::null2strData($data);
+            if(isset($data['demo_webuploader_images_1'])){
+                $ueditor1=SystemDemo::where('name','demo_webuploader_images_1')->first();
+                if(!$ueditor1){
+                    SystemDemo::create(['name'=>'demo_webuploader_images_1','value'=>$data['demo_webuploader_images_1']]);
+                }else{
+                    $ueditor1->value=$data['demo_webuploader_images_1'];
+                    $ueditor1->save();
+                }
+            }
+            if(isset($data['demo_webuploader_images_2'])){
+                $ueditor2=SystemDemo::where('name','demo_webuploader_images_2')->first();
+                if(!$ueditor2){
+                    SystemDemo::create(['name'=>'demo_webuploader_images_2','value'=>$data['demo_webuploader_images_2']]);
+                }else{
+                    $ueditor2->value=$data['demo_webuploader_images_2'];
+                    $ueditor2->save();
+                }
+            }
+            \DB::commit();//提交事务
+
+            return $this->response('保存成功', 200);
+
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
+    public function webuploaderFiles() {
+        $webuploader_files1=(string)SystemDemo::where('name','demo_webuploader_files_1')->value('value');
+        $webuploader_files2=(string)SystemDemo::where('name','demo_webuploader_files_2')->value('value');
+        return view('/admin/system/demo/webuploader-files',compact('webuploader_files1','webuploader_files2'));
+    }
+    public function webuploaderFilesSave(Request $request) {
+        \DB::beginTransaction();//开启事务
+        try {
+            $data = $request->all();
+            $data = ArrServer::null2strData($data);
+            if(isset($data['demo_webuploader_files_1'])){
+                $ueditor1=SystemDemo::where('name','demo_webuploader_files_1')->first();
+                if(!$ueditor1){
+                    SystemDemo::create(['name'=>'demo_webuploader_files_1','value'=>$data['demo_webuploader_files_1']]);
+                }else{
+                    $ueditor1->value=$data['demo_webuploader_files_1'];
+                    $ueditor1->save();
+                }
+            }
+            if(isset($data['demo_webuploader_files_2'])){
+                $ueditor2=SystemDemo::where('name','demo_webuploader_files_2')->first();
+                if(!$ueditor2){
+                    SystemDemo::create(['name'=>'demo_webuploader_files_2','value'=>$data['demo_webuploader_files_2']]);
+                }else{
+                    $ueditor2->value=$data['demo_webuploader_files_2'];
+                    $ueditor2->save();
+                }
+            }
+            \DB::commit();//提交事务
+
+            return $this->response('保存成功', 200);
+
+        } catch (\Exception $e) {
+            \DB::rollback();//回滚事务
+
+            return $this->eResponse($e->getMessage(), $e->getCode());
+        }
+    }
 }

@@ -53,8 +53,18 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::delete('system/file', 'System\FileController@destroy');
         Route::get('system/area', 'System\AreaController@index');//地区管理
         Route::post('system/area/sort', 'System\AreaController@sort');
-        Route::get('system/demo', 'System\DemoController@ueditor');//demo管理
-        Route::post('system/demo', 'System\DemoController@ueditorSave');
+
+
+        Route::get('system/demo/ueditor', 'System\DemoController@ueditor');//demo管理
+        Route::post('system/demo/ueditor', 'System\DemoController@ueditorSave');
+        Route::get('system/demo/webuploaderImage', 'System\DemoController@webuploaderImage');
+        Route::post('system/demo/webuploaderImage', 'System\DemoController@webuploaderImageSave');
+        Route::get('system/demo/webuploaderImages', 'System\DemoController@webuploaderImages');
+        Route::post('system/demo/webuploaderImages', 'System\DemoController@webuploaderImagesSave');
+        Route::get('system/demo/webuploaderFile', 'System\DemoController@webuploaderFile');
+        Route::post('system/demo/webuploaderFile', 'System\DemoController@webuploaderFileSave');
+        Route::get('system/demo/webuploaderFiles', 'System\DemoController@webuploaderFiles');
+        Route::post('system/demo/webuploaderFiles', 'System\DemoController@webuploaderFilesSave');
 
         //其他模块
 

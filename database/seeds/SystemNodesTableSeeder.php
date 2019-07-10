@@ -219,6 +219,50 @@ class SystemNodesTableSeeder extends Seeder {
                 'icon'     => 'fa fas fa-puzzle-piece',
                 'children' => [
                   [
+                    'name'     => '单图上传',
+                    'icon'     => '',
+                    'action'   => 'Admin\System\DemoController@webuploaderImage',
+                    'children' => [
+                      [
+                        'name'   => '保存',
+                        'action' => 'Admin\System\NodeController@webuploaderImageSave',
+                      ],
+                    ],
+                  ],
+                  [
+                    'name'     => '多图上传',
+                    'icon'     => '',
+                    'action'   => 'Admin\System\DemoController@webuploaderImages',
+                    'children' => [
+                      [
+                        'name'   => '保存',
+                        'action' => 'Admin\System\NodeController@webuploaderImagesSave',
+                      ],
+                    ],
+                  ],
+                  [
+                    'name'     => '单文件上传',
+                    'icon'     => '',
+                    'action'   => 'Admin\System\DemoController@webuploaderFile',
+                    'children' => [
+                      [
+                        'name'   => '保存',
+                        'action' => 'Admin\System\NodeController@webuploaderFileSave',
+                      ],
+                    ],
+                  ],
+                  [
+                    'name'     => '多文件上传',
+                    'icon'     => '',
+                    'action'   => 'Admin\System\DemoController@webuploaderFiles',
+                    'children' => [
+                      [
+                        'name'   => '保存',
+                        'action' => 'Admin\System\NodeController@webuploaderFilesSave',
+                      ],
+                    ],
+                  ],
+                  [
                     'name'     => '百度编辑器',
                     'icon'     => '',
                     'action'   => 'Admin\System\DemoController@ueditor',

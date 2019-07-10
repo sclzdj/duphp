@@ -4,7 +4,6 @@ namespace App\Model\Admin;
 
 use App\Servers\FileServer;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class SystemFile extends Model {
 
@@ -34,6 +33,27 @@ class SystemFile extends Model {
      */
     protected $hidden = [];
 
+    /**
+     * 图片标签的src  注意特殊场景的不要用它
+     * @param     $url  记录url
+     * @param int $type 类型 1:水印 2:缩略图 3:缩略图加水印 其它:原图
+     *
+     * @return string
+     */
+    static public function src($url,$type=0) {
+        if(strpos($url,asset('image_storage?filename='))!==false){
+            $driver=self::where('url',$url)->value('driver');
+            if($driver){
+                if($driver=='local'){
+                    if($type==1 || $type==2 || $type==3){
+                        return $url.'&type='.$type;
+                    }
+                }
+            }
+        }
+
+        return $url;
+    }
     /**
      * 删除文件和数据库记录
      *

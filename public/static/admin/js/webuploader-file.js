@@ -5,7 +5,7 @@ $(function () {
     for (var len = moth_uploader_file.length; len < 2; len = moth_uploader_file.length) {
         moth_uploader_file = "0" + moth_uploader_file;
     }
-    var day_uploader_file =String(now_uploader_file.getDate());
+    var day_uploader_file = String(now_uploader_file.getDate());
     for (var len = day_uploader_file.length; len < 2; len = day_uploader_file.length) {
         day_uploader_file = "0" + day_uploader_file;
     }
@@ -29,8 +29,8 @@ $(function () {
             },
             // 只允许选择文件文件。
             accept: {
-                title: upload_type, //指定接受哪些类型的文件
-                extensions: '', //允许的文件后缀，不带点，多个用逗号分割
+                title: upload_type, // 文字描述
+                extensions: server_upload_file_allow_extension, //允许的文件后缀，不带点，多个用逗号分割
                 mimeTypes: '' //文件mime类型
             },
             //附带参数
@@ -44,7 +44,7 @@ $(function () {
             method: 'POST', //文件上传方式
             fileNumLimit: undefined, //验证文件总数量, 超出则不允许加入队列，默认undefined
             fileSizeLimit: undefined, //验证文件总大小是否超出限制, 超出则不允许加入队列，默认undefined
-            fileSingleSizeLimit: undefined, //验证单个文件大小是否超出限制, 超出则不允许加入队列，默认undefined
+            fileSingleSizeLimit: server_upload_file_limit_size > 0 ? server_upload_file_limit_size : undefined, //验证单个文件大小是否超出限制, 超出则不允许加入队列，默认undefined
             duplicate: true //为true允许重复上传同张文件
         });
         //标记这是第几个文件上传

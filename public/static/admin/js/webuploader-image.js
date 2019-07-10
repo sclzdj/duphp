@@ -29,8 +29,8 @@ $(function () {
             },
             // 只允许选择图片文件。
             accept: {
-                title: upload_type, //指定接受哪些类型的文件
-                extensions: 'gif,jpg,jpeg,bmp,png', //允许的文件后缀，不带点，多个用逗号分割
+                title: upload_type, // 文字描述
+                extensions: server_upload_image_allow_extension, //允许的文件后缀，不带点，多个用逗号分割
                 mimeTypes: 'image/*' //文件mime类型
             },
             //附带参数
@@ -44,7 +44,7 @@ $(function () {
             method: 'POST', //文件上传方式
             fileNumLimit: undefined, //验证文件总数量, 超出则不允许加入队列，默认undefined
             fileSizeLimit: undefined, //验证文件总大小是否超出限制, 超出则不允许加入队列，默认undefined
-            fileSingleSizeLimit: undefined, //验证单个文件大小是否超出限制, 超出则不允许加入队列，默认undefined
+            fileSingleSizeLimit: server_upload_image_limit_size > 0 ? server_upload_image_limit_size : undefined, //验证单个文件大小是否超出限制, 超出则不允许加入队列，默认undefined
             duplicate: true //为true允许重复上传同张图片
         });
         //标记这是第几个图片上传
@@ -128,7 +128,7 @@ $(function () {
                     $('#' + file.id).find('span.none-view').remove();
                     $('#' + file.id).prepend('<img width="100" height="100">');
                 }
-                if (scene_uploader_image[this.index] != 'set_admin_avatar' && scene_uploader_image[this.index] != 'set_admin_logo' && scene_uploader_image[this.index] != 'set_admin_logo_text' && scene_uploader_image[this.index] != 'set_admin_logo_signin' && scene_uploader_image[this.index] != 'set_upload_image_watermark') {
+                if (server_upload_default_filesystems == 'local' && scene_uploader_image[this.index] != 'set_admin_avatar' && scene_uploader_image[this.index] != 'set_admin_logo' && scene_uploader_image[this.index] != 'set_admin_logo_text' && scene_uploader_image[this.index] != 'set_admin_logo_signin' && scene_uploader_image[this.index] != 'set_upload_image_watermark') {
                     $('#' + file.id).find('img').prop('src', server_image_host + response.data.url + '&type=2&' + Math.random());
                     $('#' + file.id).find('img').attr('data-original', server_image_host + response.data.url + '&type=1&' + Math.random());
                 } else {

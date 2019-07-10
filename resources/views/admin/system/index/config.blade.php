@@ -168,7 +168,7 @@
                                                                 <img src="{{$systemConfig['value']}}"
                                                                      data-original="{{$systemConfig['value']}}"
                                                                      width="100" height="100">
-                                                                <div class="info">{{$systemConfig['value']}}</div>
+                                                                <div class="info"></div>
                                                                 <i class="fa fa-times-circle remove-picture"></i>
                                                             </div>
                                                         @endif

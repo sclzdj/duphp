@@ -5,6 +5,11 @@
 <html class="no-focus" lang="zh"> <!--<![endif]-->
 @php
     $SFV=\App\Model\Admin\SystemConfig::getVal('basic_static_file_version');
+    $upload_default_filesystems=config('filesystems.default');
+    $config_upload_image_limit_size=\App\Model\Admin\SystemConfig::getVal('upload_image_limit_size', 'upload');
+    $config_upload_image_allow_extension=\App\Model\Admin\SystemConfig::getVal('upload_image_allow_extension', 'upload');
+    $config_upload_file_limit_size=\App\Model\Admin\SystemConfig::getVal('upload_file_limit_size', 'upload');
+    $config_upload_file_allow_extension=\App\Model\Admin\SystemConfig::getVal('upload_file_allow_extension', 'upload');
 @endphp
 <head>
     <meta charset="utf-8">
@@ -26,9 +31,12 @@
     @php
         $admin_logo=\App\Model\Admin\SystemConfig::getVal('admin_logo','admin');
     @endphp
-    <link rel="shortcut icon" type="image/png" href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
-    <link rel="icon" type="image/png" href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
-    <link rel="apple-touch-icon" type="image/png" href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
+    <link rel="shortcut icon" type="image/png"
+          href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
+    <link rel="icon" type="image/png"
+          href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
+    <link rel="apple-touch-icon" type="image/png"
+          href="{{$admin_logo!==''?$admin_logo:asset('/static/admin/img/logo.png'.'?'.$SFV)}}" sizes="40x40">
     <!-- END Icons -->
     <!-- Stylesheets -->
     <!--本页面专属顶部css-->
@@ -104,10 +112,17 @@
         });
     });
     //上传全局配置
+    var server_upload_default_filesystems="{{$upload_default_filesystems}}";//磨人的文件上传系统
     var server_upload_image_url = "{{action('Admin\System\FileController@upload')}}";//上传地址
     var server_image_host = "";//图片显示前缀域名，上传成功后返回的是完整图片地址就留空
+    var server_upload_image_limit_size = "{{$config_upload_image_limit_size}}";//允许的上传图片大小
+    server_upload_image_limit_size = server_upload_image_limit_size === '' ? 0 : parseInt(server_upload_image_limit_size) * 1000;
+    var server_upload_image_allow_extension = "{{$config_upload_image_allow_extension}}";//允许的上传图片后缀
     var server_upload_file_url = "{{action('Admin\System\FileController@upload')}}";//上传地址
     var server_file_host = "";//文件显示前缀域名，上传成功后返回的是完整文件地址就留空
+    var server_upload_file_limit_size = "{{$config_upload_file_limit_size}}";//允许的上传文件大小
+    server_upload_file_limit_size = server_upload_file_limit_size === '' ? 0 : parseInt(server_upload_file_limit_size) * 1000;
+    var server_upload_file_allow_extension = "{{$config_upload_file_allow_extension}}";//允许的上传文件后缀
 </script>
 <!--自定义js-->
 <script src="{{asset('/static/admin/js/custom.js').'?'.$SFV}}"></script>
