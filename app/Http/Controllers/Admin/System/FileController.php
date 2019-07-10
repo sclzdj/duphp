@@ -146,6 +146,15 @@ class FileController extends BaseController {
                 $result = SystemFile::delFileAndRow($ids);
                 \DB::commit();//提交事务
                 if ($result) {
+                    if (count($result) === count($ids)) {
+                        $message = '<div>所选数据全都有关联数据，不能删除！关联数据：';
+                        foreach ($result as $r) {
+                            $message .= '<li>记录:'.$r['id'].'，表'.$r['table'].'，字段:'.$r['field'].'，关联记录:'.$r['id_str'].'</li>';
+                        }
+                        $message .= '</div>';
+
+                        return $this->response($message, 400);
+                    }
                     $message = '<div><span style="color: #c54736;">以下记录有关联数据，不能删除</span>，其它已批量删除成功！<div><span style="color: #c54736;">有关联数据记录：</span>';
                     foreach ($result as $r) {
                         $message .= '<li style="color: #c54736;">记录:'.$r['id'].'，表'.$r['table'].'，字段:'.$r['field'].'，关联记录:'.$r['id_str'].'</li>';
@@ -197,7 +206,7 @@ class FileController extends BaseController {
             return $this->uploadResponse('上传过程中出错，请主要检查php.ini是否配置正确', 400);
         }
         $fileInfo = [];
-        $fileInfo['extension'] = $request->file->clientExtension()!==''?$request->file->clientExtension():$request->file->extension();
+        $fileInfo['extension'] = $request->file->clientExtension() !== '' ? $request->file->clientExtension() : $request->file->extension();
         $fileInfo['mimeType'] = $request->file->getMimeType();
         $fileInfo['size'] = $request->file->getClientSize();
         $fileInfo['iniSize'] = $request->file->getMaxFilesize();

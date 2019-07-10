@@ -15,7 +15,7 @@
                                         百度编辑器1
                                     </label>
                                     <div class="col-md-9 form-option-line">
-                                        <script class="js-ueditor" name="demo-ueditor-1" type="text/plain">{!! $ueditor1 !!}</script>
+                                        <script class="js-ueditor" name="demo_ueditor_1" type="text/plain">{!! $ueditor1 !!}</script>
                                     </div>
                                     <div class="col-md-11 col-md-offset-1 form-validate-msg form-option-line">
                                         <span class="form-control-static help-line">百度编辑器1的提示信息</span>
@@ -26,7 +26,7 @@
                                         百度编辑器2
                                     </label>
                                     <div class="col-md-9 form-option-line">
-                                        <script class="js-ueditor" name="demo-ueditor-2" type="text/plain">{!! $ueditor2 !!}</script>
+                                        <script class="js-ueditor" name="demo_ueditor_2" type="text/plain">{!! $ueditor2 !!}</script>
                                     </div>
                                     <div class="col-md-11 col-md-offset-1 form-validate-msg form-option-line">
                                         <span class="form-control-static help-line">百度编辑器2的提示信息</span>

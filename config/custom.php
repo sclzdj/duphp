@@ -3,32 +3,39 @@
 return [
   'upload_scenes' => [
     'set_admin_avatar'           => [
-      'table' => 'system_users',
-      'where' => ['avatar'=>'='],
+      'system_users' => [
+        'where' => ['avatar' => '='],
+      ],
     ],
     'set_admin_logo'             => [
-      'table' => 'system_configs',
-      'where' => ['value'=>'='],
+      'system_configs' => [
+        'whereRaw' => "`name` = 'admin_logo'",
+        'where'    => ['value' => '='],
+      ],
     ],
     'set_admin_logo_text'        => [
-      'table' => 'system_configs',
-      'where' => ['value'=>'='],
+      'system_configs' => [
+        'whereRaw' => "`name` = 'admin_logo_text'",
+        'where'    => ['value' => '='],
+      ],
     ],
     'set_admin_logo_signin'      => [
-      'table' => 'system_configs',
-      'where' => ['value'=>'='],
+      'system_configs' => [
+        'whereRaw' => "`name` = 'admin_logo_signin'",
+        'where'    => ['value' => '='],
+      ],
     ],
     'set_upload_image_watermark' => [
-      'table' => 'system_configs',
-      'where' =>['value'=>'='],
+      'system_configs' => [
+        'whereRaw' => "`name` = 'upload_image_watermark_pic'",
+        'where'    => ['value' => '='],
+      ],
     ],
-    'ueditor_upload' => [
-      'table' => 'system_demos',
-      'where' =>['value'=>'like'],
-    ],
-    'ueditor_catch_upload' => [
-      'table' => 'system_demos',
-      'where' =>['value'=>'like'],
+    'ueditor_catch_upload'       => [
+      'system_demos' => [
+        'whereRaw' => "(`name` = 'demo_ueditor_1' OR `name` = 'demo_ueditor_2')",
+        'where'    => ['value' => 'like'],
+      ],
     ],
   ],
 ];

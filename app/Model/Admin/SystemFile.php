@@ -37,7 +37,7 @@ class SystemFile extends Model {
     /**
      * 删除文件和数据库记录
      *
-     * @param string $ids 文件id集合
+     * @param string $ids 文件id集合，或单个id都支持
      *
      * @return array
      */
@@ -45,54 +45,43 @@ class SystemFile extends Model {
         $upload_scenes = config('custom.upload_scenes');
         $result = [];
         $objects = [];
-        if (is_numeric($ids)) {
-            $systemFile = self::where('id', $ids)->first();
+        $systemFiles = self::whereIn('id', is_array($ids) ? $ids : explode(',', $ids))->get();
+        foreach ($systemFiles as $systemFile) {
             if (isset($upload_scenes[$systemFile->scene])) {
-                $where = [];
-                foreach ($upload_scenes[$systemFile->scene]['where'] as $k => $v) {
-                    if($v=='like'){
-                        $where[] = "`{$k}` {$v} '%{$systemFile->url}%'";
-                    }else{
-                        $where[] = "`{$k}` {$v} '{$systemFile->url}'";
-                    }
-                }
-                $where = implode(' OR ', $where);
-                $id_str = \DB::table($upload_scenes[$systemFile->scene]['table'])->selectRaw('GROUP_CONCAT(`id`) AS `id_str`')->whereRaw($where)->first()->id_str;
-                if (!$id_str) {
-                    $systemFile->delete();
-                    $objects[] = $systemFile->objects;
-                } else {
-                    $result = [
-                      'table'  => $upload_scenes[$systemFile->scene]['table'],
-                      'field'  => implode('|',array_keys($upload_scenes[$systemFile->scene]['where'])),
-                      'id_str' => $id_str,
-                    ];
-                }
-            }
-        } else {
-            $systemFiles = self::whereIn('id', is_array($ids) ? $ids : explode(',', $ids))->get();
-            foreach ($systemFiles as $systemFile) {
-                if (isset($upload_scenes[$systemFile->scene])) {
+                foreach ($upload_scenes[$systemFile->scene] as $table => $value) {
                     $where = [];
-                    foreach ($upload_scenes[$systemFile->scene]['where'] as $k => $v) {
-                        if($v=='like'){
+                    foreach ($value['where'] as $k => $v) {
+                        if ($v == 'like') {
                             $where[] = "`{$k}` {$v} '%{$systemFile->url}%'";
-                        }else{
+                        } elseif ($v == '=' || strtolower($v) == 'eq') {
                             $where[] = "`{$k}` {$v} '{$systemFile->url}'";
                         }
                     }
                     $where = implode(' OR ', $where);
-                    $id_str = \DB::table($upload_scenes[$systemFile->scene]['table'])->selectRaw('GROUP_CONCAT(`id`) AS `id_str`')->whereRaw($where)->first()->id_str;
+                    $DB = \DB::table($table)->selectRaw('GROUP_CONCAT(`id`) AS `id_str`')->whereRaw($where);
+                    if (isset($value['whereRaw']) && $value['whereRaw'] !== '') {
+                        $DB->whereRaw($value['whereRaw']);
+                    }
+                    $id_str = $DB->first()->id_str;
                     if (!$id_str) {
                         $systemFile->delete();
                         $objects[] = $systemFile->objects;
                     } else {
-                        $result[] = [
-                          'id'     => $systemFile->id,
-                          'table'  => $upload_scenes[$systemFile->scene]['table'],
-                          'field'  => implode('|',array_keys($upload_scenes[$systemFile->scene]['where'])),
-                          'id_str' => $id_str,
-                        ];
+                        if(is_numeric($ids)){
+                            $result = [
+                              'id'     => $systemFile->id,
+                              'table'  => $table,
+                              'field'  => implode('|', array_keys($value['where'])),
+                              'id_str' => $id_str,
+                            ];
+                        }else{
+                            $result[] = [
+                              'id'     => $systemFile->id,
+                              'table'  => $table,
+                              'field'  => implode('|', array_keys($value['where'])),
+                              'id_str' => $id_str,
+                            ];
+                        }
                     }
                 }
             }

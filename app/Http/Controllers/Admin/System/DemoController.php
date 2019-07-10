@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
 class DemoController extends BaseController {
 
     public function ueditor() {
-        $ueditor1=(string)SystemDemo::where('name','demo-ueditor-1')->value('value');
-        $ueditor2=(string)SystemDemo::where('name','demo-ueditor-2')->value('value');
+        $ueditor1=(string)SystemDemo::where('name','demo_ueditor_1')->value('value');
+        $ueditor2=(string)SystemDemo::where('name','demo_ueditor_2')->value('value');
         return view('/admin/system/demo/ueditor',compact('ueditor1','ueditor2'));
     }
     public function ueditorSave(Request $request) {
@@ -19,21 +19,21 @@ class DemoController extends BaseController {
         try {
             $data = $request->all();
             $data = ArrServer::null2strData($data);
-            if(isset($data['demo-ueditor-1'])){
-                $ueditor1=SystemDemo::where('name','demo-ueditor-1')->first();
+            if(isset($data['demo_ueditor_1'])){
+                $ueditor1=SystemDemo::where('name','demo_ueditor_1')->first();
                 if(!$ueditor1){
-                    SystemDemo::create(['name'=>'demo-ueditor-1','value'=>$data['demo-ueditor-1']]);
+                    SystemDemo::create(['name'=>'demo_ueditor_1','value'=>$data['demo_ueditor_1']]);
                 }else{
-                    $ueditor1->value=$data['demo-ueditor-1'];
+                    $ueditor1->value=$data['demo_ueditor_1'];
                     $ueditor1->save();
                 }
             }
-            if(isset($data['demo-ueditor-2'])){
-                $ueditor2=SystemDemo::where('name','demo-ueditor-2')->first();
+            if(isset($data['demo_ueditor_2'])){
+                $ueditor2=SystemDemo::where('name','demo_ueditor_2')->first();
                 if(!$ueditor2){
-                    SystemDemo::create(['name'=>'demo-ueditor-2','value'=>$data['demo-ueditor-2']]);
+                    SystemDemo::create(['name'=>'demo_ueditor_2','value'=>$data['demo_ueditor_2']]);
                 }else{
-                    $ueditor2->value=$data['demo-ueditor-2'];
+                    $ueditor2->value=$data['demo_ueditor_2'];
                     $ueditor2->save();
                 }
             }
