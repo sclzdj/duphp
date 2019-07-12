@@ -74,8 +74,8 @@
                                             <input type="hidden" name="avatar" value="{{$systemUser->avatar}}">
                                             <div class="uploader-list">
                                                 @if($systemUser->avatar!=='')
-                                                    <div class="file-item js-gallery thumbnail upload-state-done" style="margin:0;margin-right: 10px; margin-bottom: 5px;">
-                                                        <img src="{{$systemUser->avatar}}" data-original="{{$systemUser->avatar}}" width="100" height="100">
+                                                    <div class="file-item js-gallery thumbnail upload-state-done">
+                                                        <img class="uploader-img" src="{{$systemUser->avatar}}" data-original="{{$systemUser->avatar}}">
                                                         <div class="info">{{$systemUser->avatar}}</div>
                                                         <i class="fa fa-times-circle remove-picture"></i>
                                                     </div>

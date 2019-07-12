@@ -283,7 +283,7 @@ class FileController extends BaseController {
                 return $this->response([]);
             }
 
-            $url = $FileServer->upload($filetype, $filename, $path, $request->file($key), $fileInfo);
+            $url = $FileServer->upload($filetype, $filename, $path, $request->file($key), $fileInfo,$upload_type);
             if ($url !== false) {
                 \DB::commit();//提交事务
                 if ($scene == 'ueditor_upload') {

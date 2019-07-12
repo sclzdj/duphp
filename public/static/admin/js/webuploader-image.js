@@ -64,8 +64,8 @@ $(function () {
         // 当有文件添加进来的时候
         uploader_image[index].on('fileQueued', function (file) {
             var $li = $(
-                '<div id="' + file.id + '" class="file-item js-gallery thumbnail" style="margin:0;margin-right: 10px; margin-bottom: 5px;min-width:50px;min-height: 50px;">' +
-                '<img width="100" height="100">' +
+                '<div id="' + file.id + '" class="file-item js-gallery thumbnail">' +
+                '<img class="uploader-img">' +
                 '<div class="info">' + file.name + '</div>' +
                 '</div>'
                 ),
@@ -126,9 +126,9 @@ $(function () {
                 //图片查看器赋值
                 if ($('#' + file.id).find('img').length == 0) {
                     $('#' + file.id).find('span.none-view').remove();
-                    $('#' + file.id).prepend('<img width="100" height="100">');
+                    $('#' + file.id).prepend('<img class="uploader-img">');
                 }
-                if (server_upload_default_filesystems == 'local' && scene_uploader_image[this.index] != 'set_admin_avatar' && scene_uploader_image[this.index] != 'set_admin_logo' && scene_uploader_image[this.index] != 'set_admin_logo_text' && scene_uploader_image[this.index] != 'set_admin_logo_signin' && scene_uploader_image[this.index] != 'set_upload_image_watermark') {
+                if (server_upload_default_filesystems == 'local' && !inArray(scene_uploader_image[this.index], server_upload_image_special_scenes)) {
                     $('#' + file.id).find('img').prop('src', server_image_host + response.data.url + '&type=2&' + Math.random());
                     $('#' + file.id).find('img').attr('data-original', server_image_host + response.data.url + '&type=1&' + Math.random());
                 } else {

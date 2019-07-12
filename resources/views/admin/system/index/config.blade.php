@@ -163,11 +163,9 @@
                                                            value="{{$systemConfig['value']}}">
                                                     <div class="uploader-list">
                                                         @if($systemConfig['value']!=='')
-                                                            <div class="file-item js-gallery thumbnail upload-state-done"
-                                                                 style="margin:0;margin-right: 10px; margin-bottom: 5px;">
-                                                                <img src="{{$systemConfig['value']}}"
-                                                                     data-original="{{$systemConfig['value']}}"
-                                                                     width="100" height="100">
+                                                            <div class="file-item js-gallery thumbnail upload-state-done">
+                                                                <img class="uploader-img" src="{{$systemConfig['value']}}"
+                                                                     data-original="{{$systemConfig['value']}}">
                                                                 <div class="info"></div>
                                                                 <i class="fa fa-times-circle remove-picture"></i>
                                                             </div>
@@ -182,13 +180,12 @@
                                             <div class="col-md-11 form-option-line">
                                                 <div class="webuploader-box js-upload-image" upload-type="images"
                                                      input-name="{{$systemConfig['name']}}">
-                                                    <div class="uploader-list ui-sortable">
+                                                    <div class="uploader-list ui-images-sortable">
                                                         @foreach(explode(',',$systemConfig['value']) as $v)
-                                                            <div class="file-item js-gallery thumbnail upload-state-done"
-                                                                 style="margin:0;margin-right: 10px; margin-bottom: 5px;">
-                                                                <img src="{{$v}}" data-original="{{$v}}">
+                                                            <div class="file-item js-gallery thumbnail upload-state-done">
+                                                                <img class="uploader-img" src="{{$v}}" data-original="{{$v}}">
                                                                 <input type="hidden" name="{{$systemConfig['name']}}[]"
-                                                                       value="{{$v}}" width="100" height="100">
+                                                                       value="{{$v}}">
                                                                 <i class="fa fa-times-circle remove-picture"></i>
                                                                 <i class="fa fa-fw fa-arrows move-picture"></i>
                                                             </div>
@@ -225,7 +222,7 @@
                                             <div class="col-md-11 form-option-line">
                                                 <div class="webuploader-box js-upload-file" upload-type="files"
                                                      input-name="{{$systemConfig['name']}}">
-                                                    <div class="uploader-list ui-sortable">
+                                                    <div class="uploader-list ui-files-sortable">
                                                         @foreach(explode(',',$systemConfig['value']) as $v)
                                                             <li class="list-group-item file-item upload-state-done"
                                                                 style="word-wrap: break-word;">
@@ -339,6 +336,7 @@
         @if(in_array('images',$genres) || in_array('files',$genres))
             <script src="{{asset('/static/libs/jquery-nestable/jquery.nestable.js').'?'.$SFV}}"></script>
             <script src="{{asset('/static/libs/jquery-ui/jquery-ui.min.js').'?'.$SFV}}"></script>
+            <script src="{{asset('/static/admin/js/webuploader-move.js').'?'.$SFV}}"></script>
         @endif
         <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
         @if(in_array('image',$genres) || in_array('images',$genres))

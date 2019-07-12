@@ -3,6 +3,7 @@
 @endphp
 @extends('admin.layouts.master')
 @section('pre_css')
+    <link rel="stylesheet" href="{{asset('/static/libs/jquery-nestable/jquery.nestable.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('/static/libs/webuploader/webuploader.css').'?'.$SFV}}">
     <link rel="stylesheet" href="{{asset('/static/libs/viewer/viewer.min.css').'?'.$SFV}}">
 @endsection
@@ -16,55 +17,62 @@
                             <form class="form-horizontal form-builder row" id="demo-form">
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-1 control-label form-option-line">
-                                        单张图片上传1
+                                        多张图片上传1
                                     </label>
                                     <div class="col-md-11 form-option-line">
-                                        <div class="webuploader-box js-upload-image" upload-type="image">
-                                            <input type="hidden" name="demo_webuploader_image_1"
-                                                   value="{{$webuploader_image1}}">
-                                            <div class="uploader-list">
-                                                @if($webuploader_image1!=='')
-                                                    <div class="file-item js-gallery thumbnail upload-state-done">
-                                                        <img class="uploader-img" src="{{\App\Model\Admin\SystemFile::src($webuploader_image1,2)}}"
-                                                             data-original="{{\App\Model\Admin\SystemFile::src($webuploader_image1,1)}}">
-                                                        <div class="info"></div>
-                                                        <i class="fa fa-times-circle remove-picture"></i>
-                                                    </div>
+                                        <div class="webuploader-box js-upload-image" upload-type="images"
+                                             input-name="demo_webuploader_images_1">
+                                            <div class="uploader-list ui-images-sortable">
+                                                @if($webuploader_images1 !=='')
+                                                    @foreach(explode(',',$webuploader_images1) as $v)
+                                                        <div class="file-item js-gallery thumbnail upload-state-done">
+                                                            <img class="uploader-img" src="{{\App\Model\Admin\SystemFile::src($v,2)}}"
+                                                                 data-original="{{\App\Model\Admin\SystemFile::src($v,1)}}">
+                                                            <input type="hidden" name="demo_webuploader_images_1[]"
+                                                                   value="{{$v}}">
+                                                            <i class="fa fa-times-circle remove-picture"></i>
+                                                            <i class="fa fa-fw fa-arrows move-picture"></i>
+                                                        </div>
+                                                    @endforeach
                                                 @endif
                                             </div>
                                             <div class="clearfix"></div>
-                                            <div class="filePicker">上传单张图片</div>
-                                            <span class="form-control-static form-option-line help-line form-option-webuploader-line">单张图片上传1的提示信息</span>
+                                            <div class="filePicker">上传多张图片</div>
+                                            <span class="form-control-static form-option-line help-line form-option-webuploader-line">多单张图片上传1的提示信息</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-1 control-label form-option-line">
-                                        单张图片上传2
+                                        多张图片上传2
                                     </label>
                                     <div class="col-md-11 form-option-line">
-                                        <div class="webuploader-box js-upload-image" upload-type="image">
-                                            <input type="hidden" name="demo_webuploader_image_2"
-                                                   value="{{$webuploader_image2}}">
-                                            <div class="uploader-list">
-                                                @if($webuploader_image2!=='')
-                                                    <div class="file-item js-gallery thumbnail upload-state-done">
-                                                        <img class="uploader-img" src="{{\App\Model\Admin\SystemFile::src($webuploader_image2,2)}}"
-                                                             data-original="{{\App\Model\Admin\SystemFile::src($webuploader_image2,1)}}">
-                                                        <div class="info"></div>
-                                                        <i class="fa fa-times-circle remove-picture"></i>
-                                                    </div>
+                                        <div class="webuploader-box js-upload-image" upload-type="images"
+                                             input-name="demo_webuploader_images_2">
+                                            <div class="uploader-list ui-images-sortable">
+                                                @if($webuploader_images2 !=='')
+                                                    @foreach(explode(',',$webuploader_images2) as $v)
+                                                        <div class="file-item js-gallery thumbnail upload-state-done">
+                                                            <img class="uploader-img" src="{{\App\Model\Admin\SystemFile::src($v,2)}}"
+                                                                      data-original="{{\App\Model\Admin\SystemFile::src($v,1)}}">
+                                                            <input type="hidden" name="demo_webuploader_images_2[]"
+                                                                   value="{{$v}}">
+                                                            <i class="fa fa-times-circle remove-picture"></i>
+                                                            <i class="fa fa-fw fa-arrows move-picture"></i>
+                                                        </div>
+                                                    @endforeach
                                                 @endif
                                             </div>
                                             <div class="clearfix"></div>
-                                            <div class="filePicker">上传单张图片</div>
-                                            <span class="form-control-static form-option-line help-line form-option-webuploader-line">单张图片上传2的提示信息</span>
+                                            <div class="filePicker">上传多张图片</div>
+                                            <span class="form-control-static form-option-line help-line form-option-webuploader-line">多单张图片上传2的提示信息</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-username">
                                     <div class="col-md-offset-2 col-md-9">
-                                        <button class="btn btn-minw btn-primary ajax-post" type="button" id="create-submit">
+                                        <button class="btn btn-minw btn-primary ajax-post" type="button"
+                                                id="create-submit">
                                             提交
                                         </button>
                                     </div>
@@ -78,12 +86,15 @@
     </div>
 @endsection
 @section('javascript')
+    <script src="{{asset('/static/libs/jquery-nestable/jquery.nestable.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/jquery-ui/jquery-ui.min.js').'?'.$SFV}}"></script>
     <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
     <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
     <script>
         var set_scene_uploader_image = ['demo_webuploader', 'demo_webuploader'];
     </script>
     <script src="{{asset('/static/admin/js/webuploader-image.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/webuploader-move.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
             $(document).on('click', '#create-submit', function () {
@@ -92,7 +103,7 @@
                 Dolphin.loading('提交中...');
                 $.ajax({
                     type: 'POST',
-                    url: '{{action('Admin\System\DemoController@webuploaderImageSave')}}',
+                    url: '{{action('Admin\System\DemoController@webuploaderImagesSave')}}',
                     dataType: 'JSON',
                     data: data,
                     success: function (response) {

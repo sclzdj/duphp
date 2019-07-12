@@ -36,14 +36,15 @@ class FileServer {
     }
 
     /**
-     * @param string $filetype 上传类型，file，image
-     * @param string $filename 保存的文件名
-     * @param string $path     保存目录
-     * @param string $key      表单名称
+     * @param string $filetype    上传类型，file，image
+     * @param string $filename    保存的文件名
+     * @param string $path        保存目录
+     * @param string $key         表单名称
+     * @param string $upload_type 上传类型
      *
      * @return false|string
      */
-    public function upload($filetype, $filename, $path = '', $file, $fileInfo = []) {
+    public function upload($filetype, $filename, $path = '', $file, $fileInfo = [], $upload_type) {
         if (config('filesystems.default') == 'local') {
             if ($fileInfo['extension'] !== '') {
                 $save_filename = $filename.'.'.$fileInfo['extension'];
@@ -74,7 +75,7 @@ class FileServer {
             }
             $objects = [];
             $objects[] = $object;
-            if ($filetype == 'image') {
+            if (($upload_type == 'image' || $upload_type == 'images') && $filetype == 'image') {
                 if (!is_dir('storage')) {
                     return false;
                 }
@@ -93,46 +94,38 @@ class FileServer {
                 $water = Image::make($upload_image_watermark_pic);
                 $bwWidth = 2 * ($water->width() + $marginX * 2);
                 $bwHeight = 2 * ($water->height() + $marginY * 2);
-                if ($fileInfo['scene'] == 'set_admin_avatar') {
-                    $url = asset(Storage::url($object));//原始文件
-                } elseif ($fileInfo['scene'] == 'set_admin_logo') {
-                    $url = asset(Storage::url($object));//原始文件
-                } elseif ($fileInfo['scene'] == 'set_admin_logo_text') {
-                    $url = asset(Storage::url($object));//原始文件
-                } elseif ($fileInfo['scene'] == 'set_admin_logo_signin') {
-                    $url = asset(Storage::url($object));//原始文件
-                } elseif ($fileInfo['scene'] == 'set_upload_image_watermark') {
-                    $img = Image::make($file);
-                    if ($img->width() > 100 || $img->height() > 100) {//把上传的水印图片等比缩小到100px以下
-                        $img->resize(100, 100, function ($constraint) {
-                            $constraint->aspectRatio();
-                            $constraint->upsize();
+                if (in_array($fileInfo['scene'], config('custom.upload_image_special_scenes'))) {
+                    if ($fileInfo['scene'] == 'set_upload_image_watermark') {
+                        $img = Image::make($file);
+                        if ($img->width() > 100 || $img->height() > 100) {//把上传的水印图片等比缩小到100px以下
+                            $img->resize(100, 100, function ($constraint) {
+                                $constraint->aspectRatio();
+                                $constraint->upsize();
+                            }
+                            )->save($newpath.'/'.$save_filename);
                         }
-                        )->save($newpath.'/'.$save_filename);
-                    }
-                    $url = asset(Storage::url($object));
-                } elseif ($fileInfo['scene'] == 'ueditor_upload') {
-                    //生成水印
-                    $img = Image::make($file);
-                    $watermark_status = $img->width() >= $bwWidth && $img->height() >= $bwHeight;
-                    if ($upload_editor_image_watermark_on == 1 && $watermark_status) {
-                        $img->insert($upload_image_watermark_pic, $upload_image_watermark_position, $marginX, $marginY)->save($newpath.'/'.$save_filename);
-                    }
-                    $url = asset(Storage::url($object));//原始文件
-                } elseif ($fileInfo['scene'] == 'ueditor_catch_upload') {
-                    //生成水印
-                    $img = Image::make($file);
-                    $watermark_status = $img->width() >= $bwWidth && $img->height() >= $bwHeight;
-                    if ($upload_editor_catch_image_watermark_on == 1 && $watermark_status) {
-                        $img->insert($upload_image_watermark_pic, $upload_image_watermark_position, $marginX, $marginY)->save($newpath.'/'.$save_filename);
-                    } else {
-                        $arrTmp = explode('/', $newpath.'/'.$save_filename);
-                        array_pop($arrTmp);
-                        $newDir = implode('/', $arrTmp);
-                        if (!is_dir($newDir)) {
-                            mkdir($newDir, 0777, true);
+                    } elseif ($fileInfo['scene'] == 'ueditor_upload') {
+                        //生成水印
+                        $img = Image::make($file);
+                        $watermark_status = $img->width() >= $bwWidth && $img->height() >= $bwHeight;
+                        if ($upload_editor_image_watermark_on == 1 && $watermark_status) {
+                            $img->insert($upload_image_watermark_pic, $upload_image_watermark_position, $marginX, $marginY)->save($newpath.'/'.$save_filename);
                         }
-                        $img->save($newpath.'/'.$save_filename);
+                    } elseif ($fileInfo['scene'] == 'ueditor_catch_upload') {
+                        //生成水印
+                        $img = Image::make($file);
+                        $watermark_status = $img->width() >= $bwWidth && $img->height() >= $bwHeight;
+                        if ($upload_editor_catch_image_watermark_on == 1 && $watermark_status) {
+                            $img->insert($upload_image_watermark_pic, $upload_image_watermark_position, $marginX, $marginY)->save($newpath.'/'.$save_filename);
+                        } else {
+                            $arrTmp = explode('/', $newpath.'/'.$save_filename);
+                            array_pop($arrTmp);
+                            $newDir = implode('/', $arrTmp);
+                            if (!is_dir($newDir)) {
+                                mkdir($newDir, 0777, true);
+                            }
+                            $img->save($newpath.'/'.$save_filename);
+                        }
                     }
                     $url = asset(Storage::url($object));//原始文件
                 } else {
@@ -193,6 +186,7 @@ class FileServer {
               'object'       => $object,
               'objects'      => implode('|', $objects),
               'filename'     => $filename,
+              'upload_type'  => $upload_type,
             ];
             $update = array_merge($update, $fileInfo);
             $systemFile->update($update);

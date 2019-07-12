@@ -27,6 +27,7 @@ class CreateSystemFilesTable extends Migration
             $table->string('disk')->default('')->comment('磁盘');
             $table->string('driver')->default('')->comment('驱动');
             $table->string('scene')->default('')->comment('场景');
+            $table->string('uplaod_type')->default('')->comment('上传方式');
             $table->timestamps();
         });
         DB::statement("ALTER TABLE `system_files` COMMENT '后台:系统文件'"); // 表注释

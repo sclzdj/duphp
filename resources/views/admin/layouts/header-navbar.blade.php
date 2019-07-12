@@ -4,7 +4,7 @@
         <li>
             <div class="btn-group">
                 <button class="btn btn-default btn-image dropdown-toggle" data-toggle="dropdown" type="button">
-                    <img src="@if(auth('admin')->user()->avatar!=='') {{auth('admin')->user()->avatar.'&type=2'}} @else {{asset('/static/admin/img/avatar.jpg').'?'.$SFV}} @endif" alt="用户头像">
+                    <img src="@if(auth('admin')->user()->avatar!=='') {{auth('admin')->user()->avatar}} @else {{asset('/static/admin/img/avatar.jpg').'?'.$SFV}} @endif" alt="用户头像">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">

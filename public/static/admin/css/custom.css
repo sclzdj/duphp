@@ -92,4 +92,14 @@ select.form-control {
     }
 }
 
+.webuploader-box .uploader-list img.uploader-img {
+    width: 100px;
+    height: 100px;
+}
+
+.webuploader-box .uploader-list .file-item {
+    margin: 0;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
 

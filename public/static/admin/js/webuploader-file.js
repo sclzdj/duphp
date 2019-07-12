@@ -65,8 +65,7 @@ $(function () {
         uploader_file[index].on('fileQueued', function (file) {
             var $li = $('<li id="' + file.id + '" class="list-group-item file-item" style="word-wrap: break-word;">' +
                 '<span class="pull-right file-state"></span>' +
-                '<i class="fa fa-file"></i>' +
-                file.name + '&nbsp;&nbsp;<span class="file-btns"></span></li>');
+                '<i class="fa fa-file"></i>' +'<span class="file-title-text">'+file.name +'</span>'+ '&nbsp;&nbsp;<span class="file-btns"></span></li>');
             // $list为容器jQuery实例
             if (this.upload_type == 'files') {
                 $('.js-upload-file:eq(' + this.index + ') .uploader-list').append($li);
@@ -115,13 +114,14 @@ $(function () {
                 var $li = $('#' + file.id),
                     $file_state = $li.find('.file-state'),
                     $success = $file_state.find('.text-success');
+                $li.find('span.file-title-text').text(server_file_host + response.data.url);
                 // 避免重复创建
                 if (!$success.length) {
                     $success = $('<span class="text-success"></span>').appendTo($file_state);
                 }
                 $success.text('上传成功');
                 //下载按钮
-                $download = '&nbsp;[<a href="' + server_file_host + response.data.path + '" target="_blank" class="text-success">下载</a>]';
+                $download = '&nbsp;[<a href="' + server_file_host + response.data.url + '" target="_blank" class="text-success">下载</a>]';
                 $li.find('.file-btns').append($download);
                 //删除原有提示
                 $li.find('.file-state .error').remove();

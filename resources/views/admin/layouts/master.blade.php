@@ -98,6 +98,8 @@
 <script src="{{asset('/static/libs/bootstrap-notify/bootstrap-notify.min.js').'?'.$SFV}}"></script>
 <script src="{{asset('/static/libs/js-xss/xss.min.js').'?'.$SFV}}"></script>
 <script src="{{asset('/static/libs/layer/layer.js').'?'.$SFV}}"></script>
+<!--前置自定义js-->
+<script src="{{asset('/static/admin/js/pre_custom.js').'?'.$SFV}}"></script>
 <!-- 程序启动 -->
 <script>
     jQuery(function () {
@@ -112,6 +114,7 @@
         });
     });
     //上传全局配置
+    var server_upload_image_special_scenes={!! json_encode(config('custom.upload_image_special_scenes')) !!};//文件上传特殊场景配置，这些场景会在上传时做特殊处理，不会生成水印和缩略图
     var server_upload_default_filesystems="{{$upload_default_filesystems}}";//磨人的文件上传系统
     var server_upload_image_url = "{{action('Admin\System\FileController@upload')}}";//上传地址
     var server_image_host = "";//图片显示前缀域名，上传成功后返回的是完整图片地址就留空

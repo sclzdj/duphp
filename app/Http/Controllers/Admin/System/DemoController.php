@@ -57,23 +57,19 @@ class DemoController extends BaseController {
         try {
             $data = $request->all();
             $data = ArrServer::null2strData($data);
-            if(isset($data['demo_webuploader_image_1'])){
-                $webuploader_image1=SystemDemo::where('name','demo_webuploader_image_1')->first();
-                if(!$webuploader_image1){
-                    SystemDemo::create(['name'=>'demo_webuploader_image_1','value'=>$data['demo_webuploader_image_1']]);
-                }else{
-                    $webuploader_image1->value=$data['demo_webuploader_image_1'];
-                    $webuploader_image1->save();
-                }
+            $webuploader_image1=SystemDemo::where('name','demo_webuploader_image_1')->first();
+            if(!$webuploader_image1){
+                SystemDemo::create(['name'=>'demo_webuploader_image_1','value'=>$data['demo_webuploader_image_1']]);
+            }else{
+                $webuploader_image1->value=$data['demo_webuploader_image_1'];
+                $webuploader_image1->save();
             }
-            if(isset($data['demo_webuploader_image_2'])){
-                $webuploader_image2=SystemDemo::where('name','demo_webuploader_image_2')->first();
-                if(!$webuploader_image2){
-                    SystemDemo::create(['name'=>'demo_webuploader_image_2','value'=>$data['demo_webuploader_image_2']]);
-                }else{
-                    $webuploader_image2->value=$data['demo_webuploader_image_2'];
-                    $webuploader_image2->save();
-                }
+            $webuploader_image2=SystemDemo::where('name','demo_webuploader_image_2')->first();
+            if(!$webuploader_image2){
+                SystemDemo::create(['name'=>'demo_webuploader_image_2','value'=>$data['demo_webuploader_image_2']]);
+            }else{
+                $webuploader_image2->value=$data['demo_webuploader_image_2'];
+                $webuploader_image2->save();
             }
             \DB::commit();//提交事务
 
@@ -95,23 +91,19 @@ class DemoController extends BaseController {
         try {
             $data = $request->all();
             $data = ArrServer::null2strData($data);
-            if(isset($data['demo_webuploader_file_1'])){
-                $ueditor1=SystemDemo::where('name','demo_webuploader_file_1')->first();
-                if(!$ueditor1){
-                    SystemDemo::create(['name'=>'demo_webuploader_file_1','value'=>$data['demo_webuploader_file_1']]);
-                }else{
-                    $ueditor1->value=$data['demo_webuploader_file_1'];
-                    $ueditor1->save();
-                }
+            $webuploader_file1=SystemDemo::where('name','demo_webuploader_file_1')->first();
+            if(!$webuploader_file1){
+                SystemDemo::create(['name'=>'demo_webuploader_file_1','value'=>$data['demo_webuploader_file_1']]);
+            }else{
+                $webuploader_file1->value=$data['demo_webuploader_file_1'];
+                $webuploader_file1->save();
             }
-            if(isset($data['demo_webuploader_file_2'])){
-                $ueditor2=SystemDemo::where('name','demo_webuploader_file_2')->first();
-                if(!$ueditor2){
-                    SystemDemo::create(['name'=>'demo_webuploader_file_2','value'=>$data['demo_webuploader_file_2']]);
-                }else{
-                    $ueditor2->value=$data['demo_webuploader_file_2'];
-                    $ueditor2->save();
-                }
+            $webuploader_file2=SystemDemo::where('name','demo_webuploader_file_2')->first();
+            if(!$webuploader_file2){
+                SystemDemo::create(['name'=>'demo_webuploader_file_2','value'=>$data['demo_webuploader_file_2']]);
+            }else{
+                $webuploader_file2->value=$data['demo_webuploader_file_2'];
+                $webuploader_file2->save();
             }
             \DB::commit();//提交事务
 
@@ -134,22 +126,28 @@ class DemoController extends BaseController {
             $data = $request->all();
             $data = ArrServer::null2strData($data);
             if(isset($data['demo_webuploader_images_1'])){
-                $ueditor1=SystemDemo::where('name','demo_webuploader_images_1')->first();
-                if(!$ueditor1){
-                    SystemDemo::create(['name'=>'demo_webuploader_images_1','value'=>$data['demo_webuploader_images_1']]);
-                }else{
-                    $ueditor1->value=$data['demo_webuploader_images_1'];
-                    $ueditor1->save();
-                }
+                $data['demo_webuploader_images_1']=implode(',',$data['demo_webuploader_images_1']);
+            }else{
+                $data['demo_webuploader_images_1']='';
+            }
+            $webuploader_images1=SystemDemo::where('name','demo_webuploader_images_1')->first();
+            if(!$webuploader_images1){
+                SystemDemo::create(['name'=>'demo_webuploader_images_1','value'=>$data['demo_webuploader_images_1']]);
+            }else{
+                $webuploader_images1->value=$data['demo_webuploader_images_1'];
+                $webuploader_images1->save();
             }
             if(isset($data['demo_webuploader_images_2'])){
-                $ueditor2=SystemDemo::where('name','demo_webuploader_images_2')->first();
-                if(!$ueditor2){
-                    SystemDemo::create(['name'=>'demo_webuploader_images_2','value'=>$data['demo_webuploader_images_2']]);
-                }else{
-                    $ueditor2->value=$data['demo_webuploader_images_2'];
-                    $ueditor2->save();
-                }
+                $data['demo_webuploader_images_2']=implode(',',$data['demo_webuploader_images_2']);
+            }else{
+                $data['demo_webuploader_images_2']='';
+            }
+            $webuploader_images2=SystemDemo::where('name','demo_webuploader_images_2')->first();
+            if(!$webuploader_images2){
+                SystemDemo::create(['name'=>'demo_webuploader_images_2','value'=>$data['demo_webuploader_images_2']]);
+            }else{
+                $webuploader_images2->value=$data['demo_webuploader_images_2'];
+                $webuploader_images2->save();
             }
             \DB::commit();//提交事务
 
@@ -172,22 +170,28 @@ class DemoController extends BaseController {
             $data = $request->all();
             $data = ArrServer::null2strData($data);
             if(isset($data['demo_webuploader_files_1'])){
-                $ueditor1=SystemDemo::where('name','demo_webuploader_files_1')->first();
-                if(!$ueditor1){
-                    SystemDemo::create(['name'=>'demo_webuploader_files_1','value'=>$data['demo_webuploader_files_1']]);
-                }else{
-                    $ueditor1->value=$data['demo_webuploader_files_1'];
-                    $ueditor1->save();
-                }
+                $data['demo_webuploader_files_1']=implode(',',$data['demo_webuploader_files_1']);
+            }else{
+                $data['demo_webuploader_files_1']='';
+            }
+            $webuploader_files1=SystemDemo::where('name','demo_webuploader_files_1')->first();
+            if(!$webuploader_files1){
+                SystemDemo::create(['name'=>'demo_webuploader_files_1','value'=>$data['demo_webuploader_files_1']]);
+            }else{
+                $webuploader_files1->value=$data['demo_webuploader_files_1'];
+                $webuploader_files1->save();
             }
             if(isset($data['demo_webuploader_files_2'])){
-                $ueditor2=SystemDemo::where('name','demo_webuploader_files_2')->first();
-                if(!$ueditor2){
-                    SystemDemo::create(['name'=>'demo_webuploader_files_2','value'=>$data['demo_webuploader_files_2']]);
-                }else{
-                    $ueditor2->value=$data['demo_webuploader_files_2'];
-                    $ueditor2->save();
-                }
+                $data['demo_webuploader_files_2']=implode(',',$data['demo_webuploader_files_2']);
+            }else{
+                $data['demo_webuploader_files_2']='';
+            }
+            $webuploader_files2=SystemDemo::where('name','demo_webuploader_files_2')->first();
+            if(!$webuploader_files2){
+                SystemDemo::create(['name'=>'demo_webuploader_files_2','value'=>$data['demo_webuploader_files_2']]);
+            }else{
+                $webuploader_files2->value=$data['demo_webuploader_files_2'];
+                $webuploader_files2->save();
             }
             \DB::commit();//提交事务
 

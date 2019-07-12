@@ -1,7 +1,16 @@
 <?php
 
 return [
-  'upload_scenes'/*文件上传场景配置*/ => [
+  'upload_image_special_scenes'/*文件上传特殊场景配置，这些场景会在上传时做特殊处理，不会生成水印和缩略图*/ => [
+    'set_admin_avatar',
+    'set_admin_logo',
+    'set_admin_logo_text',
+    'set_admin_logo_signin',
+    'set_upload_image_watermark',
+    'ueditor_upload',
+    'ueditor_catch_upload',
+  ],
+  'upload_scenes'/*文件上传场景配置*/                                     => [
       //设置管理员头像
       'set_admin_avatar'/*场景名称*/   => [
         'system_users'/*每个场景对应的表，可以多个*/ => [
@@ -53,7 +62,7 @@ return [
         ],
       ],
       //demo图片和文件上传
-      'demo_webuploader'       => [
+      'demo_webuploader'           => [
         'system_demos' => [
           'whereRaw' => "(`name` = 'demo_webuploader_image_1' OR `name` = 'demo_webuploader_image_2' OR `name` = 'demo_webuploader_images_1' OR `name` = 'demo_webuploader_images_2' OR `name` = 'demo_webuploader_file_1' OR `name` = 'demo_webuploader_file_2' OR `name` = 'demo_webuploader_files_1' OR `name` = 'demo_webuploader_files_2')",
           'where'    => ['value' => 'like'],

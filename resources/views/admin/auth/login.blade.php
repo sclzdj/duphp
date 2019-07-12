@@ -150,6 +150,11 @@
             $('#login-form input[name="username"]').val(Cookies.get('username'));
             $('#login-remember-token').prop('checked', true);
         }
+        $(document).on('keydown', '#login-form input[name="password"]', function (event) {
+            if (event.keyCode == 13) {//回车键登录
+                $('#login-submit').trigger('click');
+            }
+        });
         $(document).on('click', '#login-submit', function () {
             $('#login-form').find('.form-validate-msg').remove();//清空该表单的验证错误信息
             var data = $('#login-form').serialize();//表单数据
