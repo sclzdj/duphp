@@ -12,22 +12,24 @@ $(function () {
     UE.Editor.prototype.getActionUrl = function (action) {
         switch (action) {
             case 'config':
-                return document.location.protocol + '//' + window.location.host+'/api/admin/system/file/ueditorUploadConfig';
+                return document.location.protocol + '//' + window.location.host + '/api/admin/system/file/ueditorUploadConfig';
                 break;
             case 'uploadimage':
             case 'uploadscrawl':
+                return document.location.protocol + '//' + window.location.host + '/api/admin/system/file/upload?upload_type=image&scene=ueditor_upload'; //这就是自定义的上传地址
+                break;
             case 'uploadvideo':
             case 'uploadfile':
-                return document.location.protocol + '//' + window.location.host+'/api/admin/system/file/upload?scene=ueditor_upload'; //这就是自定义的上传地址
+                return document.location.protocol + '//' + window.location.host + '/api/admin/system/file/upload?upload_type=file&scene=ueditor_upload'; //这就是自定义的上传地址
                 break;
             case 'listimage':
-                return document.location.protocol + '//' + window.location.host+'/api/admin/system/file/ueditorList?type=image';
+                return document.location.protocol + '//' + window.location.host + '/api/admin/system/file/ueditorList?type=image';
                 break;
             case 'listfile':
-                return document.location.protocol + '//' + window.location.host+'/api/admin/system/file/ueditorList?type=file';
+                return document.location.protocol + '//' + window.location.host + '/api/admin/system/file/ueditorList?type=file';
                 break;
             case 'catchimage':
-                return document.location.protocol + '//' + window.location.host+'/api/admin/system/file/ueditorCatchImage?scene=ueditor_catch_upload';
+                return document.location.protocol + '//' + window.location.host + '/api/admin/system/file/ueditorCatchImage?upload_type=image&scene=ueditor_catch_upload';
                 break;
             default:
                 return this._bkGetActionUrl.call(this, action);
