@@ -46,16 +46,16 @@
                     <div class="tab-pane active">
                         <form class="sort-form">
                             <div class="row">
-                                <div class="col-sm-12" style="margin-bottom: 15px;">
+                                <div class="col-12" style="margin-bottom: 15px;">
                                     <div class="toolbar-btn-action">
                                         <a title="添加模块" class="btn btn-primary" href="{{action('Admin\System\NodeController@create',['pid'=>0])}}"><i class="fa fa-plus-circle"></i> 添加模块</a>
                                         <button href="{{action('Admin\System\NodeController@moduleSort')}}" submit-type="POST" title="保存" type="button" class="btn btn-success ids-submit">保存排序</button>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-12">
                                     <div id="sortable" class="connectedSortable push-20 ui-sortable">
                                         @foreach($modules as $module)
-                                            <div class="sortable-item pull-left ui-sortable-handle">
+                                            <div class="sortable-item pull-left ui-sortable-handle" style="margin-bottom: 5px;">
                                                 <input type="hidden" name="ids[]" value="{{$module->id}}">
                                                 <i class="{{$module->icon}}"></i> {{$module->name}}
                                             </div>
@@ -80,7 +80,9 @@
             $("#sortable").sortable({
                 connectWith: ".connectedSortable"
             }).disableSelection();
-
+            $("#sortable .sortable-item").each(function () {
+                $(this).width($(this).width()+1);//让每个拖拽对象拖拽的时候不会因宽度而变形
+            });
             //批量提交函数
             function idsSubmit(fn, ids) {
                 var url = $(fn).attr('href');
