@@ -187,6 +187,7 @@ class FileServer {
               'objects'      => implode('|', $objects),
               'filename'     => $filename,
               'upload_type'  => $upload_type,
+              'name'         => $fileInfo['extension'] === '' ? str_replace('/', '_', $filename) : str_replace('/', '_', $filename).'.'.$fileInfo['extension'],
             ];
             $update = array_merge($update, $fileInfo);
             $systemFile->update($update);

@@ -24,6 +24,8 @@ class SystemFile extends Model {
       'size',
       'scene',
       'filename',
+      'name',
+      'upload_type',
     ];
 
     /**

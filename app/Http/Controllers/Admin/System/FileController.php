@@ -173,7 +173,6 @@ class FileController extends BaseController {
         }
     }
 
-
     /**
      * 文件上传
      *
@@ -189,6 +188,13 @@ class FileController extends BaseController {
         $filename = ltrim(str_replace('\\', '/', $filename), '/');
         $upload_scenes = config('custom.upload_scenes');
         if (!isset($upload_scenes[$scene])) {
+            if ($scene == 'ueditor_upload') {
+                return response()->json([
+                    "state" => '该场景值没有被配置预设，无效',
+                  ]
+                );
+            }
+
             return $this->uploadResponse('该场景值没有被配置预设，无效', 400);
         }
         if ($filename === ''
@@ -199,18 +205,63 @@ class FileController extends BaseController {
           )) {
             $filename = date("Ymd/").time().mt_rand(10000, 99999);
         }
-        if (!$request->hasFile($key)) {
+        if (!$request->file($key)) {
+            if ($scene == 'ueditor_upload') {
+                return response()->json([
+                    "state" => '没有选择上传文件',
+                  ]
+                );
+            }
+
             return $this->uploadResponse('没有选择上传文件', 400);
         }
+        $iniSize = $request->file($key)->getMaxFilesize();
+        if (!$request->hasFile($key)) {
+            if ($scene == 'ueditor_upload') {
+                return response()->json([
+                    "state" => 'php.ini最大限制上传'.
+                      number_format($iniSize /
+                        1024 / 1024, 2, '.',
+                        ''
+                      ).'M的文件',
+                  ]
+                );
+            }
+
+            return $this->uploadResponse('php.ini最大限制上传'.
+              number_format($iniSize /
+                1024 / 1024, 2, '.',
+                ''
+              ).'M的文件', 400
+            );
+        }
         if (!$request->file($key)->isValid()) {
+            if ($scene == 'ueditor_upload') {
+                return response()->json([
+                    "state" => '上传过程中出错，请主要检查php.ini是否配置正确',
+                  ]
+                );
+            }
+
             return $this->uploadResponse('上传过程中出错，请主要检查php.ini是否配置正确', 400);
         }
         $fileInfo = [];
-        $fileInfo['extension'] = $request->file->clientExtension() !== '' ? $request->file->clientExtension() : $request->file->extension();
-        $fileInfo['mimeType'] = $request->file->getMimeType();
-        $fileInfo['size'] = $request->file->getClientSize();
-        $fileInfo['iniSize'] = $request->file->getMaxFilesize();
+        $fileInfo['extension'] = $request->file($key)->clientExtension() !== '' ? $request->file($key)->clientExtension() : $request->file($key)->extension();
+        $fileInfo['mimeType'] = $request->file($key)->getMimeType();
+        $fileInfo['size'] = $request->file($key)->getSize();
+        $fileInfo['iniSize'] = $iniSize;
         if ($fileInfo['size'] > $fileInfo['iniSize']) {
+            if ($scene == 'ueditor_upload') {
+                return response()->json([
+                    "state" => 'php.ini最大限制上传'.
+                      number_format($fileInfo['iniSize'] /
+                        1024 / 1024, 2, '.',
+                        ''
+                      ).'M的文件',
+                  ]
+                );
+            }
+
             return $this->uploadResponse('php.ini最大限制上传'.
               number_format($fileInfo['iniSize'] /
                 1024 / 1024, 2, '.',
@@ -231,6 +282,14 @@ class FileController extends BaseController {
             if ($upload_image_limit_size > 0
               && $fileInfo['size'] > $upload_image_limit_size * 1000
             ) {
+                if ($scene == 'ueditor_upload') {
+                    return response()->json([
+                        "state" => '最大允许上传'.
+                          $upload_image_limit_size.'K的图片',
+                      ]
+                    );
+                }
+
                 return $this->uploadResponse('最大允许上传'.
                   $upload_image_limit_size.'K的图片',
                   400
@@ -244,6 +303,14 @@ class FileController extends BaseController {
                   $upload_image_allow_extension_arr
                 )
                 ) {
+                    if ($scene == 'ueditor_upload') {
+                        return response()->json([
+                            "state" => '只允许上传图片的后缀类型：'.
+                              $upload_image_allow_extension,
+                          ]
+                        );
+                    }
+
                     return $this->uploadResponse('只允许上传图片的后缀类型：'.
                       $upload_image_allow_extension,
                       400
@@ -255,6 +322,14 @@ class FileController extends BaseController {
             if ($upload_file_limit_size > 0
               && $fileInfo['size'] > $upload_file_limit_size * 1000
             ) {
+                if ($scene == 'ueditor_upload') {
+                    return response()->json([
+                        "state" => '最大允许上传'.
+                          $upload_file_limit_size.'K的文件',
+                      ]
+                    );
+                }
+
                 return $this->uploadResponse('最大允许上传'.
                   $upload_file_limit_size.'K的文件',
                   400
@@ -268,6 +343,13 @@ class FileController extends BaseController {
                   $upload_file_allow_extension_arr
                 )
                 ) {
+                    if ($scene == 'ueditor_upload') {
+                        return response()->json([
+                            "state" => "只允许上传文件的后缀类型",
+                          ]
+                        );
+                    }
+
                     return $this->uploadResponse('只允许上传文件的后缀类型：'.
                       $upload_file_allow_extension,
                       400
@@ -283,7 +365,7 @@ class FileController extends BaseController {
                 return $this->response([]);
             }
 
-            $url = $FileServer->upload($filetype, $filename, $path, $request->file($key), $fileInfo,$upload_type);
+            $url = $FileServer->upload($filetype, $filename, $path, $request->file($key), $fileInfo, $upload_type);
             if ($url !== false) {
                 \DB::commit();//提交事务
                 if ($scene == 'ueditor_upload') {
@@ -314,7 +396,7 @@ class FileController extends BaseController {
             $FileServer->delete($FileServer->objects);
             if ($scene == 'ueditor_upload') {
                 return response()->json([
-                    "state" => "上传失败",
+                    "state" => $e->getMessage(),
                   ]
                 );
             }

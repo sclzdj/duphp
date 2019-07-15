@@ -309,22 +309,22 @@
                                                             @if(strpos($systemFile->mimeType,'image/')!==false)
                                                                 <div class="js-gallery">
                                                                     @if($systemFile->driver=='local' && ($systemFile->upload_type=='image' || $systemFile->upload_type=='images') && !in_array($systemFile->scene,config('custom.upload_image_special_scenes')))
-                                                                        <img title="{{$systemFile->url.'&type=1'}}"
+                                                                        <img title="{{$systemFile->name}}"
                                                                              class="image"
                                                                              data-original="{{$systemFile->url.'&type=1'}}"
                                                                              src="{{$systemFile->url.'&type=2'}}">
                                                                     @else
-                                                                        <img title="{{$systemFile->url}}" class="image"
+                                                                        <img title="{{$systemFile->name}}" class="image"
                                                                              data-original="{{$systemFile->url}}"
                                                                              src="{{$systemFile->url}}">
                                                                     @endif
                                                                 </div>
                                                             @else
                                                                 @if(file_exists('./static/admin/img/files/'.$systemFile->extension.'.png'))
-                                                                    <img title="{{$systemFile->url}}" class="image"
+                                                                    <img title="{{$systemFile->name}}" class="image"
                                                                          src="{{asset('/static/admin/img/files/'.$systemFile->extension.'.png').'?'.$SFV}}">
                                                                 @else
-                                                                    <img title="{{$systemFile->url}}" class="image"
+                                                                    <img title="{{$systemFile->name}}" class="image"
                                                                          src="{{asset('/static/admin/img/files/file.png').'?'.$SFV}}">
                                                                 @endif
                                                             @endif
@@ -414,7 +414,7 @@
                                                         <div class="btn-group">
                                                             @if($systemFile->original_url!=='')
                                                                 <a class="btn btn-xs btn-default" target="_blank"
-                                                                   href="{{$systemFile->original_url}}">下载</a>
+                                                                   href="{{$systemFile->original_url}}" download="{{$systemFile->name}}">下载</a>
                                                             @endif
                                                             @if(\App\Servers\PermissionServer::allowAction('Admin\System\FileController@destroy'))
                                                                 <a class="btn btn-xs btn-default id-submit"

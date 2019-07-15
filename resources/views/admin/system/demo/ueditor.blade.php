@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-username">
                                     <div class="col-md-offset-2 col-md-9">
-                                        <button class="btn btn-minw btn-primary ajax-post" type="button" id="create-submit">
+                                        <button class="btn btn-minw btn-primary ajax-post" type="button" id="demo-submit">
                                             提交
                                         </button>
                                     </div>
@@ -51,9 +51,10 @@
     <script src="{{asset('/static/libs/ueditor/ueditor.config.js').'?'.$SFV}}"></script>
     <script src="{{asset('/static/libs/ueditor/ueditor.all.min.js').'?'.$SFV}}"></script>
     <script src="{{asset('/static/libs/ueditor/lang/zh-cn/zh-cn.js').'?'.$SFV}}"></script>
-    <script src="{{asset('/static/admin/js/ueditor-handle.js').'?'.$SFV}}"></script>  <script>
+    <script src="{{asset('/static/admin/js/ueditor-handle.js').'?'.$SFV}}"></script>
+    <script>
         $(function () {
-            $(document).on('click', '#create-submit', function () {
+            $(document).on('click', '#demo-submit', function () {
                 $('#demo-form').find('.form-validate-msg').remove();//清空该表单的验证错误信息
                 var data = $('#demo-form').serialize();//表单数据
                 Dolphin.loading('提交中...');

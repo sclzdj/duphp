@@ -65,6 +65,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
         Route::post('system/demo/webuploaderFile', 'System\DemoController@webuploaderFileSave');
         Route::get('system/demo/webuploaderFiles', 'System\DemoController@webuploaderFiles');
         Route::post('system/demo/webuploaderFiles', 'System\DemoController@webuploaderFilesSave');
+        Route::get('system/demo/tags', 'System\DemoController@tags');
+        Route::post('system/demo/tags', 'System\DemoController@tagsSave');
+        Route::get('system/demo/select2', 'System\DemoController@select2');
+        Route::post('system/demo/select2', 'System\DemoController@select2Save');
 
         //其他模块
 

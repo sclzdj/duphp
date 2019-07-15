@@ -273,6 +273,28 @@ class SystemNodesTableSeeder extends Seeder {
                       ],
                     ],
                   ],
+                  [
+                    'name'     => '标签',
+                    'icon'     => '',
+                    'action'   => 'Admin\System\DemoController@tags',
+                    'children' => [
+                      [
+                        'name'   => '保存',
+                        'action' => 'Admin\System\NodeController@tagsSave',
+                      ],
+                    ],
+                  ],
+                  [
+                    'name'     => '查找选择',
+                    'icon'     => '',
+                    'action'   => 'Admin\System\DemoController@select2',
+                    'children' => [
+                      [
+                        'name'   => '保存',
+                        'action' => 'Admin\System\NodeController@select2Save',
+                      ],
+                    ],
+                  ],
                 ],
               ],
             ],

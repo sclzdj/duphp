@@ -3,7 +3,8 @@
 @endphp
 @extends('admin.layouts.master')
 @section('pre_css')
-    <link rel="stylesheet" href="{{asset('/static/libs/webuploader/webuploader.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/libs/select2/select2.min.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/libs/select2/select2-bootstrap.min.css').'?'.$SFV}}">
 @endsection
 @section('content')
     <div class="row">
@@ -15,58 +16,40 @@
                             <form class="form-horizontal form-builder row" id="demo-form">
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-1 control-label form-option-line">
-                                        单文件上传1
+                                        查找选择1
                                     </label>
-                                    <div class="col-md-11 form-option-line">
-                                        <div class="webuploader-box js-upload-file" upload-type="file">
-                                            <input type="hidden" name="demo_webuploader_file_1"
-                                                   value="{{$webuploader_file1}}">
-                                            <div class="uploader-list">
-                                                @if($webuploader_file1!=='')
-                                                    <li class="list-group-item file-item upload-state-done"
-                                                        style="word-wrap: break-word;">
-                                                        <span class="pull-right file-state"></span>
-                                                        <i class="fa fa-file"></i>{{$webuploader_file1}}&nbsp;&nbsp;
-                                                        <span class="file-btns">
-                                                            [<a href="javascript:void(0);"
-                                                                class="remove-file">删除</a>]&nbsp;
-                                                            [<a href="{{$webuploader_file1}}" target="_blank"
-                                                                class="text-success">下载</a>]
-                                                        </span>
-                                                    </li>
-                                                @endif
-                                            </div>
-                                            <div class="filePicker">上传单个文件</div>
-                                            <span class="form-control-static form-option-line help-line form-option-webuploader-line">单文件上传1的提示信息</span>
-                                        </div>
+                                    <div class="col-md-6 form-option-line">
+                                        <select class="js-select2 form-control select-linkage select2-hidden-accessible"
+                                                name="demo_select2_1" aria-hidden="true">
+                                            <option value="">请选择</option>
+                                            <option value="1" @if($select21==1) selected @endif>查找选择1选项_1</option>
+                                            <option value="2" @if($select21==2) selected @endif>查找选择1选项_2</option>
+                                            <option value="3" @if($select21==3) selected @endif>查找选择1选项_3</option>
+                                            <option value="4" @if($select21==4) selected @endif>查找选择1选项_4</option>
+                                            <option value="5" @if($select21==5) selected @endif>查找选择1选项_5</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-5 form-control-static form-option-line">
+                                        <div class="help-block help-block-line">查找选择1的提示信息</div>
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-1 control-label form-option-line">
-                                        多文件上传2
+                                        查找选择2
                                     </label>
-                                    <div class="col-md-11 form-option-line">
-                                        <div class="webuploader-box js-upload-file" upload-type="file">
-                                            <input type="hidden" name="demo_webuploader_file_2"
-                                                   value="{{$webuploader_file2}}">
-                                            <div class="uploader-list">
-                                                @if($webuploader_file2!=='')
-                                                    <li class="list-group-item file-item upload-state-done"
-                                                        style="word-wrap: break-word;">
-                                                        <span class="pull-right file-state"></span>
-                                                        <i class="fa fa-file"></i>{{$webuploader_file2}}&nbsp;&nbsp;
-                                                        <span class="file-btns">
-                                                            [<a href="javascript:void(0);"
-                                                                class="remove-file">删除</a>]&nbsp;
-                                                            [<a href="{{$webuploader_file2}}" target="_blank"
-                                                                class="text-success">下载</a>]
-                                                        </span>
-                                                    </li>
-                                                @endif
-                                            </div>
-                                            <div class="filePicker">上传单个文件</div>
-                                            <span class="form-control-static form-option-line help-line form-option-webuploader-line">多文件上传2的提示信息</span>
-                                        </div>
+                                    <div class="col-md-6 form-option-line">
+                                        <select class="js-select2 form-control select-linkage select2-hidden-accessible"
+                                                name="demo_select2_2" aria-hidden="true">
+                                            <option value="">请选择</option>
+                                            <option value="1" @if($select22==1) selected @endif>查找选择2选项_1</option>
+                                            <option value="2" @if($select22==2) selected @endif>查找选择2选项_2</option>
+                                            <option value="3" @if($select22==3) selected @endif>查找选择2选项_3</option>
+                                            <option value="4" @if($select22==4) selected @endif>查找选择2选项_4</option>
+                                            <option value="5" @if($select22==5) selected @endif>查找选择2选项_5</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-5 form-control-static form-option-line">
+                                        <div class="help-block help-block-line">查找选择2的提示信息</div>
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-username">
@@ -86,11 +69,13 @@
     </div>
 @endsection
 @section('javascript')
-    <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/select2/select2.full.min.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/select2/i18n/zh-CN.js').'?'.$SFV}}"></script>
     <script>
-        var set_scene_uploader_file = ['demo_webuploader', 'demo_webuploader'];
+        $(function () {
+            App.initHelpers('select2');
+        });
     </script>
-    <script src="{{asset('/static/admin/js/webuploader-file.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
             $(document).on('click', '#demo-submit', function () {
@@ -99,7 +84,7 @@
                 Dolphin.loading('提交中...');
                 $.ajax({
                     type: 'POST',
-                    url: '{{action('Admin\System\DemoController@webuploaderFileSave')}}',
+                    url: '{{action('Admin\System\DemoController@select2Save')}}',
                     dataType: 'JSON',
                     data: data,
                     success: function (response) {

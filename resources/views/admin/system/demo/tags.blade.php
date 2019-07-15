@@ -3,8 +3,7 @@
 @endphp
 @extends('admin.layouts.master')
 @section('pre_css')
-    <link rel="stylesheet" href="{{asset('/static/libs/webuploader/webuploader.css').'?'.$SFV}}">
-    <link rel="stylesheet" href="{{asset('/static/libs/viewer/viewer.min.css').'?'.$SFV}}">
+    <link rel="stylesheet" href="{{asset('/static/libs/jquery-tags-input/jquery.tagsinput.css').'?'.$SFV}}">
 @endsection
 @section('content')
     <div class="row">
@@ -16,50 +15,24 @@
                             <form class="form-horizontal form-builder row" id="demo-form">
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-1 control-label form-option-line">
-                                        单张图片上传1
+                                        标签1
                                     </label>
-                                    <div class="col-md-11 form-option-line">
-                                        <div class="webuploader-box js-upload-image" upload-type="image">
-                                            <input type="hidden" name="demo_webuploader_image_1"
-                                                   value="{{$webuploader_image1}}">
-                                            <div class="uploader-list">
-                                                @if($webuploader_image1!=='')
-                                                    <div class="file-item js-gallery thumbnail upload-state-done">
-                                                        <img class="uploader-img" src="{{\App\Model\Admin\SystemFile::src($webuploader_image1,2)}}"
-                                                             data-original="{{\App\Model\Admin\SystemFile::src($webuploader_image1,1)}}">
-                                                        <div class="info"></div>
-                                                        <i class="fa fa-times-circle remove-picture"></i>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="filePicker">上传单张图片</div>
-                                            <span class="form-control-static form-option-line help-line form-option-webuploader-line">单张图片上传1的提示信息</span>
-                                        </div>
+                                    <div class="col-md-6 form-option-line">
+                                        <input class="form-control tags-input" type="text" name="demo_tags_1" value="{{$tags1}}" placeholder="请输入标签1">
+                                    </div>
+                                    <div class="col-md-5 form-control-static form-option-line">
+                                        <span class="form-control-static help-line">标签1的提示信息</span>
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-1 control-label form-option-line">
-                                        单张图片上传2
+                                        标签2
                                     </label>
-                                    <div class="col-md-11 form-option-line">
-                                        <div class="webuploader-box js-upload-image" upload-type="image">
-                                            <input type="hidden" name="demo_webuploader_image_2"
-                                                   value="{{$webuploader_image2}}">
-                                            <div class="uploader-list">
-                                                @if($webuploader_image2!=='')
-                                                    <div class="file-item js-gallery thumbnail upload-state-done">
-                                                        <img class="uploader-img" src="{{\App\Model\Admin\SystemFile::src($webuploader_image2,2)}}"
-                                                             data-original="{{\App\Model\Admin\SystemFile::src($webuploader_image2,1)}}">
-                                                        <div class="info"></div>
-                                                        <i class="fa fa-times-circle remove-picture"></i>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <div class="clearfix"></div>
-                                            <div class="filePicker">上传单张图片</div>
-                                            <span class="form-control-static form-option-line help-line form-option-webuploader-line">单张图片上传2的提示信息</span>
-                                        </div>
+                                    <div class="col-md-6 form-option-line">
+                                        <input class="form-control tags-input" type="text" name="demo_tags_2" value="{{$tags2}}" placeholder="请输入标签2">
+                                    </div>
+                                    <div class="col-md-5 form-control-static form-option-line">
+                                        <span class="form-control-static help-line">标签2的提示信息</span>
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="create-username">
@@ -78,12 +51,8 @@
     </div>
 @endsection
 @section('javascript')
-    <script src="{{asset('/static/libs/viewer/viewer.min.js').'?'.$SFV}}"></script>
-    <script src="{{asset('/static/libs/webuploader/webuploader.min.js').'?'.$SFV}}"></script>
-    <script>
-        var set_scene_uploader_image = ['demo_webuploader', 'demo_webuploader'];
-    </script>
-    <script src="{{asset('/static/admin/js/webuploader-image.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/libs/jquery-tags-input/jquery.tagsinput.js').'?'.$SFV}}"></script>
+    <script src="{{asset('/static/admin/js/tags-input.js').'?'.$SFV}}"></script>
     <script>
         $(function () {
             $(document).on('click', '#demo-submit', function () {
@@ -92,7 +61,7 @@
                 Dolphin.loading('提交中...');
                 $.ajax({
                     type: 'POST',
-                    url: '{{action('Admin\System\DemoController@webuploaderImageSave')}}',
+                    url: '{{action('Admin\System\DemoController@tagsSave')}}',
                     dataType: 'JSON',
                     data: data,
                     success: function (response) {
