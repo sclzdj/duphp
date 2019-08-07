@@ -773,8 +773,23 @@ class FileController extends BaseController {
         if (strpos($mime, 'image/') === false) {
             abort(404, '未找到图片');
         }
-        header('Content-Type:'.$mime);
-        echo file_get_contents($img);
-    }
+        $imagecreatefromfunction = 'imagecreatefrom'.strtolower(str_replace('image/', '', $mime));
+        $imagefunction = 'image'.strtolower(str_replace('image/', '', $mime));
+        if (!function_exists($imagecreatefromfunction) || !function_exists($imagefunction)) {
+            header('Content-Type:'.$mime);
+            echo file_get_contents($img);
+        } else {
+            $image = $imagecreatefromfunction($img);
+            ob_start();
+            $imagefunction($image);
+            $content = ob_get_clean();
+            imagedestroy($image);
 
+            return response($content, 200, [
+                'Content-Length' => strlen($content),
+                'Content-Type'   => $mime,
+              ]
+            );
+        }
+    }
 }
